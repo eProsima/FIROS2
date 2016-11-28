@@ -1,0 +1,4 @@
+struct Output{
+    float time;
+    float rotation;
+};

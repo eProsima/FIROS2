@@ -1,0 +1,44 @@
+// generated from rosidl_generator_dds_idl/resource/msg.idl.em
+
+#ifndef __sensor_msgs__msg__Imu__idl__
+#define __sensor_msgs__msg__Imu__idl__
+
+#include "Quaternion_.idl"
+#include "Vector3_.idl"
+#include "Header_.idl"
+
+module sensor_msgs
+{
+
+module msg
+{
+
+module dds_
+{
+
+
+
+typedef double sensor_msgs__Imu__double_array_9[9];
+
+struct Imu_
+{
+
+  std_msgs::msg::dds_::Header_ header_;
+  geometry_msgs::msg::dds_::Quaternion_ orientation_;
+sensor_msgs__Imu__double_array_9 orientation_covariance_;
+  geometry_msgs::msg::dds_::Vector3_ angular_velocity_;
+sensor_msgs__Imu__double_array_9 angular_velocity_covariance_;
+  geometry_msgs::msg::dds_::Vector3_ linear_acceleration_;
+sensor_msgs__Imu__double_array_9 linear_acceleration_covariance_;
+
+};  // struct Imu_
+
+#pragma keylist Imu_
+
+};  // module dds_
+
+};  // module msg
+
+};  // module sensor_msgs
+
+#endif  // __sensor_msgs__msg__Imu__idl__

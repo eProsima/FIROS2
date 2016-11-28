@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/javierih/ros2_ws/src/ros2/firos2/resource/user_functions/Output.cpp
+Output.h
+/home/javierih/ros2_ws/src/ros2/firos2/resource/user_functions/Output.h
+fastcdr/Cdr.h
+-
+fastcdr/exceptions/BadParamException.h
+-
+utility
+-
+
+/home/javierih/ros2_ws/src/ros2/firos2/resource/user_functions/Output.h
+stdint.h
+-
+array
+-
+string
+-
+vector
+-
+
