@@ -17,11 +17,11 @@
 #define _RSMANAGER_H_
 
 #include <iostream>
-#include "DummyPubSub.h"
+#include "RSBridge.h"
 
 class RSManager {
 	int i;
-	std::vector<DummyPubSub*> bridge;
+	std::vector<RSBridge*> bridge;
 public:
 	RSManager(std::string xml_file_path);
  	~RSManager(){};

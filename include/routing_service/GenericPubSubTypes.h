@@ -20,17 +20,17 @@
  */
 
 
-#ifndef _DUMMY_PUBSUBTYPES_H_
-#define _DUMMY_PUBSUBTYPES_H_
+#ifndef _GENERIC_PUBSUBTYPES_H_
+#define _GENERIC_PUBSUBTYPES_H_
 
 #include <fastrtps/TopicDataType.h>
 
 using namespace eprosima::fastrtps;
 
-class DummyPubSubType : public TopicDataType {
+class GenericPubSubType : public TopicDataType {
 public:
-	DummyPubSubType();
-	virtual ~DummyPubSubType();
+	GenericPubSubType();
+	virtual ~GenericPubSubType();
 	bool serialize(void *data, SerializedPayload_t *payload);
 	bool deserialize(SerializedPayload_t *payload, void *data);
     std::function<uint32_t()> getSerializedSizeProvider(void* data);
@@ -41,4 +41,4 @@ public:
 	unsigned char* m_keyBuffer;
 };
 
-#endif // _Dummy_PUBSUBTYPE_H_
+#endif // _GENERIC_PUBSUBTYPE_H_

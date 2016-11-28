@@ -15,31 +15,31 @@
 #include <fastcdr/FastBuffer.h>
 #include <fastcdr/Cdr.h>
 
-#include "DummyPubSubTypes.h"
+#include "GenericPubSubTypes.h"
 
-DummyPubSubType::DummyPubSubType() {
+GenericPubSubType::GenericPubSubType() {
 	m_typeSize = 1; //(uint32_t)Dummy::getMaxCdrSerializedSize(); // <----- SerializedPayload_t max_size
 	m_keyBuffer = (unsigned char*)malloc(16); //(Dummy::getKeyMaxCdrSerializedSize()>16 ? Dummy::getKeyMaxCdrSerializedSize() : 16);
 }
 
-DummyPubSubType::~DummyPubSubType() {
+GenericPubSubType::~GenericPubSubType() {
 	if(m_keyBuffer!=nullptr)
 		free(m_keyBuffer);
 }
 
-bool DummyPubSubType::serialize(void *data, SerializedPayload_t *payload) {
+bool GenericPubSubType::serialize(void *data, SerializedPayload_t *payload) {
 	SerializedPayload_t* p_type = (SerializedPayload_t*) data;
 	payload->copy(p_type, false);
 	return true;
 }
 
-bool DummyPubSubType::deserialize(SerializedPayload_t* payload, void* data) {
+bool GenericPubSubType::deserialize(SerializedPayload_t* payload, void* data) {
 	SerializedPayload_t* p_type = (SerializedPayload_t*) data;
 	p_type->copy(payload, false);
 	return true;
 }
 
-std::function<uint32_t()> DummyPubSubType::getSerializedSizeProvider(void* data) {
+std::function<uint32_t()> GenericPubSubType::getSerializedSizeProvider(void* data) {
 	return [data]() -> uint32_t {
 		return 1;
 	};

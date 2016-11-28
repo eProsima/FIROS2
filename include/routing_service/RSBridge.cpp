@@ -24,11 +24,11 @@
 
 #include <fastrtps/Domain.h>
 
-#include "DummyPubSub.h"
-#include "DummyPubSubTypes.h"
+#include "RSBridge.h"
+#include "GenericPubSubTypes.h"
 
 
-DummyPubSub::DummyPubSub(	ParticipantAttributes par_pub_params,
+RSBridge::RSBridge(	ParticipantAttributes par_pub_params,
 							ParticipantAttributes par_sub_params,
 							PublisherAttributes pub_params,
 							SubscriberAttributes sub_params,
@@ -46,10 +46,10 @@ DummyPubSub::DummyPubSub(	ParticipantAttributes par_pub_params,
 	if(mp_participant == nullptr) std::cout << "participant creation failed";
 
 	//Register types
-	input_type = new DummyPubSubType();
+	input_type = new GenericPubSubType();
 	input_type->setName(sub_params.topic.topicDataType.c_str());
 	Domain::registerType(ms_participant,(TopicDataType*) input_type);
-	output_type = new DummyPubSubType();
+	output_type = new GenericPubSubType();
 	output_type->setName(pub_params.topic.topicDataType.c_str());
 	Domain::registerType(mp_participant,(TopicDataType*) output_type);
 
@@ -63,9 +63,9 @@ DummyPubSub::DummyPubSub(	ParticipantAttributes par_pub_params,
 	if(ms_subscriber == nullptr)  std::cout << "subscriber creation failed";
 }
 
-DummyPubSub::~DummyPubSub(){Domain::removeParticipant(mp_participant);}
+RSBridge::~RSBridge(){Domain::removeParticipant(mp_participant);}
 
-void DummyPubSub::SubListener::onSubscriptionMatched(Subscriber* sub,MatchingInfo& info){
+void RSBridge::SubListener::onSubscriptionMatched(Subscriber* sub,MatchingInfo& info){
 	if (info.status == MATCHED_MATCHING)
 	{
 		n_matched++;
@@ -78,7 +78,7 @@ void DummyPubSub::SubListener::onSubscriptionMatched(Subscriber* sub,MatchingInf
 	}
 }
 
-DummyPubSub::SubListener::SubListener(const char* file_path){
+RSBridge::SubListener::SubListener(const char* file_path){
 	handle = dlopen (file_path, RTLD_LAZY);
     if (!handle) {
         fputs (dlerror(), stderr);
@@ -91,11 +91,11 @@ DummyPubSub::SubListener::SubListener(const char* file_path){
     }
 }
 
-DummyPubSub::SubListener::~SubListener(){
+RSBridge::SubListener::~SubListener(){
 	dlclose(handle);
 }
 
-void DummyPubSub::SubListener::onNewDataMessage(Subscriber* sub){
+void RSBridge::SubListener::onNewDataMessage(Subscriber* sub){
 	SerializedPayload_t serialized_input;
 	SerializedPayload_t serialized_output;
     if(sub->takeNextData(&serialized_input, &m_info)){

@@ -72,7 +72,7 @@ RSManager::RSManager(std::string xml_file_path){
 		subscriber_params.topic.topicDataType = input_type_name;
 		subscriber_params.topic.topicName = input_topic_name;
 
-		bridge.push_back(new DummyPubSub(participant_publisher_params,
+		bridge.push_back(new RSBridge(participant_publisher_params,
 										participant_subscriber_params,
 										publisher_params,
 										subscriber_params,
