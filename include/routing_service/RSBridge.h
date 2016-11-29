@@ -29,7 +29,7 @@
 #include "GenericPubSubTypes.h"
 #include "RSBridge.h"
 
-#include <dlfcn.h>
+#include "eProsimaDL/eProsimaDL.h"
 
 using namespace eprosima::fastrtps;
 

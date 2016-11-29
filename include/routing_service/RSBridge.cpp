@@ -79,20 +79,21 @@ void RSBridge::SubListener::onSubscriptionMatched(Subscriber* sub,MatchingInfo& 
 }
 
 RSBridge::SubListener::SubListener(const char* file_path){
-	handle = dlopen (file_path, RTLD_LAZY);
-    if (!handle) {
+	//handle = dlopen (file_path, RTLD_LAZY);
+	handle = eProsimaLoadLibrary(file_path);
+    /*if (!handle) {
         fputs (dlerror(), stderr);
         exit(1);
-    }
-    user_transformation = (userf_t)dlsym(handle, "transform");
-    if ((error = dlerror()) != NULL){
+    }*/
+    user_transformation = (userf_t)eProsimaGetProcAddress(handle, "transform");
+    /*if ((error = dlerror()) != NULL){
         fputs(error, stderr);
         exit(1);
-    }
+    }*/
 }
 
 RSBridge::SubListener::~SubListener(){
-	dlclose(handle);
+	eProsimaCloseLibrary(handle);
 }
 
 void RSBridge::SubListener::onNewDataMessage(Subscriber* sub){

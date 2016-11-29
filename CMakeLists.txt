@@ -20,21 +20,19 @@ find_package(fastcdr REQUIRED)
 
 add_executable(firosRF src/main.cpp)
 
-add_library(tinyxml2 include/tinyxml2/tinyxml2.cpp)
+add_library(eProsimaDL include/routing_service/eProsimaDL/eProsimaDL.cpp)
+add_library(tinyxml2 include/routing_service/tinyxml2/tinyxml2.cpp)
 add_library(RSManager include/routing_service/RSManager.cpp)
 add_library(RSBridge include/routing_service/RSBridge.cpp)
 add_library(GenericPubSubTypes include/routing_service/GenericPubSubTypes.cpp)
 
-target_link_libraries(GenericPubSubTypes fastrtps fastcdr)
-target_link_libraries(RSBridge GenericPubSubTypes)
-target_link_libraries(RSManager RSBridge)
 
-target_link_libraries(	firosRF
-						RSManager
-						RSBridge
-                        tinyxml2
-						${CMAKE_DL_LIBS}
-                     )
+target_link_libraries(eProsimaDL  ${CMAKE_DL_LIBS})
+target_link_libraries(GenericPubSubTypes fastrtps fastcdr)
+target_link_libraries(RSBridge GenericPubSubTypes eProsimaDL)
+target_link_libraries(RSManager RSBridge tinyxml2)
+
+target_link_libraries(firosRF RSManager)
 
 install(TARGETS firosRF DESTINATION bin)
 

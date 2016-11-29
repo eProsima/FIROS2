@@ -18,6 +18,8 @@
 
 #include <iostream>
 #include "RSBridge.h"
+#include "tinyxml2/tinyxml2.h"
+
 
 class RSManager {
 	int i;

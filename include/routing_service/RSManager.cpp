@@ -13,7 +13,6 @@
 // limitations under the License.
 
 #include "RSManager.h"
-#include "../tinyxml2/tinyxml2.h"
 
 RSManager::RSManager(std::string xml_file_path){
 
