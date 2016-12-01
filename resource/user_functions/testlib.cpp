@@ -15,7 +15,7 @@
   #define USER_LIB_EXPORT
 #endif
 
-extern "C" void __declspec(dllexport) transform(SerializedPayload_t *serialized_input, SerializedPayload_t *serialized_output){
+extern "C" void USER_LIB_EXPORT transform(SerializedPayload_t *serialized_input, SerializedPayload_t *serialized_output){
 	sensor_msgs::msg::dds_::Imu_ imu_data;
 	sensor_msgs::msg::dds_::Imu_PubSubType imu_pst;
 	Output output_data;
