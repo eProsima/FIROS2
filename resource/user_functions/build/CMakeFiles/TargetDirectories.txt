@@ -1,3 +1,0 @@
-C:/dev/ros2/src/ros2/firos2/resource/user_functions/build/CMakeFiles/testlib.dir
-C:/dev/ros2/src/ros2/firos2/resource/user_functions/build/CMakeFiles/ALL_BUILD.dir
-C:/dev/ros2/src/ros2/firos2/resource/user_functions/build/CMakeFiles/ZERO_CHECK.dir
