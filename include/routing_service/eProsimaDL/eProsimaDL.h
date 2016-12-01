@@ -2,8 +2,7 @@
 #define _EPROSIMA_C_SYS_EPROSIMADL_H_
 
 #ifdef __cplusplus
-extern "C"
-{
+extern "C"{
 #endif // __cplusplus
 
 	/**

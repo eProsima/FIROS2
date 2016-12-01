@@ -7,45 +7,39 @@
 	#include <dlfcn.h>
 #endif
 
-void* eProsimaLoadLibrary(const char *filename)
-{
+void* eProsimaLoadLibrary(const char *filename){
 	void *libraryHandle = nullptr;
 
 	if(filename != nullptr){
 #ifdef _WIN32
-	  libraryHandle = LoadLibrary(filename);
+	libraryHandle = LoadLibrary(filename);
 #else
-		libraryHandle = dlopen(filename, RTLD_LAZY);
+	libraryHandle = dlopen(filename, RTLD_LAZY);
 #endif
 	}
 	else{
-		printf("Bad parameter (filename)\n");
+		std::cout << "bad filename" << std::endl;
 	}
 
 	if(libraryHandle == nullptr){
-			printf("load fail\n");
+		std::cout << "load fail" << std::endl;
 	}
-
 
 	return libraryHandle;
 }
 
-void* eProsimaGetProcAddress(void *libraryHandle, const char *functionName)
-{
+void* eProsimaGetProcAddress(void *libraryHandle, const char *functionName){
 	void *functionPointer = nullptr;
 
-	if(libraryHandle != nullptr && functionName != nullptr)
-	{
+	if(libraryHandle != nullptr && functionName != nullptr){
 #ifdef _WIN32
 		functionPointer = GetProcAddress((HMODULE)libraryHandle, functionName);
-		if (functionPointer == nullptr) printf("\n\nGAME OVER\n\n");
 #else
 		functionPointer = dlsym(libraryHandle, functionName);
 #endif
 	}
-	else
-	{
-		printf("Bad parameters");
+	else{
+		std::cout << "bad parameters" << std::endl;
 	}
 
 	return functionPointer;

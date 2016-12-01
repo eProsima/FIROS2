@@ -22,7 +22,6 @@
 
 
 class RSManager {
-	int i;
 	std::vector<RSBridge*> bridge;
 public:
 	RSManager(std::string xml_file_path);

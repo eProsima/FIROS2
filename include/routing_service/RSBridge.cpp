@@ -33,9 +33,10 @@ RSBridge::RSBridge(	ParticipantAttributes par_pub_params,
 							PublisherAttributes pub_params,
 							SubscriberAttributes sub_params,
 							const char *file_path
-						) : mp_participant(nullptr), ms_subscriber(nullptr),
-							mp_publisher(nullptr), input_type(nullptr),
-							output_type(nullptr), m_listener(file_path)
+						) : mp_participant(nullptr), ms_participant(nullptr),
+						 	ms_subscriber(nullptr),	mp_publisher(nullptr),
+							input_type(nullptr), output_type(nullptr),
+							m_listener(file_path)
 {
 	// Create RTPSParticipant
 	mp_participant = Domain::createParticipant(par_pub_params);
@@ -43,7 +44,7 @@ RSBridge::RSBridge(	ParticipantAttributes par_pub_params,
 
 	// Create RTPSParticipant
 	ms_participant = Domain::createParticipant(par_sub_params);
-	if(mp_participant == nullptr) std::cout << "participant creation failed";
+	if(ms_participant == nullptr) std::cout << "participant creation failed";
 
 	//Register types
 	input_type = new GenericPubSubType();
@@ -63,7 +64,10 @@ RSBridge::RSBridge(	ParticipantAttributes par_pub_params,
 	if(ms_subscriber == nullptr)  std::cout << "subscriber creation failed";
 }
 
-RSBridge::~RSBridge(){Domain::removeParticipant(mp_participant);}
+RSBridge::~RSBridge(){
+	Domain::removeParticipant(mp_participant);
+	Domain::removeParticipant(ms_participant);
+}
 
 void RSBridge::SubListener::onSubscriptionMatched(Subscriber* sub,MatchingInfo& info){
 	if (info.status == MATCHED_MATCHING)

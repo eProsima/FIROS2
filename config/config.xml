@@ -13,6 +13,6 @@
 			<topic>OutputPubSubTopic</topic>
 			<type>Output</type>
 		</publisher>
-		<transformation>C:\\dev\\ros2\\src\\ros2\\firos2\\resource\\user_functions\\build\\Release\\testlib.dll</transformation>
+		<transformation>/home/javierih/ros2_ws/src/ros2/firos2/resource/user_functions/build/libtestlib.so</transformation>
 	</bridge>
 </firos>
