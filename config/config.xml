@@ -13,36 +13,6 @@
 			<topic>OutputPubSubTopic</topic>
 			<type>Output</type>
 		</publisher>
-		<transformation>/home/javierih/ros2_ws/src/ros2/firos2/resource/user_functions/build/libtestlib.so</transformation>
-	</bridge>
-	<bridge>
-		<subscriber>
-			<participant>ros2_participant2</participant>
-			<domain>0</domain>
-			<topic>imu</topic>
-			<type>sensor_msgs::msg::dds_::Imu_</type>
-		</subscriber>
-		<publisher>
-			<participant>fastrtps_participant2</participant>
-			<domain>0</domain>
-			<topic>OutputPubSubTopic</topic>
-			<type>Output</type>
-		</publisher>
-		<transformation>/home/javierih/ros2_ws/src/ros2/firos2/resource/user_functions/build/libtestlib.so</transformation>
-	</bridge>
-	<bridge>
-		<subscriber>
-			<participant>ros2_participant3</participant>
-			<domain>0</domain>
-			<topic>imu</topic>
-			<type>sensor_msgs::msg::dds_::Imu_</type>
-		</subscriber>
-		<publisher>
-			<participant>fastrtps_participant3</participant>
-			<domain>0</domain>
-			<topic>OutputPubSubTopic</topic>
-			<type>Output</type>
-		</publisher>
-		<transformation>/home/javierih/ros2_ws/src/ros2/firos2/resource/user_functions/build/libtestlib.so</transformation>
+		<transformation>C:\\dev\\ros2\\src\\ros2\\firos2\\resource\\user_functions\\build\\Release\\testlib.dll</transformation>
 	</bridge>
 </firos>

@@ -1,1 +1,0 @@
-/usr/bin/c++  -fPIC   -shared -Wl,-soname,libImuPubSubTypes.so -o libImuPubSubTypes.so CMakeFiles/ImuPubSubTypes.dir/Imu_PubSubTypes.cpp.o libImu.so -lfastcdr libHeader.so libVector3.so libQuaternion.so -Wl,-rpath,/home/javierih/ros2_ws/src/ros2/firos2/resource/user_functions/build 

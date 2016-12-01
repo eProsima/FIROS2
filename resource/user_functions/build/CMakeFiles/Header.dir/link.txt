@@ -1,1 +1,0 @@
-/usr/bin/c++  -fPIC   -shared -Wl,-soname,libHeader.so -o libHeader.so CMakeFiles/Header.dir/Header_.cpp.o 

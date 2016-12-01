@@ -1,9 +1,21 @@
 #include <iostream>
-
 #include "Imu_PubSubTypes.h"
 #include "OutputPubSubTypes.h"
 
-extern "C" void transform(SerializedPayload_t *serialized_input, SerializedPayload_t *serialized_output){
+#if defined(_WIN32) && defined (BUILD_SHARED_LIBS)
+	#if defined (_MSC_VER)
+		#pragma warning(disable: 4251)
+	#endif
+  #if defined(testlib_EXPORTS)
+  	#define  USER_LIB_EXPORT __declspec(dllexport)
+  #else
+    #define  USER_LIB_EXPORT __declspec(dllimport)
+  #endif
+#else
+  #define USER_LIB_EXPORT
+#endif
+
+extern "C" void __declspec(dllexport) transform(SerializedPayload_t *serialized_input, SerializedPayload_t *serialized_output){
 	sensor_msgs::msg::dds_::Imu_ imu_data;
 	sensor_msgs::msg::dds_::Imu_PubSubType imu_pst;
 	Output output_data;

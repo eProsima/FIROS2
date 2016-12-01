@@ -1,5 +1,5 @@
 project(user_lib)
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.9)
 
 include(CheckCXXCompilerFlag)
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANG OR
@@ -12,20 +12,22 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANG OR
     endif()
 endif()
 
+find_package(fastcdr)
+find_package(fastrtps)
+
+add_definitions(-DEPROSIMA_USER_DLL_EXPORT  -DBUILD_SHARED_LIBS)
+
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+set(BUILD_SHARED_LIBS TRUE)
 
-add_library(Imu SHARED Imu_.cpp)
-add_library(ImuPubSubTypes SHARED Imu_PubSubTypes.cpp)
-add_library(Header SHARED Header_.cpp)
-add_library(Vector3 SHARED Vector3_.cpp)
-add_library(Quaternion SHARED Quaternion_.cpp)
-add_library(Output SHARED Output.cpp)
-add_library(OutputPubSubTypes SHARED OutputPubSubTypes.cpp)
-add_library(testlib SHARED testlib.cpp)
+add_library(testlib SHARED  Imu_.cpp
+                            Imu_PubSubTypes.cpp
+                            Header_.cpp
+                            Vector3_.cpp
+                            Quaternion_.cpp
+                            Output.cpp
+                            OutputPubSubTypes.cpp
+                            testlib.cpp
+)
 
-target_link_libraries(Imu fastcdr Header Vector3 Quaternion)
-target_link_libraries(ImuPubSubTypes Imu)
-target_link_libraries(OutputPubSubTypes fastcdr Output)
-target_link_libraries(testlib fastcdr ImuPubSubTypes OutputPubSubTypes ${CMAKE_DL_LIBS})
-
-set_property(TARGET testlib PROPERTY POSITION_INDEPENDENT_CODE ON)
+target_link_libraries(testlib fastrtps fastcdr ${CMAKE_DL_LIBS})

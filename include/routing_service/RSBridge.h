@@ -33,7 +33,7 @@
 
 using namespace eprosima::fastrtps;
 
-typedef void (*userf_t)(SerializedPayload_t *serialized_input, SerializedPayload_t *serialized_output);
+typedef void (__stdcall *userf_t)(SerializedPayload_t *serialized_input, SerializedPayload_t *serialized_output);
 
 class RSBridge
 {
