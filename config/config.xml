@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <firos>
-	<bridge>
+	<!--<bridge>
 		<subscriber>
 			<participant>ros2_participant</participant>
 			<domain>0</domain>
@@ -14,5 +14,35 @@
 			<type>Output</type>
 		</publisher>
 		<transformation>/home/javierih/ros2_ws/src/ros2/firos2/resource/user_functions/build/libtestlib.so</transformation>
+	</bridge>-->
+	<bridge>
+		<subscriber>
+			<participant>participant_subscriber</participant>
+			<domain>3</domain>
+			<topc>OutputPubSubTopic</topc>
+			<type>Output</type>
+		</subscriber>
+		<publisher>
+			<participant>fastrtps_participant</participant>
+			<domain>0</domain>
+			<topic>OutputPubSubTopic</topic>
+			<type>Output</type>
+		</publisher>
+		<transformation></transformation>
+	</bridge>
+	<bridge>
+		<subscriber>
+			<participant>participant_subscriber</participant>
+			<domain>3</domain>
+			<topic>OutputPubSubTopic</topic>
+			<type>Output</type>
+		</subscriber>
+		<publisher>
+			<participant>fastrtps_participant</participant>
+			<domain>0</domain>
+			<topic>OutputPubSubTopic</topic>
+			<type>Output</type>
+		</publisher>
+		<transformation></transformation>
 	</bridge>
 </firos>

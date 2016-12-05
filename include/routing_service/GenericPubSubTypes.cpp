@@ -18,8 +18,8 @@
 #include "GenericPubSubTypes.h"
 
 GenericPubSubType::GenericPubSubType() {
-	m_typeSize = 1; //(uint32_t)Dummy::getMaxCdrSerializedSize(); // <----- SerializedPayload_t max_size
-	m_keyBuffer = (unsigned char*)malloc(16); //(Dummy::getKeyMaxCdrSerializedSize()>16 ? Dummy::getKeyMaxCdrSerializedSize() : 16);
+	m_typeSize = 1;
+	m_keyBuffer = (unsigned char*)malloc(16);
 }
 
 GenericPubSubType::~GenericPubSubType() {
@@ -41,6 +41,7 @@ bool GenericPubSubType::deserialize(SerializedPayload_t* payload, void* data) {
 
 std::function<uint32_t()> GenericPubSubType::getSerializedSizeProvider(void* data) {
 	return [data]() -> uint32_t {
-		return 1;
+		SerializedPayload_t* p_type = (SerializedPayload_t*) data;
+		return p_type->length;
 	};
 }

@@ -22,10 +22,14 @@
 
 
 class RSManager {
-	std::vector<RSBridge*> bridge;
+	std::vector<RSBridge> bridge;
+	bool active;
 public:
 	RSManager(std::string xml_file_path);
  	~RSManager(){};
+	bool isActive();
+	tinyxml2::XMLElement* assignCurrentElement(tinyxml2::XMLElement *element, std::string name);
+
 };
 
 #endif // _RSMANAGER_H_

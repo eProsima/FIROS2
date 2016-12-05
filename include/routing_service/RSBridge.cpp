@@ -28,7 +28,7 @@
 #include "GenericPubSubTypes.h"
 
 
-RSBridge::RSBridge(	ParticipantAttributes par_pub_params,
+RSBridge::RSBridge(			ParticipantAttributes par_pub_params,
 							ParticipantAttributes par_sub_params,
 							PublisherAttributes pub_params,
 							SubscriberAttributes sub_params,
@@ -56,17 +56,17 @@ RSBridge::RSBridge(	ParticipantAttributes par_pub_params,
 
 	//Create publisher
 	mp_publisher = Domain::createPublisher(mp_participant,pub_params,nullptr);
-	if(mp_publisher == nullptr)  std::cout << "publisher creation failed";
+	if(mp_publisher == nullptr) std::cout << "publisher creation failed";
 	m_listener.setPublisher(mp_publisher);
 
 	// Create Subscriber
 	ms_subscriber = Domain::createSubscriber(ms_participant,sub_params,(SubscriberListener*)&m_listener);
-	if(ms_subscriber == nullptr)  std::cout << "subscriber creation failed";
+	if(ms_subscriber == nullptr) std::cout << "subscriber creation failed";
 }
 
 RSBridge::~RSBridge(){
-	Domain::removeParticipant(mp_participant);
-	Domain::removeParticipant(ms_participant);
+	if(mp_participant != nullptr) Domain::removeParticipant(mp_participant);
+	if(ms_participant != nullptr) Domain::removeParticipant(ms_participant);
 }
 
 void RSBridge::SubListener::onSubscriptionMatched(Subscriber* sub,MatchingInfo& info){
@@ -82,22 +82,16 @@ void RSBridge::SubListener::onSubscriptionMatched(Subscriber* sub,MatchingInfo& 
 	}
 }
 
-RSBridge::SubListener::SubListener(const char* file_path){
-	//handle = dlopen (file_path, RTLD_LAZY);
-	handle = eProsimaLoadLibrary(file_path);
-    /*if (!handle) {
-        fputs (dlerror(), stderr);
-        exit(1);
-    }*/
-    user_transformation = (userf_t)eProsimaGetProcAddress(handle, "transform");
-    /*if ((error = dlerror()) != NULL){
-        fputs(error, stderr);
-        exit(1);
-    }*/
+RSBridge::SubListener::SubListener(const char* file_path) : handle(nullptr), user_transformation(nullptr){
+	if(file_path){
+		std::cout << "cargando funciones..." << std::endl;
+		handle = eProsimaLoadLibrary(file_path);
+    	user_transformation = (userf_t)eProsimaGetProcAddress(handle, "transform");
+	}
 }
 
 RSBridge::SubListener::~SubListener(){
-	eProsimaCloseLibrary(handle);
+	if(handle) eProsimaCloseLibrary(handle);
 }
 
 void RSBridge::SubListener::onNewDataMessage(Subscriber* sub){
@@ -105,7 +99,12 @@ void RSBridge::SubListener::onNewDataMessage(Subscriber* sub){
 	SerializedPayload_t serialized_output;
     if(sub->takeNextData(&serialized_input, &m_info)){
         if(m_info.sampleKind == ALIVE){
-			user_transformation(&serialized_input, &serialized_output);
+			if(user_transformation){
+				user_transformation(&serialized_input, &serialized_output);
+			}
+			else{
+				serialized_output.copy(&serialized_input, false);
+			}
 			listener_publisher->write(&serialized_output);
 		}
 	}
