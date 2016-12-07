@@ -23,11 +23,6 @@ set(BUILD_SHARED_LIBS TRUE)
 file(GLOB USER_LIB_SOURCES_CXX "*.cxx")
 file(GLOB USER_LIB_SOURCES_CPP "*.cpp")
 
-add_library(userlib SHARED# ${USER_LIB_SOURCES_CXX} ${USER_LIB_SOURCES_CPP})
-							HelloWorld.cxx
-                            HelloWorldPubSubTypes.cxx
-                            String_.cxx
-                            String_PubSubTypes.cxx
-                            userlib.cpp
-                        )
+add_library(userlib SHARED ${USER_LIB_SOURCES_CXX} ${USER_LIB_SOURCES_CPP})
+
 target_link_libraries(userlib fastrtps fastcdr ${CMAKE_DL_LIBS})
