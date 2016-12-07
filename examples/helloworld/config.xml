@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<firos>
+	<bridge>
+		<subscriber>
+			<participant>fastrtps_subscriber</participant>
+			<domain>80</domain>
+			<topic>HelloWorldTopic</topic>
+			<type>HelloWorld</type>
+		</subscriber>
+		<publisher>
+			<participant>ros2_publisher</participant>
+			<domain>0</domain>
+			<topic>chatter</topic>
+			<type>std_msgs::msg::dds_::String_</type>
+		</publisher>
+		<transformation>/home/javierih/ros2_ws/src/ros2/firos2/examples/helloworld/build/libuserlib.so</transformation>
+	</bridge>
+</firos>
