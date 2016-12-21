@@ -20,12 +20,11 @@ find_package(fastcdr REQUIRED)
 
 add_executable(firosRF src/main.cpp)
 
-add_library(dynamicload include/routing_service/dynamicload/dynamicload.cpp)
-add_library(tinyxml2 include/routing_service/tinyxml2/tinyxml2.cpp)
-add_library(RSManager include/routing_service/RSManager.cpp)
-add_library(RSBridge include/routing_service/RSBridge.cpp)
-add_library(GenericPubSubTypes include/routing_service/GenericPubSubTypes.cpp)
-
+add_library(dynamicload src/dynamicload/dynamicload.cpp)
+add_library(tinyxml2 src/tinyxml2/tinyxml2.cpp)
+add_library(RSManager src/RSManager.cpp)
+add_library(RSBridge src/RSBridge.cpp)
+add_library(GenericPubSubTypes src/GenericPubSubTypes.cpp)
 
 target_link_libraries(dynamicload  ${CMAKE_DL_LIBS})
 target_link_libraries(GenericPubSubTypes fastrtps fastcdr)
@@ -34,6 +33,17 @@ target_link_libraries(RSManager RSBridge tinyxml2)
 
 target_link_libraries(firosRF RSManager)
 
+ament_export_dependencies(rosidl_cmake) #IDL
+ament_export_dependencies(rosidl_generator_dds_idl) #IDL
+
+
 install(TARGETS firosRF DESTINATION bin)
 
-ament_package()
+ament_package(
+  CONFIG_EXTRAS "firos2-extras.cmake.in" #IDL
+)
+
+install(
+  DIRECTORY cmake
+  DESTINATION share/${PROJECT_NAME}
+)

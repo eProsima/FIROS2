@@ -1,4 +1,4 @@
-project(user_lib)
+project(template_lib)
 cmake_minimum_required(VERSION 2.9)
 
 include(CheckCXXCompilerFlag)
@@ -20,14 +20,9 @@ add_definitions(-DEPROSIMA_USER_DLL_EXPORT  -DBUILD_SHARED_LIBS)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(BUILD_SHARED_LIBS TRUE)
 
-add_library(testlib SHARED  Imu_.cpp
-                            Imu_PubSubTypes.cpp
-                            Header_.cpp
-                            Vector3_.cpp
-                            Quaternion_.cpp
-                            Output.cpp
-                            OutputPubSubTypes.cpp
-                            testlib.cpp
-)
+file(GLOB USER_LIB_SOURCES_CXX "*.cxx")
+file(GLOB USER_LIB_SOURCES_CPP "*.cpp")
 
-target_link_libraries(testlib fastrtps fastcdr ${CMAKE_DL_LIBS})
+add_library(templatelib SHARED ${USER_LIB_SOURCES_CXX} ${USER_LIB_SOURCES_CPP})
+
+target_link_libraries(templatelib fastrtps fastcdr ${CMAKE_DL_LIBS})

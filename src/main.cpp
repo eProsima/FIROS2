@@ -1,7 +1,7 @@
 #include <iostream>
 #include <memory>
 
-#include "../include/routing_service/RSManager.h"
+#include "RSManager.h"
 
 
 int main(int argc, char * argv[]){

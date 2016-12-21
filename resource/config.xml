@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<firos>
+	<bridge>
+		<subscriber>
+			<participant>subscriber_participant_name</participant>
+			<domain>0</domain>
+			<topic>subscriber_topic_name</topic>
+			<type>subscriber_type_name</type>
+		</subscriber>
+		<publisher>
+			<participant>publisher_participant_name</participant>
+			<domain>0</domain>
+			<topic>publisher_topic_name</topic>
+			<type>puclisher_type_name</type>
+		</publisher>
+		<transformation>/path/to/transformation/library</transformation>
+	</bridge>
+</firos>

@@ -1,6 +1,6 @@
 #include <iostream>
-#include "Imu_PubSubTypes.h"
-#include "OutputPubSubTypes.h"
+//#include "TypeAPubSubTypes.h"
+//#include "TypeBPubSubTypes.h"
 
 #if defined(_WIN32) && defined (BUILD_SHARED_LIBS)
 	#if defined (_MSC_VER)
@@ -16,19 +16,27 @@
 #endif
 
 extern "C" void USER_LIB_EXPORT transform(SerializedPayload_t *serialized_input, SerializedPayload_t *serialized_output){
-	sensor_msgs::msg::dds_::Imu_ imu_data;
-	sensor_msgs::msg::dds_::Imu_PubSubType imu_pst;
-	Output output_data;
-	OutputPubSubType output_pst;
+	// Types definition
+	/*
+	TypeA input_data;
+	TypeAPubSubType input_pst;
+	TypeB output_data;
+	TypeBPubSubType output_pst;
+	*/
+
 	// Deserialization
-	imu_pst.deserialize(serialized_input, &imu_data);
+	/*
+	imu_pst.deserialize(serialized_input, &input_data);
+	*/
+
 	// Custom routing
-	output_data.time(
-		imu_data.header_().sec() +
-		imu_data.header_().nanosec()/1000.0
-	);
-	output_data.rotation(-75.64);
+	/*
+	output_data = 0;
+	*/
+
 	// Serialization
+	/*
 	serialized_output->reserve(output_pst.m_typeSize);
 	output_pst.serialize(&output_data, serialized_output);
+	*/
 }

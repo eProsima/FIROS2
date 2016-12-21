@@ -2,23 +2,23 @@
 
 For this example we are going to use three elements:
 * Firos2 with an example configuration and transformation.
-* ROS2 [Talker/Listener example](www.google.com).
-* Fast [RTPS HelloWorld example](www.google.com).
+* ROS2 [Talker/Listener example](https://github.com/ros2/ros2/wiki/Linux-Development-Setup#try-some-examples).
+* Fast RTPS [HelloWorld example](https://github.com/eProsima/Fast-RTPS/tree/master/examples/C%2B%2B/HelloWorldExample).
 
-The goal will be to make a bridge from the Fast RTPS HelloWorld publisher and the "Listener" node of ROS2.
+The goal will be to make a bridge from the Fast RTPS HelloWorld publisher and the *Listener* node of ROS2.
 
 ##Types generation
 
-First of all we are going to check which IDL is using each node. In the case of Fast RTPS HelloWorld the IDL of the example is located on the main directory. But in the case of ROS2, we have to take the IDL file from the generated files that ROS2 creates at compilation time. For this particular example, we can find a compatible IDL named String_.idl in the install directory. These two idl has been copied to the [idl](www.google.com) directory.
+First of all we are going to check which IDL is using each node. In the case of Fast RTPS HelloWorld the IDL of the example is located on the main directory. But in the case of ROS2, we have to take the IDL file from the generated files that ROS2 creates at compilation time (if you need more information about idl files and its generation from ROS2 msg files, please visit this [link]). For this particular example, we can find a compatible IDL named String_.idl in the install directory. These two IDLs has been copied to the [idl](idl) directory.
 
-Now, on the [examples/helloworld](www.google.com) directory of Firos2 and using these two IDLs and the tool fastrtpsgen we are going to generate the needed source files that contains the definition of the described types in the IDL file:
+Now using these two IDLs and the tool fastrtpsgen we are going to generate the needed source files that contains the definition of the described types in the IDL file:
 
 ``` bash
 $ fastrtpsgen idl/HelloWorld.idl
 $ fastrtpsgen idl/String_.idl
 ```
 
-Inside the same directory, we are going to use the provided template for the *CMakeLists.txt* and *config.xml* files located on [resource/user_functions](www.google.com). In this point, our directory looks like it is showed on the following graph.
+From the [resource](../../resource) directory, we are going to use the provided template for the *CMakeLists.txt* and *config.xml* files. In this point, our directory looks like it is showed on the following graph.
 
 ``` bash
    examples
@@ -43,7 +43,7 @@ Once it is done, we are going to fill the conversion functions with our applicat
 
 On the ROS2 side, *Listener* is working with an IDL which only has an string attribute: *data_*. In this example we are going to define a conversion for putting the text of *message* and the number of *index* in an only one string stored on *data_*. This transformation replicates the original behaviour of the Talker/Listener example, where Talker publishes a string "Hello World: X", where X takes its value from an ascending counter defined on the ROS2 node.
 
-Our transformation function code, which is located on [userlib.cpp](www.google.com), will be defined like this:
+Our transformation function code, which is located on *userlib.cpp*, will be defined like this:
 
 ``` cpp
 extern "C" void USER_LIB_EXPORT transform(SerializedPayload_t *serialized_input, SerializedPayload_t *serialized_output){
@@ -84,7 +84,7 @@ Or these other on Windows:
 
 
 ##Publisher/subscriber parameters
-The next step is to set the [config.xml](www.google.com) file with the specific parameters of our bridge:
+The next step is to set the *config.xml* file with the specific parameters of our bridge:
 
 ``` xml
 <bridge>
