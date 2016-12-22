@@ -5,7 +5,7 @@ Firos2 is a ROS2 integrable tool focused in the intercommunication between ROS2 
 With Firos2 the user can create different parametric communication bridges between ROS2 and Fast RTPS performing transformation over the messages such as customized routing, mapping between input and output attributes or data modification.
 
 <p align="center">
-<img src="https://github.com/JavierIH/armageddon/blob/firos/doc/images/firos2_schema.png"> 
+<img src="doc/images/firos2_schema.png"> 
 </p>
 
 ##Installation on ROS2 workspace
