@@ -11,7 +11,7 @@
 			<participant>publisher_participant_name</participant>
 			<domain>0</domain>
 			<topic>publisher_topic_name</topic>
-			<type>puclisher_type_name</type>
+			<type>publisher_type_name</type>
 		</publisher>
 		<transformation>/path/to/transformation/library</transformation>
 	</bridge>
