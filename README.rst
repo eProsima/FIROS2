@@ -1,7 +1,7 @@
 eProsima Firos2
 ===============
 
-*eProsima Firos2* is a *ROS2* integrable tool focused in the intercommunication between *ROS2* and *Fast RTPS* environments.
+*eProsima Firos2* is a *ROS2* integrable tool focused in the intercommunication between *ROS2* and FIWARE through *Fast RTPS* Generic Enabler.
 
 Since *Firos2* is powered by the *eProsima Protocol Bridging Service*, and it makes possible the creation of communication bridges with customized routing, mapping between input and output attributes or data modification.
 
