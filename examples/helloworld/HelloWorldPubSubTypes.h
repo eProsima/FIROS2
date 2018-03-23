@@ -25,22 +25,26 @@
 
 #include <fastrtps/TopicDataType.h>
 
+using namespace eprosima::fastrtps;
+using eprosima::fastrtps::rtps::SerializedPayload_t;
+using eprosima::fastrtps::rtps::InstanceHandle_t;
+
 #include "HelloWorld.h"
 
 /*!
  * @brief This class represents the TopicDataType of the type HelloWorld defined by the user in the IDL file.
  * @ingroup HELLOWORLD
  */
-class HelloWorldPubSubType : public eprosima::fastrtps::TopicDataType {
+class HelloWorldPubSubType : public TopicDataType {
 public:
         typedef HelloWorld type;
 
 	HelloWorldPubSubType();
 	virtual ~HelloWorldPubSubType();
-	bool serialize(void *data, eprosima::fastrtps::rtps::SerializedPayload_t *payload);
-	bool deserialize(eprosima::fastrtps::rtps::SerializedPayload_t *payload, void *data);
+	bool serialize(void *data, SerializedPayload_t *payload);
+	bool deserialize(SerializedPayload_t *payload, void *data);
         std::function<uint32_t()> getSerializedSizeProvider(void* data);
-	bool getKey(void *data, eprosima::fastrtps::rtps::InstanceHandle_t *ihandle);
+	bool getKey(void *data, InstanceHandle_t *ihandle);
 	void* createData();
 	void deleteData(void * data);
 	MD5 m_md5;
