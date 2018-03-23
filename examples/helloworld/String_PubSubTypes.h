@@ -26,6 +26,8 @@
 #include <fastrtps/TopicDataType.h>
 
 using namespace eprosima::fastrtps;
+using eprosima::fastrtps::rtps::SerializedPayload_t;
+using eprosima::fastrtps::rtps::InstanceHandle_t;
 
 #include "String_.h"
 
