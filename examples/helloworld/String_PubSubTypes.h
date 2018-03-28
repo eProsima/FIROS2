@@ -25,10 +25,6 @@
 
 #include <fastrtps/TopicDataType.h>
 
-using namespace eprosima::fastrtps;
-using eprosima::fastrtps::rtps::SerializedPayload_t;
-using eprosima::fastrtps::rtps::InstanceHandle_t;
-
 #include "String_.h"
 
 namespace std_msgs
@@ -41,16 +37,16 @@ namespace std_msgs
              * @brief This class represents the TopicDataType of the type String_ defined by the user in the IDL file.
              * @ingroup STRING_
              */
-            class String_PubSubType : public TopicDataType {
+            class String_PubSubType : public eprosima::fastrtps::TopicDataType {
             public:
                     typedef String_ type;
 
             	String_PubSubType();
             	virtual ~String_PubSubType();
-            	bool serialize(void *data, SerializedPayload_t *payload);
-            	bool deserialize(SerializedPayload_t *payload, void *data);
+            	bool serialize(void *data, eprosima::fastrtps::rtps::SerializedPayload_t *payload);
+            	bool deserialize(eprosima::fastrtps::rtps::SerializedPayload_t *payload, void *data);
                     std::function<uint32_t()> getSerializedSizeProvider(void* data);
-            	bool getKey(void *data, InstanceHandle_t *ihandle);
+            	bool getKey(void *data, eprosima::fastrtps::rtps::InstanceHandle_t *ihandle);
             	void* createData();
             	void deleteData(void * data);
             	MD5 m_md5;

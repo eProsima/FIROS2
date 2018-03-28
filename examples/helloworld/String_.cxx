@@ -85,10 +85,7 @@ size_t std_msgs::msg::dds_::String_::getCdrSerializedSize(const std_msgs::msg::d
 
 void std_msgs::msg::dds_::String_::serialize(eprosima::fastcdr::Cdr &scdr) const
 {
-    if(m_data_.length() <= 255)
     scdr << m_data_;
-    else
-        throw eprosima::fastcdr::exception::BadParamException("data_ field exceeds the maximum length");
 }
 
 void std_msgs::msg::dds_::String_::deserialize(eprosima::fastcdr::Cdr &dcdr)
