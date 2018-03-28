@@ -6,12 +6,14 @@
 			<domain>0</domain>
 			<topic>subscriber_topic_name</topic>
 			<type>subscriber_type_name</type>
+			<partition>subscriber_partition_id</partition>
 		</subscriber>
 		<publisher>
 			<participant>publisher_participant_name</participant>
 			<domain>0</domain>
 			<topic>publisher_topic_name</topic>
 			<type>publisher_type_name</type>
+			<partition>publisher_partition_id</partition>
 		</publisher>
 		<transformation>/path/to/transformation/library</transformation>
 	</bridge>
