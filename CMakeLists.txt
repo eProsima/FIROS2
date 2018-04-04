@@ -13,6 +13,7 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANG OR
     endif()
 endif()
 
+cmake_policy(SET CMP0057 NEW)
 
 find_package(ament_cmake REQUIRED)
 find_package(fastrtps REQUIRED)
