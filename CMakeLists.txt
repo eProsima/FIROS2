@@ -19,20 +19,60 @@ find_package(ament_cmake REQUIRED)
 find_package(fastrtps REQUIRED)
 find_package(fastcdr REQUIRED)
 
-add_executable(firos2 src/main.cpp)
+add_executable(firos2 src/main.cpp
+    thirdparty/routing-service/src/RSManager.cpp
+    thirdparty/routing-service/src/dynamicload/dynamicload.cpp
+    thirdparty/routing-service/src/GenericPubSubTypes.cpp)
 
-add_library(dynamicload thirdparty/routing-service/src/dynamicload/dynamicload.cpp)
-add_library(tinyxml2 thirdparty/routing-service/src/tinyxml2/tinyxml2.cpp)
-add_library(RSManager thirdparty/routing-service/src/RSManager.cpp)
-add_library(RSBridge thirdparty/routing-service/src/RSBridge.cpp)
-add_library(GenericPubSubTypes thirdparty/routing-service/src/GenericPubSubTypes.cpp)
+#add_library(dynamicload thirdparty/routing-service/src/dynamicload/dynamicload.cpp)
+#add_library(tinyxml2 thirdparty/routing-service/src/tinyxml2/tinyxml2.cpp)
+#add_library(RSManager thirdparty/routing-service/src/RSManager.cpp)
+#add_library(GenericPubSubTypes thirdparty/routing-service/src/GenericPubSubTypes.cpp)
 
-target_link_libraries(dynamicload  ${CMAKE_DL_LIBS})
-target_link_libraries(GenericPubSubTypes fastrtps fastcdr)
-target_link_libraries(RSBridge GenericPubSubTypes dynamicload)
-target_link_libraries(RSManager RSBridge tinyxml2)
+add_library(rsngsiv2rtpsbridgelib SHARED
+    src/NGSIv2/RSBridgeNGSIv2ToFastRTPS.cpp
+    src/NGSIv2/ngsiv2rtpslib.cpp
+    src/NGSIv2/idl/JsonNGSIv2.cxx
+    src/NGSIv2/idl/JsonNGSIv2PubSubTypes.cxx
+    thirdparty/routing-service/src/dynamicload/dynamicload.cpp
+    thirdparty/routing-service/src/GenericPubSubTypes.cpp)
 
-target_link_libraries(firos2 RSManager)
+add_library(rsrtpsngsiv2bridgelib SHARED
+    src/NGSIv2/RSBridgeFastRTPSToNGSIv2.cpp
+    src/NGSIv2/rtpsngsiv2lib.cpp
+    src/NGSIv2/idl/JsonNGSIv2.cxx
+    src/NGSIv2/idl/JsonNGSIv2PubSubTypes.cxx
+    thirdparty/routing-service/src/dynamicload/dynamicload.cpp
+    thirdparty/routing-service/src/GenericPubSubTypes.cpp)
+
+#target_link_libraries(dynamicload  ${CMAKE_DL_LIBS})
+#target_link_libraries(GenericPubSubTypes fastrtps fastcdr)
+#target_link_libraries(RSManager GenericPubSubTypes dynamicload tinyxml2)
+
+target_link_libraries(firos2 fastrtps fastcdr tinyxml2
+    ${CMAKE_DL_LIBS} -L/usr/lib/x86_64-linux-gnu curl curlpp pthread ${Boost_LIBRARIES} boost_system)
+
+target_link_libraries(rsngsiv2rtpsbridgelib
+    fastrtps
+    fastcdr
+    -L/usr/lib/x86_64-linux-gnu
+    curl
+    curlpp
+    pthread
+    ${Boost_LIBRARIES}
+    boost_system
+    ${CMAKE_DL_LIBS})
+
+target_link_libraries(rsrtpsngsiv2bridgelib
+    fastrtps
+    fastcdr
+    -L/usr/lib/x86_64-linux-gnu
+    curl
+    curlpp
+    pthread
+    ${Boost_LIBRARIES}
+    boost_system
+    ${CMAKE_DL_LIBS})
 
 ament_export_dependencies(rosidl_cmake)
 ament_export_dependencies(rosidl_generator_dds_idl)
@@ -104,6 +144,8 @@ if(BUILD_TESTING)
 endif()
 
 install(TARGETS firos2 DESTINATION bin)
+install(TARGETS rsngsiv2rtpsbridgelib DESTINATION lib)
+install(TARGETS rsrtpsngsiv2bridgelib DESTINATION lib)
 
 ament_package(
   CONFIG_EXTRAS "firos2-extras.cmake.in"

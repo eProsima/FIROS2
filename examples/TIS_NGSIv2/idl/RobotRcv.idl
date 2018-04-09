@@ -1,0 +1,15 @@
+#include "RobotPosition.idl"
+
+enum State
+{
+    ACTION,
+    STAND_BY
+};
+
+struct RobotRcv
+{
+    string robot_id;
+    string transmission_time;
+    RobotPosition destination;
+    State state;
+};

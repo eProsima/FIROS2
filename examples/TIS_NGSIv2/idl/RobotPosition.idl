@@ -1,0 +1,7 @@
+struct RobotPosition
+{
+    unsigned long floor;
+    unsigned long x;
+    unsigned long y;
+    unsigned long zeta;
+};

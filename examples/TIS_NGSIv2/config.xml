@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<rs>
+	<bridge>
+        <bridge_type>ngsiv2</bridge_type>
+		<ros2>
+			<participant>ros2_participant</participant>
+			<domain>0</domain>
+			<topic>RobotTopic</topic>
+			<type>RobotSnd</type>
+            <partition>rt</partition>
+		</ros2>
+		<ngsiv2>
+			<participant>ngsiv2_participant</participant>
+			<id>.*</id>
+            <host>localhost</host>
+            <port>1026</port>
+            <subscription>
+                <type>Robot</type> <!-- optional -->
+                <notifs>id,transmission_time,floor,x,y,zeta</notifs> <!-- comma separated -->
+                <listener_host>localhost</listener_host>
+                <listener_port>12345</listener_port>
+            </subscription>
+		</ngsiv2>
+		<transformation>/home/luisgp/git/eProsima/routing-service/examples/TIS_NGSIv2/build/libuserlib.so</transformation>
+        <!--<bridge_library_ros2>/home/luisgp/git/eProsima/routing-service/build/librsrtpsngsiv2bridgelib.so</bridge_library_ros2>
+        <bridge_library_ngsiv2>/home/luisgp/git/eProsima/routing-service/build/librsngsiv2rtpsbridgelib.so</bridge_library_ngsiv2> -->
+        <bridge_library_ros2>librsrtpsngsiv2bridgelib.so</bridge_library_ros2> <!-- Using from installed in ROS2 library path -->
+        <bridge_library_ngsiv2>librsngsiv2rtpsbridgelib.so</bridge_library_ngsiv2>
+	</bridge>
+    <!-- Example for CameraInfo. NOTE the two alternatives for retrieve guest_locations and features, depending of implementation.
+	<bridge>
+        <bridge_type>ngsiv2</bridge_type>
+		<ros2>
+			<participant>ros2_participant</participant>
+			<domain>0</domain>
+			<topic>CameraTopic</topic>
+			<type>CameraInfo</type>
+            <partition>rt</partition>
+		</ros2>
+		<ngsiv2>
+			<participant>ngsiv2_participant</participant>
+			<id>.*</id>
+            <host>localhost</host>
+            <port>1026</port>
+            <subscription>
+                <type>Camera</type>
+
+                <notifs>id,transmission_time,number_of_people,floor,x,y,color,other</notifs>
+                <notifs>id,transmission_time,number_of_people,guest_locations,guest_features</notifs>
+
+                <listener_host>localhost</listener_host>
+                <listener_port>12346</listener_port>
+            </subscription>
+		</ngsiv2>
+		<transformation>/home/luisgp/git/eProsima/routing-service/examples/TIS_NGSIv2/build/libuserlib2.so</transformation>
+        <bridge_library_ros2>/home/luisgp/git/eProsima/routing-service/build/librsrtpsngsiv2bridgelib.so</bridge_library_ros2>
+        <bridge_library_ngsiv2>/home/luisgp/git/eProsima/routing-service/build/librsngsiv2rtpsbridgelib.so</bridge_library_ngsiv2>
+	</bridge>
+    -->
+</rs>

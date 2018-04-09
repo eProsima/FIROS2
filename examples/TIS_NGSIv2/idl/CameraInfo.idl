@@ -1,0 +1,21 @@
+struct GuestLocation
+{
+    unsigned long floor;
+    unsigned long x;
+    unsigned long y;
+};
+
+struct GuestFeature
+{
+    string color;
+    string other;
+};
+
+struct CameraInfo
+{
+    string camera_id;
+	string transmission_time;
+	unsigned long number_of_people;
+	sequence<GuestLocation> guest_locations;
+	sequence<GuestFeature> guest_features;
+};

@@ -1,0 +1,5 @@
+struct JsonNGSIv2
+{
+    string entityId;
+    string data;
+};
