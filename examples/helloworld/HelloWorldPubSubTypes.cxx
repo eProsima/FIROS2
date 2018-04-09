@@ -120,3 +120,4 @@ bool HelloWorldPubSubType::getKey(void *data, InstanceHandle_t* handle) {
     }
     return true;
 }
+
