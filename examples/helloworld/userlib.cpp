@@ -15,6 +15,8 @@
 #define USER_LIB_EXPORT
 #endif
 
+using eprosima::fastrtps::rtps::SerializedPayload_t;
+
 extern "C" void USER_LIB_EXPORT transform(SerializedPayload_t *serialized_input, SerializedPayload_t *serialized_output){
 	// User types
 	std_msgs::msg::dds_::String_ string_data;

@@ -28,6 +28,7 @@ namespace { char dummy; }
 
 #include <fastcdr/Cdr.h>
 
+#include <fastcdr/exceptions/BadParamException.h>
 using namespace eprosima::fastcdr::exception;
 
 #include <utility>
@@ -97,7 +98,6 @@ size_t HelloWorld::getCdrSerializedSize(const HelloWorld& data, size_t current_a
 void HelloWorld::serialize(eprosima::fastcdr::Cdr &scdr) const
 {
     scdr << m_index;
-
     scdr << m_message;
 }
 

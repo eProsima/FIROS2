@@ -44,7 +44,7 @@ bool HelloWorldPubSubType::serialize(void *data, SerializedPayload_t *payload) {
     HelloWorld *p_type = (HelloWorld*) data;
     eprosima::fastcdr::FastBuffer fastbuffer((char*) payload->data, payload->max_size); // Object that manages the raw buffer.
     eprosima::fastcdr::Cdr ser(fastbuffer, eprosima::fastcdr::Cdr::DEFAULT_ENDIAN,
-            eprosima::fastcdr::Cdr::DDS_CDR);
+            eprosima::fastcdr::Cdr::DDS_CDR); // Object that serializes the data.
     payload->encapsulation = ser.endianness() == eprosima::fastcdr::Cdr::BIG_ENDIANNESS ? CDR_BE : CDR_LE;
     // Serialize encapsulation
     ser.serialize_encapsulation();
@@ -58,13 +58,13 @@ bool HelloWorldPubSubType::serialize(void *data, SerializedPayload_t *payload) {
         return false;
     }
 
-    payload->length = (uint32_t)ser.getSerializedDataLength(); 	//Get the serialized length
+    payload->length = (uint32_t)ser.getSerializedDataLength(); //Get the serialized length
     return true;
 }
 
 bool HelloWorldPubSubType::deserialize(SerializedPayload_t* payload, void* data) {
     HelloWorld* p_type = (HelloWorld*) data; 	//Convert DATA to pointer of your type
-    eprosima::fastcdr::FastBuffer fastbuffer((char*)payload->data, payload->length); 	// Object that manages the raw buffer.
+    eprosima::fastcdr::FastBuffer fastbuffer((char*)payload->data, payload->length); // Object that manages the raw buffer.
     eprosima::fastcdr::Cdr deser(fastbuffer, eprosima::fastcdr::Cdr::DEFAULT_ENDIAN,
             eprosima::fastcdr::Cdr::DDS_CDR); // Object that deserializes the data.
     // Deserialize encapsulation.
@@ -84,7 +84,8 @@ bool HelloWorldPubSubType::deserialize(SerializedPayload_t* payload, void* data)
 }
 
 std::function<uint32_t()> HelloWorldPubSubType::getSerializedSizeProvider(void* data) {
-    return [data]() -> uint32_t {
+    return [data]() -> uint32_t
+    {
         return (uint32_t)type::getCdrSerializedSize(*static_cast<HelloWorld*>(data)) + 4 /*encapsulation*/;
     };
 }
@@ -119,3 +120,4 @@ bool HelloWorldPubSubType::getKey(void *data, InstanceHandle_t* handle) {
     }
     return true;
 }
+
