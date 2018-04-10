@@ -20,17 +20,17 @@
 using eprosima::fastrtps::rtps::SerializedPayload_t;
 
 extern "C" void USER_LIB_EXPORT transform(SerializedPayload_t *serialized_input, SerializedPayload_t *serialized_output){
-	// User types
-	std_msgs::msg::dds_::String_ data;
-	std_msgs::msg::dds_::String_PubSubType data_pst;
+    // User types
+    std_msgs::msg::dds_::String_ data;
+    std_msgs::msg::dds_::String_PubSubType data_pst;
 
     JsonNGSIv2PubSubType string_pst;
     JsonNGSIv2 string_data;
 
-	// Deserialization
-	string_pst.deserialize(serialized_input, &string_data);
+    // Deserialization
+    string_pst.deserialize(serialized_input, &string_data);
 
-	// Custom transformation
+    // Custom transformation
     std::stringstream ss(string_data.data());
     Json::Value root;
     Json::CharReaderBuilder jsonReader;

@@ -18,15 +18,15 @@
 using eprosima::fastrtps::rtps::SerializedPayload_t;
 
 extern "C" void USER_LIB_EXPORT transform(SerializedPayload_t *serialized_input, SerializedPayload_t *serialized_output){
-	// User types
-	std_msgs::msg::dds_::String_ data;
-	std_msgs::msg::dds_::String_PubSubType data_pst;
+    // User types
+    std_msgs::msg::dds_::String_ data;
+    std_msgs::msg::dds_::String_PubSubType data_pst;
 
     JsonNGSIv2PubSubType string_pst;
     JsonNGSIv2 string_data;
 
-	// Deserialization
-	data_pst.deserialize(serialized_input, &data);
+    // Deserialization
+    data_pst.deserialize(serialized_input, &data);
 
     // "Hello World: X"
     // -->
@@ -36,13 +36,13 @@ extern "C" void USER_LIB_EXPORT transform(SerializedPayload_t *serialized_input,
     std::string msg = data.data_();
     msg = msg.substr(msg.find(":") + 2); // ": "
 
-	// Custom transformation
+    // Custom transformation
     std:: string json = "{\"count\": { \"value\": " + msg + "} }";
-	string_data.entityId("Helloworld"); // Fixed for the example
-	string_data.data(json);
+    string_data.entityId("Helloworld"); // Fixed for the example
+    string_data.data(json);
     std::cout << string_data.data() << std::endl;
 
-	// Serialization
-	serialized_output->reserve(string_pst.m_typeSize);
-	string_pst.serialize(&string_data, serialized_output);
+    // Serialization
+    serialized_output->reserve(string_pst.m_typeSize);
+    string_pst.serialize(&string_data, serialized_output);
 }
