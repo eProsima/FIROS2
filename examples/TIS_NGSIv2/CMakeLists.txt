@@ -20,23 +20,25 @@ add_definitions(-DEPROSIMA_USER_DLL_EXPORT  -DBUILD_SHARED_LIBS)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(BUILD_SHARED_LIBS TRUE)
 
-file(GLOB USER_LIB_SOURCES_CXX "*.cxx")
-#file(GLOB USER_LIB_SOURCES_CPP "*.cpp")
+#file(GLOB USER_LIB_SOURCES_CXX "*.cxx")
 
 #add_executable(tis_ngsiv2 main.cpp)
+add_executable(cb_create_robot cb_create_robot.cpp)
+add_executable(cb_update_attr cb_update_attr.cpp)
+add_executable(RobotExample RobotExample_main.cpp
+    RobotExamplePublisher.cpp RobotExampleSubscriber.cpp
+    RobotPosition.cxx RobotPositionPubSubTypes.cxx
+    RobotRcv.cxx RobotRcvPubSubTypes.cxx
+    RobotSnd.cxx RobotSndPubSubTypes.cxx)
 
-#add_library(RSManager ../../thirdparty/routing-service/src/RSManager.cpp
-#    ../../src/NGSIv2/idl/JsonNGSIv2.cxx
-#    ../../src/NGSIv2/idl/JsonNGSIv2PubSubTypes.cxx)
-
-#add_library(userlib SHARED ${USER_LIB_SOURCES_CXX} ${USER_LIB_SOURCES_CPP})
-#add_library(userlib2 SHARED ${USER_LIB_SOURCES_CXX} ${USER_LIB_SOURCES_CPP})
-add_library(userlib SHARED ${USER_LIB_SOURCES_CXX} userlib.cpp jsoncpp.cpp)
-add_library(userlib2 SHARED ${USER_LIB_SOURCES_CXX} userlib2.cpp jsoncpp.cpp)
+add_library(userlib SHARED ${USER_LIB_SOURCES_CXX} userlib.cpp jsoncpp.cpp
+    RobotPosition.cxx RobotPositionPubSubTypes.cxx
+    RobotRcv.cxx RobotRcvPubSubTypes.cxx
+    RobotSnd.cxx RobotSndPubSubTypes.cxx)
+#add_library(userlib2 SHARED ${USER_LIB_SOURCES_CXX} userlib2.cpp jsoncpp.cpp)
 
 target_link_libraries(userlib fastrtps fastcdr ${CMAKE_DL_LIBS})
-target_link_libraries(userlib2 fastrtps fastcdr ${CMAKE_DL_LIBS})
-
-#target_link_libraries(RSManager rslib  fastrtps fastcdr tinyxml2)
-
-#target_link_libraries(tis_ngsiv2 RSManager ${CMAKE_DL_LIBS} -L/usr/lib/x86_64-linux-gnu curl curlpp pthread ${Boost_LIBRARIES} boost_system)
+#target_link_libraries(userlib2 fastrtps fastcdr ${CMAKE_DL_LIBS})
+target_link_libraries(cb_create_robot -L/usr/lib/x86_64-linux-gnu curl curlpp)
+target_link_libraries(cb_update_attr -L/usr/lib/x86_64-linux-gnu curl curlpp)
+target_link_libraries(RobotExample fastrtps fastcdr)

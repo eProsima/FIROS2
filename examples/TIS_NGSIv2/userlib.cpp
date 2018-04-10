@@ -21,16 +21,16 @@
 using namespace eprosima::fastrtps::rtps;
 
 extern "C" void USER_LIB_EXPORT transformFromNGSIv2(SerializedPayload_t *serialized_input, SerializedPayload_t *serialized_output){
-	// User types
-	RobotSnd robot_data;
-	RobotSndPubSubType robot_pst;
+    // User types
+    RobotSnd robot_data;
+    RobotSndPubSubType robot_pst;
 
     JsonNGSIv2PubSubType string_pst;
     JsonNGSIv2 string_data;
 
-	// Deserialization
-	string_pst.deserialize(serialized_input, &string_data);
-	// Custom transformation
+    // Deserialization
+    string_pst.deserialize(serialized_input, &string_data);
+    // Custom transformation
     std::stringstream ss(string_data.data());
     Json::Value root;
     Json::CharReaderBuilder jsonReader;
@@ -57,30 +57,29 @@ extern "C" void USER_LIB_EXPORT transformFromNGSIv2(SerializedPayload_t *seriali
 }
 
 extern "C" void USER_LIB_EXPORT transformToNGSIv2(SerializedPayload_t *serialized_input, SerializedPayload_t *serialized_output){
-	// User types
-	RobotRcv robot_data;
-	RobotRcvPubSubType robot_pst;
+    // User types
+    RobotRcv robot_data;
+    RobotRcvPubSubType robot_pst;
 
     JsonNGSIv2PubSubType string_pst;
     JsonNGSIv2 string_data;
 
-	// Deserialization
-	robot_pst.deserialize(serialized_input, &robot_data);
+    // Deserialization
+    robot_pst.deserialize(serialized_input, &robot_data);
 
-	// Custom transformation
+    // Custom transformation
     std::stringstream ss;
-    //ss << robot_data.robot_id() << "@";
     ss << "{\"transmission_time\": { \"value\": \"" << robot_data.transmission_time() << "\"}, ";
     ss << "\"floor\": {\"value\": " << robot_data.destination().floor() << "}, ";
     ss << "\"x\": {\"value\": " << robot_data.destination().x() << "}, ";
     ss << "\"y\": {\"value\": " << robot_data.destination().y() << "}, ";
     ss << "\"zeta\": {\"value\": " << robot_data.destination().zeta() << "},";
     ss << "\"state\": {\"value\": " << ((robot_data.state() == State::ACTION) ? "\"ACTION\"" : "\"STAND_BY\"") << "} }";
-	string_data.entityId(robot_data.robot_id());
-	string_data.data(ss.str());
+    string_data.entityId(robot_data.robot_id());
+    string_data.data(ss.str());
     std::cout << string_data.data() << std::endl;
 
-	// Serialization
-	serialized_output->reserve(string_pst.m_typeSize);
-	string_pst.serialize(&string_data, serialized_output);
+    // Serialization
+    serialized_output->reserve(string_pst.m_typeSize);
+    string_pst.serialize(&string_data, serialized_output);
 }
