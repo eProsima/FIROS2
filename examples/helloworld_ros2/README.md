@@ -17,7 +17,7 @@ FIROS2 includes a JsonNGSIv2.idl, which will be used by the builtin NGSIv2 libra
 
 - *entityId* is intended to be filled with the entityId that will use contextBroker to identify the entity "Helloworld", by the **transformation library** (explained later) which will convert ngsiv2 data to ros2 protocol.
 
-- *data* will contain both raw JSON from contextBroker and attributes to be update to ROS2.
+- *data* will contain raw JSON received from contextBroker.
 
 To sending data to ROS2 we will use the String_.idl that encapsulates a string complatible with the used by the *talker/listener* demo in ROS2.
 
