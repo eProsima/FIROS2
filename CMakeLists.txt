@@ -19,7 +19,6 @@ find_package(ament_cmake REQUIRED)
 find_package(fastrtps REQUIRED)
 find_package(fastcdr REQUIRED)
 find_package(tinyxml2_vendor REQUIRED)
-find_package(TinyXML2 REQUIRED)  # provided by tinyxml2 upstream, or tinyxml2_vendor
 
 add_executable(firos2 src/main.cpp
     thirdparty/routing-service/src/RSManager.cpp
@@ -42,7 +41,7 @@ add_library(rsrtpsngsiv2bridgelib SHARED
     thirdparty/routing-service/src/dynamicload/dynamicload.cpp
     thirdparty/routing-service/src/GenericPubSubTypes.cpp)
 
-target_link_libraries(firos2 fastrtps fastcdr tinyxml2
+target_link_libraries(firos2 fastrtps fastcdr
     ${CMAKE_DL_LIBS} -L/usr/lib/x86_64-linux-gnu curl curlpp pthread ${Boost_LIBRARIES} boost_system)
 
 target_link_libraries(rsngsiv2rtpsbridgelib
@@ -69,8 +68,6 @@ target_link_libraries(rsrtpsngsiv2bridgelib
 
 ament_export_dependencies(rosidl_cmake)
 ament_export_dependencies(rosidl_generator_dds_idl)
-ament_export_dependencies(tinyxml2_vendor TinyXML2)
-ament_export_include_directories(include)
 
 if(BUILD_TESTING)
     find_package(rclcpp REQUIRED)
