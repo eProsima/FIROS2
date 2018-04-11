@@ -18,7 +18,6 @@ cmake_policy(SET CMP0057 NEW)
 find_package(ament_cmake REQUIRED)
 find_package(fastrtps REQUIRED)
 find_package(fastcdr REQUIRED)
-find_package(tinyxml2_vendor REQUIRED)
 
 add_executable(firos2 src/main.cpp
     thirdparty/routing-service/src/RSManager.cpp
@@ -41,15 +40,33 @@ add_library(rsrtpsngsiv2bridgelib SHARED
     thirdparty/routing-service/src/dynamicload/dynamicload.cpp
     thirdparty/routing-service/src/GenericPubSubTypes.cpp)
 
-target_link_libraries(firos2 fastrtps fastcdr
-    ${CMAKE_DL_LIBS} -L/usr/lib/x86_64-linux-gnu curl curlpp pthread ${Boost_LIBRARIES} boost_system)
+# Include thirdparty
+target_include_directories(firos2 PRIVATE thirdparty/tinyxml2 thirdparty/curlpp/include)
+target_include_directories(rsngsiv2rtpsbridgelib PRIVATE thirdparty/tinyxml2 thirdparty/curlpp/include)
+target_include_directories(rsrtpsngsiv2bridgelib PRIVATE thirdparty/tinyxml2 thirdparty/curlpp/include)
+
+# TinyXML2 as thirdparty
+add_library(TinyXML2 thirdparty/tinyxml2/tinyxml2.cpp thirdparty/tinyxml2/tinyxml2.h)
+
+# cURLpp as thirdparty
+file(GLOB_RECURSE CURLPP_HEADERS thirdparty/curlpp/include/*)
+file(GLOB_RECURSE CURLPP_SOURCES thirdparty/curlpp/src/*)
+
+MESSAGE( STATUS "CURLPP H: " ${CURLPP_HEADERS} )
+MESSAGE( STATUS "CURLPP S: " ${CURLPP_SOURCES} )
+
+add_library(cURLpp ${CURLPP_HEADERS} ${CURLPP_SOURCES})
+set_property(TARGET cURLpp PROPERTY POSITION_INDEPENDENT_CODE ON)
+
+target_link_libraries(firos2 fastrtps fastcdr TinyXML2
+    ${CMAKE_DL_LIBS} -L/usr/lib/x86_64-linux-gnu curl cURLpp pthread ${Boost_LIBRARIES} boost_system)
 
 target_link_libraries(rsngsiv2rtpsbridgelib
     fastrtps
     fastcdr
     -L/usr/lib/x86_64-linux-gnu
     curl
-    curlpp
+    cURLpp
     pthread
     ${Boost_LIBRARIES}
     boost_system
@@ -60,7 +77,7 @@ target_link_libraries(rsrtpsngsiv2bridgelib
     fastcdr
     -L/usr/lib/x86_64-linux-gnu
     curl
-    curlpp
+    cURLpp
     pthread
     ${Boost_LIBRARIES}
     boost_system
