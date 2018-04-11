@@ -18,16 +18,13 @@ cmake_policy(SET CMP0057 NEW)
 find_package(ament_cmake REQUIRED)
 find_package(fastrtps REQUIRED)
 find_package(fastcdr REQUIRED)
+find_package(tinyxml2_vendor REQUIRED)
+find_package(TinyXML2 REQUIRED)  # provided by tinyxml2 upstream, or tinyxml2_vendor
 
 add_executable(firos2 src/main.cpp
     thirdparty/routing-service/src/RSManager.cpp
     thirdparty/routing-service/src/dynamicload/dynamicload.cpp
     thirdparty/routing-service/src/GenericPubSubTypes.cpp)
-
-#add_library(dynamicload thirdparty/routing-service/src/dynamicload/dynamicload.cpp)
-#add_library(tinyxml2 thirdparty/routing-service/src/tinyxml2/tinyxml2.cpp)
-#add_library(RSManager thirdparty/routing-service/src/RSManager.cpp)
-#add_library(GenericPubSubTypes thirdparty/routing-service/src/GenericPubSubTypes.cpp)
 
 add_library(rsngsiv2rtpsbridgelib SHARED
     src/NGSIv2/RSBridgeNGSIv2ToFastRTPS.cpp
@@ -44,10 +41,6 @@ add_library(rsrtpsngsiv2bridgelib SHARED
     src/NGSIv2/idl/JsonNGSIv2PubSubTypes.cxx
     thirdparty/routing-service/src/dynamicload/dynamicload.cpp
     thirdparty/routing-service/src/GenericPubSubTypes.cpp)
-
-#target_link_libraries(dynamicload  ${CMAKE_DL_LIBS})
-#target_link_libraries(GenericPubSubTypes fastrtps fastcdr)
-#target_link_libraries(RSManager GenericPubSubTypes dynamicload tinyxml2)
 
 target_link_libraries(firos2 fastrtps fastcdr tinyxml2
     ${CMAKE_DL_LIBS} -L/usr/lib/x86_64-linux-gnu curl curlpp pthread ${Boost_LIBRARIES} boost_system)
@@ -76,6 +69,8 @@ target_link_libraries(rsrtpsngsiv2bridgelib
 
 ament_export_dependencies(rosidl_cmake)
 ament_export_dependencies(rosidl_generator_dds_idl)
+ament_export_dependencies(tinyxml2_vendor TinyXML2)
+ament_export_include_directories(include)
 
 if(BUILD_TESTING)
     find_package(rclcpp REQUIRED)
