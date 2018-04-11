@@ -4,3 +4,6 @@
 [submodule "thirdparty/routing-service"]
 	path = thirdparty/routing-service
 	url = https://gitlab.sambaserver.eprosima.com/LuisGasco/routing-service
+[submodule "thirdparty/curlpp"]
+	path = thirdparty/curlpp
+	url = https://github.com/jpbarrette/curlpp
