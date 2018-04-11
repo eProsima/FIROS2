@@ -1,3 +1,6 @@
 [submodule "thirdparty/tinyxml2"]
 	path = thirdparty/tinyxml2
 	url = https://github.com/leethomason/tinyxml2
+[submodule "thirdparty/routing-service"]
+	path = thirdparty/routing-service
+	url = https://gitlab.sambaserver.eprosima.com/LuisGasco/routing-service
