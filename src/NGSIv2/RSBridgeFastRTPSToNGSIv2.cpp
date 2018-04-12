@@ -25,7 +25,7 @@
 #include "RSBridgeFastRTPSToNGSIv2.h"
 #include "idl/JsonNGSIv2PubSubTypes.h" // Type to send to NGSIv2
 
-using boost::asio::ip::tcp;
+using asio::ip::tcp;
 
 RSBridgeFastRTPSToNGSIv2::RSBridgeFastRTPSToNGSIv2(
                     ParticipantAttributes par_fastrtps_params,

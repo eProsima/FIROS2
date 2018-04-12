@@ -34,7 +34,9 @@ add_executable(RobotExample RobotExample_main.cpp
 add_library(userlib SHARED ${USER_LIB_SOURCES_CXX} userlib.cpp jsoncpp.cpp
     RobotPosition.cxx RobotPositionPubSubTypes.cxx
     RobotRcv.cxx RobotRcvPubSubTypes.cxx
-    RobotSnd.cxx RobotSndPubSubTypes.cxx)
+    RobotSnd.cxx RobotSndPubSubTypes.cxx
+    ../../src/NGSIv2/idl/JsonNGSIv2.cxx
+    ../../src/NGSIv2/idl/JsonNGSIv2PubSubTypes.cxx)
 #add_library(userlib2 SHARED ${USER_LIB_SOURCES_CXX} userlib2.cpp jsoncpp.cpp)
 
 target_link_libraries(userlib fastrtps fastcdr ${CMAKE_DL_LIBS})

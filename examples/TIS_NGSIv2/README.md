@@ -150,7 +150,7 @@ The *config.cml* file used in this example is the following:
 					<listener_port>12345</listener_port>
 				</subscription>
 			</ngsiv2>
-			<transformation>/home/luisgp/git/eProsima/routing-service/examples/TIS_NGSIv2/build/libuserlib.so</transformation>
+			<transformation>/home/luisgp/git/eProsima/firos2/examples/TIS_NGSIv2/build/libuserlib.so</transformation>
 			<bridge_library_ros2>librsrtpsngsiv2bridgelib.so</bridge_library_ros2> <!-- Using from installed in ROS2 library path -->
 			<bridge_library_ngsiv2>librsngsiv2rtpsbridgelib.so</bridge_library_ngsiv2>
 		</bridge>

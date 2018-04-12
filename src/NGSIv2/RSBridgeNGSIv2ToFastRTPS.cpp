@@ -27,8 +27,9 @@
 #include "idl/JsonNGSIv2PubSubTypes.h" // Received type from NGSIv2
 
 #include <algorithm>
+#include <thread>
 
-using boost::asio::ip::tcp;
+using asio::ip::tcp;
 
 RSBridgeNGSIv2ToFastRTPS::RSBridgeNGSIv2ToFastRTPS(NGSIv2Params par_ngsiv2_params,
                     ParticipantAttributes par_fastrtps_params,
@@ -280,10 +281,10 @@ void RSBridgeNGSIv2ToFastRTPS::NGSIv2Listener::listener()
 {
     try
     {
-        boost::array<char, 2048> buf;
-        boost::asio::io_service io_service;
+        array<char, 2048> buf;
+        asio::io_service io_service;
         this->io_service = &io_service;
-        boost::system::error_code error;
+        asio::error_code error;
         tcp::endpoint myendpoint(tcp::v4(), listener_port);
         tcp::acceptor acceptor(io_service, myendpoint);
 
@@ -292,12 +293,12 @@ void RSBridgeNGSIv2ToFastRTPS::NGSIv2Listener::listener()
             tcp::socket socket(io_service);
             acceptor.accept(socket);
 
-            size_t len = socket.read_some(boost::asio::buffer(buf), error);
+            size_t len = socket.read_some(asio::buffer(buf), error);
 
-            if (error == boost::asio::error::eof)
+            if (error == asio::error::eof)
                 break; // Connection closed cleanly by peer.
             else if (error)
-                throw boost::system::system_error(error); // Some other error.
+                throw asio::system_error(error); // Some other error.
 
             //std::cout.write(buf.data(), len);
             stringstream ss;

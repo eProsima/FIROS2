@@ -29,6 +29,7 @@
 #include "fastrtps/attributes/SubscriberAttributes.h"
 #include "../../thirdparty/routing-service/src/RSBridge.h"
 #include "../../thirdparty/routing-service/src/GenericPubSubTypes.h"
+#include <asio.hpp>
 
 #include "NGSIv2Params.h"
 
@@ -39,16 +40,11 @@
 #include <curlpp/Easy.hpp>
 #include <curlpp/Options.hpp>
 
-#include <boost/asio.hpp>
-#include <boost/array.hpp>
-
 using namespace std;
 using namespace eprosima::fastrtps;
 using namespace eprosima::fastrtps::rtps;
 using namespace curlpp::options;
 using namespace curlpp::infos;
-
-using boost::asio::ip::tcp;
 
 class RSBridgeNGSIv2ToFastRTPS : public RSBridge
 {
@@ -72,7 +68,7 @@ private:
     class NGSIv2Listener
     {
     private:
-        boost::asio::io_service* io_service;
+        asio::io_service* io_service;
         void* handle;
     public:
         Publisher *fastrtps_pub;
