@@ -25,9 +25,9 @@
         <bridge_library_nodeA>/path/to/bridge/library_1</bridge_library_nodeA> <!-- nodeA -> nodeB logic -->
         <bridge_library_nodeB>/path/to/bridge/library_2</bridge_library_nodeB> <!-- nodeB -> nodeA logic -->
     </bridge>
-    <!-- Builtin bridges -->
+    <!-- Example bridges -->
     <bridge>
-        <bridge_type>fastrtps</bridge_type>
+        <bridge_type>unidirectional</bridge_type>
         <subscriber>
             <participant>subscriber_participant_name</participant>
             <domain>subscriber_domain</domain>
@@ -46,7 +46,7 @@
         <bridge_library>/path/to/bridge/library</bridge_library> <!-- optional -->
     </bridge>
     <bridge>
-        <bridge_type>ngsiv2</bridge_type>
+        <bridge_type>bidirectional</bridge_type>
         <ros2>
             <participant>ros2_participant_name</participant>
             <domain>0</domain>
@@ -72,7 +72,7 @@
             </subscription>
         </ngsiv2>
         <transformation>/path/to/transformation/library</transformation>
-        <bridge_library_ros2>/path/to/bridge/library_1</bridge_library_ros2>
-        <bridge_library_ngsiv2>/path/to/bridge/library_2</bridge_library_ngsiv2>
+        <bridge_library_nodeA>/path/to/bridge/library_1</bridge_library_nodeA>
+        <bridge_library_nodeB>/path/to/bridge/library_2</bridge_library_nodeB>
     </bridge>
 </rs>
