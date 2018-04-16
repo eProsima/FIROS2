@@ -12,8 +12,8 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANG OR
     endif()
 endif()
 
-find_package(fastcdr)
-find_package(fastrtps)
+find_package(fastcdr REQUIRED)
+find_package(fastrtps REQUIRED)
 
 add_definitions(-DEPROSIMA_USER_DLL_EXPORT  -DBUILD_SHARED_LIBS)
 
@@ -24,5 +24,8 @@ file(GLOB USER_LIB_SOURCES_CXX "*.cxx")
 file(GLOB USER_LIB_SOURCES_CPP "*.cpp")
 
 add_library(userlib SHARED ${USER_LIB_SOURCES_CXX} ${USER_LIB_SOURCES_CPP})
+if(WIN32)
+	target_include_directories(userlib PUBLIC ../../../../../install/include)
+endif()
 
 target_link_libraries(userlib fastrtps fastcdr ${CMAKE_DL_LIBS})

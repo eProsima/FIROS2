@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <rs>
 	<bridge>
+		<bridge_type>unidirectional</bridge_type>
 		<subscriber>
 			<participant>fastrtps_subscriber</participant>
 			<domain>0</domain>
@@ -14,7 +15,10 @@
 			<type>std_msgs::msg::dds_::String_</type>
             <partition>rt</partition>
 		</publisher>
-		<!--<transformation>C:/dev/ros2/src/ros2/firos2/examples/helloworld/build/Release/userlib.dll</transformation>-->
-		<transformation>/home/luisgp/ros2_ws/src/ros2/firos2/examples/helloworld/build/libuserlib.so</transformation>
+		<!-- Windows -->
+		<transformation>C:/dev/ros2/src/ros2/firos2/examples/helloworld/build/Release/userlib.dll</transformation>
+		<bridge_library>C:/dev/ros2/src/ros2/firos2/thirdparty/routing-service/build/Release/rsrtpsbridgelib.dll</bridge_library>
+		<!-- Linux -->
+		<!--<transformation>/home/luisgp/ros2_ws/src/ros2/firos2/examples/helloworld/build/libuserlib.so</transformation>-->
 	</bridge>
 </rs>

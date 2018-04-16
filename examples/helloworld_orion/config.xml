@@ -15,9 +15,11 @@
 			<host>localhost</host>
 			<port>1026</port>
 		</publisher>
+		<!-- Windows -->
+		<!-- <transformToNGSIv2>C:\dev\ros2\src\ros2\firos2\examples\helloworld_orion\build\Release\userlib.dll</transformToNGSIv2>
+		<bridge_library>C:\dev\ros2\build\firos2\Release\rsrtpsngsiv2bridgelib.dll</bridge_library> -->
+		<!-- Linux -->
 		<transformToNGSIv2>/home/luisgp/ros2_ws/src/ros2/firos2/examples/helloworld_orion/build/libuserlib.so</transformToNGSIv2>
 		<bridge_library>librsrtpsngsiv2bridgelib.so</bridge_library>
-		<!--<bridge_library>/home/luisgp/ros2_ws/install/lib/librsrtpsngsiv2bridgelib.so</bridge_library> -->
-		<!--<bridge_library>/home/luisgp/ros2_ws/build/firos2/librsrtpsngsiv2bridgelib.so</bridge_library> -->
 	</bridge>
 </rs>
