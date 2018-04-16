@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<rs>
+<is>
 	<bridge>
 		<bridge_type>unidirectional</bridge_type>
 		<subscriber>
@@ -22,6 +22,6 @@
 			<partition>rt</partition>
 		</publisher>
 		<transformFromNGSIv2>/home/luisgp/ros2_ws/src/ros2/firos2/examples/helloworld_ros2/build/libuserlib.so</transformFromNGSIv2>
-		<bridge_library>librsngsiv2rtpsbridgelib.so</bridge_library>
+		<bridge_library>libisngsiv2rtpsbridgelib.so</bridge_library>
 	</bridge>
-</rs>
+</is>

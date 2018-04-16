@@ -1,6 +1,6 @@
 #include <iostream>
 #include <tinyxml2.h>
-#include "RSBridgeDummy.h"
+#include "ISBridgeDummy.h"
 
 #if defined(_WIN32) && defined (BUILD_SHARED_LIBS)
 	#if defined (_MSC_VER)
@@ -15,20 +15,20 @@
   #define USER_LIB_EXPORT
 #endif
 
-RSBridgeDummy* loadDummyBridge(tinyxml2::XMLElement *bridge_element);
+ISBridgeDummy* loadDummyBridge(tinyxml2::XMLElement *bridge_element);
 
-// TODO RSBridge must be now an interface (or abstract class) that all Bridges must implement.
-extern "C" RSBridge* USER_LIB_EXPORT createBridge(tinyxml2::XMLElement *bridge_element)
+// TODO ISBridge must be now an interface (or abstract class) that all Bridges must implement.
+extern "C" ISBridge* USER_LIB_EXPORT createBridge(tinyxml2::XMLElement *bridge_element)
 {
     // Add Bridge constructor and...
-    //return new RSBridgeDummy(bridge_element);
+    //return new ISBridgeDummy(bridge_element);
 
     // OR parse the config xml here and return a cleaner Bridge class!
     //return loadDummyBridge(bridge_element);
 }
 
 // TODO parse the xml and return a configured RSBRidgeDummy
-RSBridgeDummy* loadDummyBridge(tinyxml2::XMLElement *bridge_element)
+ISBridgeDummy* loadDummyBridge(tinyxml2::XMLElement *bridge_element)
 {
     try
     {
@@ -58,7 +58,7 @@ RSBridgeDummy* loadDummyBridge(tinyxml2::XMLElement *bridge_element)
         participant_nodeB_params.dummyProperty = parsed_value_b;
         // [...]
 
-        RSBridgeDummy *bridge = new RSBridgeDummy(
+        ISBridgeDummy *bridge = new ISBridgeDummy(
                                     participant_nodeA_params,
                                     participant_nodeB_params,
                                     function_path);

@@ -22,12 +22,12 @@
 
 #include <fastrtps/Domain.h>
 
-#include "RSBridgeFastRTPSToNGSIv2.h"
+#include "ISBridgeFastRTPSToNGSIv2.h"
 #include "idl/JsonNGSIv2PubSubTypes.h" // Type to send to NGSIv2
 
 using asio::ip::tcp;
 
-RSBridgeFastRTPSToNGSIv2::RSBridgeFastRTPSToNGSIv2(
+ISBridgeFastRTPSToNGSIv2::ISBridgeFastRTPSToNGSIv2(
                     ParticipantAttributes par_fastrtps_params,
                     NGSIv2Params par_ngsiv2_params,
                     SubscriberAttributes sub_params,
@@ -57,16 +57,16 @@ RSBridgeFastRTPSToNGSIv2::RSBridgeFastRTPSToNGSIv2(
     if(mf_subscriber == nullptr) return;
 }
 
-RSBridgeFastRTPSToNGSIv2::~RSBridgeFastRTPSToNGSIv2(){
+ISBridgeFastRTPSToNGSIv2::~ISBridgeFastRTPSToNGSIv2(){
     if(mf_participant != nullptr) Domain::removeParticipant(mf_participant);
 }
 
-void RSBridgeFastRTPSToNGSIv2::onTerminate()
+void ISBridgeFastRTPSToNGSIv2::onTerminate()
 {
     // Don't need to do anything here.
 }
 
-void RSBridgeFastRTPSToNGSIv2::SubListener::onSubscriptionMatched(Subscriber* sub, MatchingInfo& info){
+void ISBridgeFastRTPSToNGSIv2::SubListener::onSubscriptionMatched(Subscriber* sub, MatchingInfo& info){
     if (info.status == MATCHED_MATCHING)
     {
         n_matched++;
@@ -81,16 +81,16 @@ void RSBridgeFastRTPSToNGSIv2::SubListener::onSubscriptionMatched(Subscriber* su
     }
 }
 
-RSBridgeFastRTPSToNGSIv2::SubListener::SubListener() : user_transformation(nullptr), handle(nullptr)
+ISBridgeFastRTPSToNGSIv2::SubListener::SubListener() : user_transformation(nullptr), handle(nullptr)
 {
 }
 
-RSBridgeFastRTPSToNGSIv2::SubListener::SubListener(const char* file_path) : user_transformation(nullptr), handle(nullptr)
+ISBridgeFastRTPSToNGSIv2::SubListener::SubListener(const char* file_path) : user_transformation(nullptr), handle(nullptr)
 {
     loadLibrary(file_path);
 }
 
-void RSBridgeFastRTPSToNGSIv2::SubListener::loadLibrary(const char* file_path)
+void ISBridgeFastRTPSToNGSIv2::SubListener::loadLibrary(const char* file_path)
 {
     if(file_path){
         handle = eProsimaLoadLibrary(file_path);
@@ -102,11 +102,11 @@ void RSBridgeFastRTPSToNGSIv2::SubListener::loadLibrary(const char* file_path)
     }
 }
 
-RSBridgeFastRTPSToNGSIv2::SubListener::~SubListener(){
+ISBridgeFastRTPSToNGSIv2::SubListener::~SubListener(){
     if(handle) eProsimaCloseLibrary(handle);
 }
 
-void RSBridgeFastRTPSToNGSIv2::SubListener::onNewDataMessage(Subscriber* sub){
+void ISBridgeFastRTPSToNGSIv2::SubListener::onNewDataMessage(Subscriber* sub){
     SerializedPayload_t serialized_input;
     SerializedPayload_t serialized_output;
     if(sub->takeNextData(&serialized_input, &m_info)){
@@ -122,23 +122,23 @@ void RSBridgeFastRTPSToNGSIv2::SubListener::onNewDataMessage(Subscriber* sub){
     }
 }
 
-RSBridgeFastRTPSToNGSIv2::NGSIv2Publisher::NGSIv2Publisher()
+ISBridgeFastRTPSToNGSIv2::NGSIv2Publisher::NGSIv2Publisher()
 {
 }
 
-RSBridgeFastRTPSToNGSIv2::NGSIv2Publisher::NGSIv2Publisher(const string host, const uint16_t port)
+ISBridgeFastRTPSToNGSIv2::NGSIv2Publisher::NGSIv2Publisher(const string host, const uint16_t port)
 {
     setHostPort(host, port);
 }
 
-void RSBridgeFastRTPSToNGSIv2::NGSIv2Publisher::setHostPort(const string host, const uint16_t port)
+void ISBridgeFastRTPSToNGSIv2::NGSIv2Publisher::setHostPort(const string host, const uint16_t port)
 {
     stringstream strstr;
     strstr << host << ":" << port;
     url = strstr.str();
 }
 
-RSBridgeFastRTPSToNGSIv2::NGSIv2Publisher::~NGSIv2Publisher() {}
+ISBridgeFastRTPSToNGSIv2::NGSIv2Publisher::~NGSIv2Publisher() {}
 /*
 string getEntityId(const string json)
 {
@@ -150,7 +150,7 @@ string getPayload(const string json)
     return json.substr(json.find_first_of("@") + 1);
 }
 */
-string RSBridgeFastRTPSToNGSIv2::NGSIv2Publisher::write(SerializedPayload_t* payload)
+string ISBridgeFastRTPSToNGSIv2::NGSIv2Publisher::write(SerializedPayload_t* payload)
 {
     try {
         curlpp::Cleanup cleaner;

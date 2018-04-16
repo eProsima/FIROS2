@@ -19,65 +19,67 @@ find_package(ament_cmake REQUIRED)
 find_package(fastrtps REQUIRED)
 find_package(fastcdr REQUIRED)
 
-add_executable(firos2 src/main.cpp
-    thirdparty/routing-service/src/RSManager.cpp
-    thirdparty/routing-service/src/dynamicload/dynamicload.cpp
-    thirdparty/routing-service/src/GenericPubSubTypes.cpp)
+if(WIN32)
+	LINK_DIRECTORIES(thirdparty/curl/lib)
+endif()
 
-add_library(rsngsiv2rtpsbridgelib SHARED
-    src/NGSIv2/RSBridgeNGSIv2ToFastRTPS.cpp
+add_executable(firos2 src/main.cpp
+    thirdparty/integration-services/src/ISManager.cpp
+    thirdparty/integration-services/src/dynamicload/dynamicload.cpp
+    thirdparty/integration-services/src/GenericPubSubTypes.cpp)
+
+add_library(isngsiv2rtpsbridgelib SHARED
+    src/NGSIv2/ISBridgeNGSIv2ToFastRTPS.cpp
     src/NGSIv2/ngsiv2rtpslib.cpp
     src/NGSIv2/idl/JsonNGSIv2.cxx
     src/NGSIv2/idl/JsonNGSIv2PubSubTypes.cxx
-    thirdparty/routing-service/src/dynamicload/dynamicload.cpp
-    thirdparty/routing-service/src/GenericPubSubTypes.cpp)
+    thirdparty/integration-services/src/dynamicload/dynamicload.cpp
+    thirdparty/integration-services/src/GenericPubSubTypes.cpp)
 
-add_library(rsrtpsngsiv2bridgelib SHARED
-    src/NGSIv2/RSBridgeFastRTPSToNGSIv2.cpp
+add_library(isrtpsngsiv2bridgelib SHARED
+    src/NGSIv2/ISBridgeFastRTPSToNGSIv2.cpp
     src/NGSIv2/rtpsngsiv2lib.cpp
     src/NGSIv2/idl/JsonNGSIv2.cxx
     src/NGSIv2/idl/JsonNGSIv2PubSubTypes.cxx
-    thirdparty/routing-service/src/dynamicload/dynamicload.cpp
-    thirdparty/routing-service/src/GenericPubSubTypes.cpp)
+    thirdparty/integration-services/src/dynamicload/dynamicload.cpp
+    thirdparty/integration-services/src/GenericPubSubTypes.cpp)
 
 # Include thirdparty (ASIO only in WIN32)
 if (WIN32)
-    target_include_directories(firos2 PUBLIC thirdparty/tinyxml2 thirdparty/curlpp/include thirdparty/asio/asio/include/)
-    target_include_directories(rsngsiv2rtpsbridgelib PUBLIC thirdparty/tinyxml2 thirdparty/curlpp/include thirdparty/asio/asio/include/)
-    target_include_directories(rsrtpsngsiv2bridgelib PUBLIC thirdparty/tinyxml2 thirdparty/curlpp/include thirdparty/asio/asio/include/)
+    add_definitions(-DASIO_STANDALONE)
+    target_include_directories(firos2 PUBLIC thirdparty/tinyxml2 thirdparty/curlpp/include thirdparty/asio/asio/include)
+    target_include_directories(rsngsiv2rtpsbridgelib PUBLIC thirdparty/tinyxml2 thirdparty/curlpp/include thirdparty/asio/asio/include)
+    target_include_directories(rsrtpsngsiv2bridgelib PUBLIC thirdparty/tinyxml2 thirdparty/curlpp/include thirdparty/asio/asio/include)
 else()
     target_include_directories(firos2 PUBLIC thirdparty/tinyxml2 thirdparty/curlpp/include)
-    target_include_directories(rsngsiv2rtpsbridgelib PUBLIC thirdparty/tinyxml2 thirdparty/curlpp/include)
-    target_include_directories(rsrtpsngsiv2bridgelib PUBLIC thirdparty/tinyxml2 thirdparty/curlpp/include)
+    target_include_directories(isngsiv2rtpsbridgelib PUBLIC thirdparty/tinyxml2 thirdparty/curlpp/include)
+    target_include_directories(isrtpsngsiv2bridgelib PUBLIC thirdparty/tinyxml2 thirdparty/curlpp/include)
 endif()
-
-# TinyXML2 as thirdparty
-add_library(TinyXML2 thirdparty/tinyxml2/tinyxml2.cpp thirdparty/tinyxml2/tinyxml2.h)
-
-# cURLpp as thirdparty
-file(GLOB_RECURSE CURLPP_HEADERS thirdparty/curlpp/include/*)
-file(GLOB_RECURSE CURLPP_SOURCES thirdparty/curlpp/src/*)
-
-add_library(cURLpp ${CURLPP_HEADERS} ${CURLPP_SOURCES})
-set_property(TARGET cURLpp PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 if (WIN32)
-    set(liblist curl cURLpp)
+	# TinyXML2 as thirdparty
+	add_library(TinyXML2 thirdparty/tinyxml2/tinyxml2.cpp thirdparty/tinyxml2/tinyxml2.h)
+
+	# cURLpp as thirdparty
+	file(GLOB_RECURSE CURLPP_HEADERS thirdparty/curlpp/include/*)
+	file(GLOB_RECURSE CURLPP_SOURCES thirdparty/curlpp/src/*)
+
+	add_library(cURLpp ${CURLPP_HEADERS} ${CURLPP_SOURCES})
+    target_include_directories(cURLpp PUBLIC thirdparty/curlpp/include thirdparty/curl/include)
+	set_property(TARGET cURLpp PROPERTY POSITION_INDEPENDENT_CODE ON)
+
+    set(liblist fastrtps_static fastcdr_static TinyXML2 ${CMAKE_DL_LIBS} cURLpp IPHLPAPI shlwapi libcurl_a)
 else()
-    set(liblist -L/usr/lib/x86_64-linux-gnu curl cURLpp)
+    set(liblist fastrtps fastcdr -L/usr/lib/x86_64-linux-gnu tinyxml2 curl curlpp)
 endif()
 
-target_link_libraries(firos2 fastrtps fastcdr TinyXML2 ${CMAKE_DL_LIBS} ${liblist})
+target_link_libraries(firos2 ${CMAKE_DL_LIBS} ${liblist})
 
-target_link_libraries(rsngsiv2rtpsbridgelib
-    fastrtps
-    fastcdr
+target_link_libraries(isngsiv2rtpsbridgelib
     ${liblist}
     ${CMAKE_DL_LIBS})
 
-target_link_libraries(rsrtpsngsiv2bridgelib
-    fastrtps
-    fastcdr
+target_link_libraries(isrtpsngsiv2bridgelib
     ${liblist}
     ${CMAKE_DL_LIBS})
 
@@ -151,8 +153,8 @@ if(BUILD_TESTING)
 endif()
 
 install(TARGETS firos2 DESTINATION bin)
-install(TARGETS rsngsiv2rtpsbridgelib DESTINATION lib)
-install(TARGETS rsrtpsngsiv2bridgelib DESTINATION lib)
+install(TARGETS isngsiv2rtpsbridgelib DESTINATION lib)
+install(TARGETS isrtpsngsiv2bridgelib DESTINATION lib)
 
 ament_package(
   CONFIG_EXTRAS "firos2-extras.cmake.in"

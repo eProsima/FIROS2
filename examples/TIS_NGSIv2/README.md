@@ -128,7 +128,7 @@ In both cases, serialization and deserialization are applied as needed by Serial
 
 The *config.cml* file used in this example is the following:
 
-	<rs>
+	<is>
 		<bridge>
 			<bridge_type>ngsiv2</bridge_type>
 			<ros2>
@@ -154,7 +154,7 @@ The *config.cml* file used in this example is the following:
 			<bridge_library_ros2>librsrtpsngsiv2bridgelib.so</bridge_library_ros2> <!-- Using from installed in ROS2 library path -->
 			<bridge_library_ngsiv2>librsngsiv2rtpsbridgelib.so</bridge_library_ngsiv2>
 		</bridge>
-	</rs>
+	</is>
 
 Our ROS2 Topic is RobotTopic in the partition "rt" and with domain 0.
 As type we declare RobotSnd, as is more general than RobotRcv. The ideal case is to use exactly the same type, but compatible types like this case are ok.

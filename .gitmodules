@@ -1,12 +1,12 @@
 [submodule "thirdparty/tinyxml2"]
 	path = thirdparty/tinyxml2
 	url = https://github.com/leethomason/tinyxml2
-[submodule "thirdparty/routing-service"]
-	path = thirdparty/routing-service
-	url = https://gitlab.sambaserver.eprosima.com/LuisGasco/routing-service
 [submodule "thirdparty/curlpp"]
 	path = thirdparty/curlpp
 	url = https://github.com/jpbarrette/curlpp
 [submodule "thirdparty/asio"]
 	path = thirdparty/asio
 	url = https://github.com/chriskohlhoff/asio
+[submodule "thirdparty/integration-services"]
+	path = thirdparty/integration-services
+	url = https://192.168.1.4/LuisGasco/integration-services

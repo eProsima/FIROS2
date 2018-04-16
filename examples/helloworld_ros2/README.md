@@ -70,7 +70,7 @@ In both cases, serialization and deserialization are applied as needed by Serial
 
 The *config.cml* file used in this example is the following:
 
-	<rs>
+	<is>
 		<bridge>
 			<bridge_type>unidirectional</bridge_type>
 			<subscriber>
@@ -95,7 +95,7 @@ The *config.cml* file used in this example is the following:
 			<transformFromNGSIv2>/home/luisgp/ros2_ws/src/ros2/firos2/examples/helloworld_ros2/build/libuserlib.so</transformFromNGSIv2>
 			<bridge_library>librsngsiv2rtpsbridgelib.so</bridge_library>
 		</bridge>
-	</rs>
+	</is>
 
 Our ROS2 Topic is chatter in the partition "rt" and with domain 0. Exactly the same configuration that talker/listener ROS2 example uses.
 NGSIv2 will be configured to connect with a contextBroker server at localhost in port 1026, and will configure a subscription to any change in any entity of type "Helloworld", and asks to be notified only *count* attribute. 

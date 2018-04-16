@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<rs>
+<is>
 	<bridge>
         <bridge_type>bidirectional</bridge_type>
 		<ros2>
@@ -22,8 +22,8 @@
             </subscription>
 		</ngsiv2>
 		<transformation>/home/luisgp/git/eProsima/firos2/examples/TIS_NGSIv2/build/libuserlib.so</transformation> -->
-        <bridge_library_nodeA>librsrtpsngsiv2bridgelib.so</bridge_library_nodeA> <!-- Using from installed in ROS2 library path -->
-        <bridge_library_nodeB>librsngsiv2rtpsbridgelib.so</bridge_library_nodeB>
+        <bridge_library_nodeA>libisrtpsngsiv2bridgelib.so</bridge_library_nodeA> <!-- Using from installed in ROS2 library path -->
+        <bridge_library_nodeB>libisngsiv2rtpsbridgelib.so</bridge_library_nodeB>
 	</bridge>
     <!-- Example for CameraInfo. NOTE the two alternatives for retrieve guest_locations and features, depending of implementation.
 	<bridge>
@@ -51,8 +51,8 @@
             </subscription>
 		</ngsiv2>
 		<transformation>/home/luisgp/git/eProsima/firos2/examples/TIS_NGSIv2/build/libuserlib2.so</transformation>
-        <bridge_library_nodeA>/home/luisgp/git/eProsima/firos2/build/librsrtpsngsiv2bridgelib.so</bridge_library_nodeA>
-        <bridge_library_nodeB>/home/luisgp/git/eProsima/firos2/build/librsngsiv2rtpsbridgelib.so</bridge_library_nodeB>
+        <bridge_library_nodeA>/home/luisgp/git/eProsima/firos2/build/libisrtpsngsiv2bridgelib.so</bridge_library_nodeA>
+        <bridge_library_nodeB>/home/luisgp/git/eProsima/firos2/build/libisngsiv2rtpsbridgelib.so</bridge_library_nodeB>
 	</bridge>
     -->
-</rs>
+</is>

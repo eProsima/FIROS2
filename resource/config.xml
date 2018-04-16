@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!-- Complete <bridge> node will be sent to each bridge_library to be parsed by itself. -->
-<rs>
+<is>
     <!-- Generic bridges -->
     <bridge>
         <bridge_type>unidirectional</bridge_type>
@@ -75,4 +75,4 @@
         <bridge_library_nodeA>/path/to/bridge/library_1</bridge_library_nodeA>
         <bridge_library_nodeB>/path/to/bridge/library_2</bridge_library_nodeB>
     </bridge>
-</rs>
+</is>

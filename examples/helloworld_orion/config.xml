@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<rs>
+<is>
 	<bridge>
 		<bridge_type>unidirectional</bridge_type>
 		<subscriber>
@@ -17,9 +17,9 @@
 		</publisher>
 		<!-- Windows -->
 		<!-- <transformToNGSIv2>C:\dev\ros2\src\ros2\firos2\examples\helloworld_orion\build\Release\userlib.dll</transformToNGSIv2>
-		<bridge_library>C:\dev\ros2\build\firos2\Release\rsrtpsngsiv2bridgelib.dll</bridge_library> -->
+		<bridge_library>C:\dev\ros2\build\firos2\Release\isrtpsngsiv2bridgelib.dll</bridge_library> -->
 		<!-- Linux -->
 		<transformToNGSIv2>/home/luisgp/ros2_ws/src/ros2/firos2/examples/helloworld_orion/build/libuserlib.so</transformToNGSIv2>
-		<bridge_library>librsrtpsngsiv2bridgelib.so</bridge_library>
+		<bridge_library>libisrtpsngsiv2bridgelib.so</bridge_library>
 	</bridge>
-</rs>
+</is>

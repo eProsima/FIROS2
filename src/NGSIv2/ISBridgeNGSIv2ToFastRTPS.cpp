@@ -23,7 +23,7 @@
 
 #include <fastrtps/Domain.h>
 
-#include "RSBridgeNGSIv2ToFastRTPS.h"
+#include "ISBridgeNGSIv2ToFastRTPS.h"
 #include "idl/JsonNGSIv2PubSubTypes.h" // Received type from NGSIv2
 
 #include <algorithm>
@@ -31,7 +31,7 @@
 
 using asio::ip::tcp;
 
-RSBridgeNGSIv2ToFastRTPS::RSBridgeNGSIv2ToFastRTPS(NGSIv2Params par_ngsiv2_params,
+ISBridgeNGSIv2ToFastRTPS::ISBridgeNGSIv2ToFastRTPS(NGSIv2Params par_ngsiv2_params,
                     ParticipantAttributes par_fastrtps_params,
                     NGSIv2SubscriptionParams sub_params,
                     PublisherAttributes pub_params,
@@ -62,11 +62,11 @@ RSBridgeNGSIv2ToFastRTPS::RSBridgeNGSIv2ToFastRTPS(NGSIv2Params par_ngsiv2_param
     ngsiv2_listener.startListenerAndSubscribe(sub_params, file_path);
 }
 
-RSBridgeNGSIv2ToFastRTPS::~RSBridgeNGSIv2ToFastRTPS(){
+ISBridgeNGSIv2ToFastRTPS::~ISBridgeNGSIv2ToFastRTPS(){
     if(mf_participant != nullptr) Domain::removeParticipant(mf_participant);
 }
 
-string RSBridgeNGSIv2ToFastRTPS::NGSIv2Listener::getListenerURL()
+string ISBridgeNGSIv2ToFastRTPS::NGSIv2Listener::getListenerURL()
 {
     stringstream strstr;
     strstr << "http://" << listener_host << ":" << listener_port;
@@ -74,7 +74,7 @@ string RSBridgeNGSIv2ToFastRTPS::NGSIv2Listener::getListenerURL()
     return strstr.str();
 }
 
-RSBridgeNGSIv2ToFastRTPS::NGSIv2Listener::NGSIv2Listener(const string host, const uint16_t port)
+ISBridgeNGSIv2ToFastRTPS::NGSIv2Listener::NGSIv2Listener(const string host, const uint16_t port)
 {
     stringstream strstr;
     strstr << host << ":" << port;
@@ -83,18 +83,18 @@ RSBridgeNGSIv2ToFastRTPS::NGSIv2Listener::NGSIv2Listener(const string host, cons
     user_transformation = nullptr;
 }
 
-RSBridgeNGSIv2ToFastRTPS::NGSIv2Listener::~NGSIv2Listener()
+ISBridgeNGSIv2ToFastRTPS::NGSIv2Listener::~NGSIv2Listener()
 {
     if(handle) eProsimaCloseLibrary(handle);
     exit = true;
 }
 
-void RSBridgeNGSIv2ToFastRTPS::NGSIv2Listener::startListenerAndSubscribe(NGSIv2SubscriptionParams sub_params, const char* file_path)
+void ISBridgeNGSIv2ToFastRTPS::NGSIv2Listener::startListenerAndSubscribe(NGSIv2SubscriptionParams sub_params, const char* file_path)
 {
     listener_host = sub_params.host;
     listener_port = sub_params.port;
     exit = false;
-    std::thread thread(&RSBridgeNGSIv2ToFastRTPS::NGSIv2Listener::listener, this);
+    std::thread thread(&ISBridgeNGSIv2ToFastRTPS::NGSIv2Listener::listener, this);
 
     if(file_path){
         handle = eProsimaLoadLibrary(file_path);
@@ -111,7 +111,7 @@ void RSBridgeNGSIv2ToFastRTPS::NGSIv2Listener::startListenerAndSubscribe(NGSIv2S
     thread.detach();
 }
 
-void RSBridgeNGSIv2ToFastRTPS::NGSIv2Listener::setPublisher(Publisher *fastrtps_pub)
+void ISBridgeNGSIv2ToFastRTPS::NGSIv2Listener::setPublisher(Publisher *fastrtps_pub)
 {
     this->fastrtps_pub = fastrtps_pub;
 }
@@ -125,7 +125,7 @@ void find_and_replace(string& source, string const& find, string const& replace)
     }
 }
 
-string RSBridgeNGSIv2ToFastRTPS::NGSIv2Listener::addSubscription(const string server, const string idPattern,
+string ISBridgeNGSIv2ToFastRTPS::NGSIv2Listener::addSubscription(const string server, const string idPattern,
                      const string type, const string attrs, const string expression,
                      const string listener, const string notifAttrs, const string expiration,
                      const int throttling, const string description)
@@ -239,12 +239,12 @@ string RSBridgeNGSIv2ToFastRTPS::NGSIv2Listener::addSubscription(const string se
     return "";
 }
 
-void RSBridgeNGSIv2ToFastRTPS::onTerminate()
+void ISBridgeNGSIv2ToFastRTPS::onTerminate()
 {
     ngsiv2_listener.deleteSubscription(ngsiv2_listener.url, ngsiv2_listener.subscription_id); // Delete our subcription from origin
 }
 
-void RSBridgeNGSIv2ToFastRTPS::NGSIv2Listener::deleteSubscription(const string server, const string id)
+void ISBridgeNGSIv2ToFastRTPS::NGSIv2Listener::deleteSubscription(const string server, const string id)
 {
     try
     {
@@ -277,7 +277,7 @@ void RSBridgeNGSIv2ToFastRTPS::NGSIv2Listener::deleteSubscription(const string s
     }
 }
 
-void RSBridgeNGSIv2ToFastRTPS::NGSIv2Listener::listener()
+void ISBridgeNGSIv2ToFastRTPS::NGSIv2Listener::listener()
 {
     try
     {

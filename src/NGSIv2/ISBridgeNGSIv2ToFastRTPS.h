@@ -13,8 +13,8 @@
 // limitations under the License.
 
 
-#ifndef _RSBRIDGEFASTRTPSTONGSIv2_H_
-#define _RSBRIDGEFASTRTPSTONGSIv2_H_
+#ifndef _ISBRIDGENGSIv2TOFASTRTPS_H_
+#define _ISBRIDGENGSIv2TOFASTRTPS_H_
 
 #include <iostream>
 
@@ -27,12 +27,15 @@
 #include "fastrtps/subscriber/SubscriberListener.h"
 #include "fastrtps/subscriber/SampleInfo.h"
 #include "fastrtps/attributes/SubscriberAttributes.h"
-
-#include "../../thirdparty/routing-service/src/RSBridge.h"
-#include "../../thirdparty/routing-service/src/GenericPubSubTypes.h"
+#include "../../thirdparty/integration-services/src/ISBridge.h"
+#include "../../thirdparty/integration-services/src/GenericPubSubTypes.h"
 #include <asio.hpp>
 
 #include "NGSIv2Params.h"
+
+#ifdef _WIN32
+#define CURL_STATICLIB
+#endif
 
 #include <curlpp/cURLpp.hpp>
 #include <curlpp/Options.hpp>
@@ -47,56 +50,52 @@ using namespace eprosima::fastrtps::rtps;
 using namespace curlpp::options;
 using namespace curlpp::infos;
 
-class RSBridgeFastRTPSToNGSIv2 : public RSBridge
+class ISBridgeNGSIv2ToFastRTPS : public ISBridge
 {
 public:
-    RSBridgeFastRTPSToNGSIv2(
-        ParticipantAttributes par_fastrtps_params,
-        NGSIv2Params par_ngsiv2_params,
-        SubscriberAttributes sub_params,
-        const char* file_path);
-    virtual ~RSBridgeFastRTPSToNGSIv2();
+    ISBridgeNGSIv2ToFastRTPS(NGSIv2Params par_ngsiv2_params,
+                ParticipantAttributes par_fastrtps_params,
+                NGSIv2SubscriptionParams sub_params,
+                PublisherAttributes pub_params,
+                const char* file_path);
+    //ISBridgeNGSIv2ToFastRTPS(ISBridgeNGSIv2ToFastRTPS &&b);
+    virtual ~ISBridgeNGSIv2ToFastRTPS();
     void onTerminate() override;
 private:
     Participant *mf_participant;
-    Subscriber *mf_subscriber;
+    Publisher *mf_publisher;
     GenericPubSubType *data_type;
     std::string ngsiv2_host;
     uint16_t ngsiv2_port;
     std::string ngsiv2_id;
 
-    class NGSIv2Publisher
+    class NGSIv2Listener
     {
+    private:
+        asio::io_service* io_service;
+        void* handle;
     public:
+        Publisher *fastrtps_pub;
         string url;
-        NGSIv2Publisher();
-        NGSIv2Publisher(const string host, const uint16_t port);
-        void setHostPort(const string host, const uint16_t port);
-        ~NGSIv2Publisher();
-        string write(SerializedPayload_t *payload);
-    } ngsiv2_publisher;
-
-    class SubListener : public SubscriberListener{
-    public:
-        SubListener();
-        SubListener(const char* file_path);
-        ~SubListener();
-        void loadLibrary(const char* file_path);
-        void setPublisher(NGSIv2Publisher* publisher){
-            listener_publisher = publisher;
-        }
-        void onSubscriptionMatched(Subscriber* sub, MatchingInfo& info);
-        void onNewDataMessage(Subscriber* sub);
-        NGSIv2Publisher *listener_publisher;
+        string listener_host;
+        uint16_t listener_port;
+        string subscription_id;
+        bool exit;
         userf_t user_transformation;
-        void *handle;
-        char *error;
-
-        SampleInfo_t m_info;
-        int n_matched;
-        int n_msg;
-    } m_listener;
+        NGSIv2Listener(const string host, const uint16_t port);
+        //NGSIv2Listener(NGSIv2Listener &&l);
+        ~NGSIv2Listener();
+        string getListenerURL();
+        string getAttrList(const std::vector< string > list);
+        string addSubscription(const string server, const string idPattern,
+                     const string type, const string attrs, const string expression,
+                     const string listener, const string notifAttrs, const string expiration = "",
+                     const int throttling = -1, const string description = "");
+        void deleteSubscription(const string server, const string id);
+        void listener();
+        void setPublisher(Publisher *fastrtps_pub);
+        void startListenerAndSubscribe(NGSIv2SubscriptionParams sub_params, const char* file_path);
+    } ngsiv2_listener;
 };
 
 #endif // _Header__SUBSCRIBER_H_
-

@@ -64,7 +64,7 @@ In both cases, serialization and deserialization are applied as needed by Serial
 
 The *config.cml* file used in this example is the following:
 
-	<rs>
+	<is>
 		<bridge>
 			<bridge_type>unidirectional</bridge_type>
 			<subscriber>
@@ -83,7 +83,7 @@ The *config.cml* file used in this example is the following:
 			<transformToNGSIv2>/home/luisgp/ros2_ws/src/ros2/firos2/examples/helloworld_orion/build/libuserlib.so</transformToNGSIv2>
 			<bridge_library>librsrtpsngsiv2bridgelib.so</bridge_library>
 		</bridge>
-	</rs>
+	</is>
 
 Our ROS2 Topic is chatter in the partition "rt" and with domain 0. Exactly the same configuration that talker/listener ROS2 example uses.
 NGSIv2 will be configured to connect with a contextBroker server at localhost in port 1026.

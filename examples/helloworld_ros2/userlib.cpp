@@ -8,7 +8,7 @@
 #if defined (_MSC_VER)
 #pragma warning(disable: 4251)
 #endif
-#if defined(userlib_EXPORTS)
+#if defined(EPROSIMA_USER_DLL_EXPORT)
 #define  USER_LIB_EXPORT __declspec(dllexport)
 #else
 #define  USER_LIB_EXPORT __declspec(dllimport)

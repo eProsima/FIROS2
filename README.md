@@ -2,7 +2,7 @@
 ![http://www.eprosima.com](https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSd0PDlVz1U_7MgdTe0FRIWD0Jc9_YH-gGi0ZpLkr-qgCI6ZEoJZ5GBqQ) 
 
 *eProsima FIROS2* is an application that allows intercommunication between ROS2 and NGSIv2 protocol. 
-Since *FIROS2* is powered by *eProsima Transformation and Routing Services* it makes possible the creation of bidirectional communication bridges with customized routing, mapping between input and output attributes or data modification between ROS2 and NGSIv2 from FIWARE-Orion contextBroker.
+Since *FIROS2* is powered by *eProsima Integration Services* it makes possible the creation of bidirectional communication bridges with customized routing, mapping between input and output attributes or data modification between ROS2 and NGSIv2 from FIWARE-Orion contextBroker.
 
 ```plantuml
 @startuml
@@ -11,7 +11,7 @@ package "Orion contextBroker" <<Cloud>> {
     class Subscription
 }
 
-package "Transformation and Routing Services" <<Rectangle>> {
+package "Integration Services" <<Rectangle>> {
     class UserLibrary {
         +NodeA_t transformFromNGSIv2(NodeB_t)
         +NodeB_t transformToNGSIv2(NodeA_t)
@@ -55,13 +55,13 @@ There are several examples to show the behaviour under [examples folder](https:/
 
 ### FIROS2 configuration
 
-*FIROS2* offers different parameters that can be configured. For setting-up a bridge, the user has to define a configuration file with the information about input and output protocols. A generic template can be found on [**config.xml**](https://gitlab.sambaserver.eprosima.com/LuisGasco/firos2/blob/master/resource/config.xml)
+*FIROS2* offers different parameters that can be configured. For setting-up a bridge, the user has to define a configuration file with the information about input and output protocols. A generic template can be found on [**config.xml**](https://github.com/eProsima/firos2/blob/master/resource/config.xml)
 
 In this template is it possible to set different bridges between topics and entities. FIROS2' bridges subscribes to a topic and update data of the related entity and subscribes to entities and publish data to the related topic. The parameters that have to be defined are (only shown a *bridge* section of the *config.xml* file):
 
 	
 	<bridge>
-		<bridge_type>ngsiv2</bridge_type>
+		<bridge_type>bidirectional</bridge_type>
 		<ros2>
 			<participant>ros2_participant_name</participant>
 			<domain>0</domain>
@@ -125,7 +125,7 @@ The *idl* files will be created inside the workspace build directory at compilat
 For interaction with *NGSIv2* entities an idl file (and generated files) is provided. This idl is named **JsonNGSIv2.idl** and contains a structure composed by two strings, *entityId* and *data*.
 
 For received messages from *NGSIv2* protocol, only *data* must be filled. In this case *entityId* will be ignored, and it's better to keep it empty.
-*Transformation and Routing Services* will fill *data* with the complete Json string sent to our listener by the contextBroker server (this is, the subscription result).
+*Integration Services* will fill *data* with the complete Json string sent to our listener by the contextBroker server (this is, the subscription result).
 
 For send messages to the contextBroker to update entities from changes received from *RTPS* subscriber, *JsonNGSIv2" must fill *entityId* with the entityId of the entity modified and *data* with a composed Json containing the attributed to be updated.
 

@@ -1,12 +1,12 @@
 #include <iostream>
 #include <tinyxml2.h>
-#include "RSBridgeNGSIv2ToFastRTPS.h"
+#include "ISBridgeNGSIv2ToFastRTPS.h"
 
 #if defined(_WIN32) && defined (BUILD_SHARED_LIBS)
 	#if defined (_MSC_VER)
 		#pragma warning(disable: 4251)
 	#endif
-  #if defined(testlib_EXPORTS)
+  #if defined(ngsiv2rtpslib_EXPORTS)
   	#define  USER_LIB_EXPORT __declspec(dllexport)
   #else
     #define  USER_LIB_EXPORT __declspec(dllimport)
@@ -15,9 +15,9 @@
   #define USER_LIB_EXPORT
 #endif
 
-RSBridgeNGSIv2ToFastRTPS* loadNGSIv2ToFastRTPSBridge(tinyxml2::XMLElement *bridge_element);
+ISBridgeNGSIv2ToFastRTPS* loadNGSIv2ToFastRTPSBridge(tinyxml2::XMLElement *bridge_element);
 
-extern "C" RSBridge* USER_LIB_EXPORT createBridge(tinyxml2::XMLElement *bridge_element)
+extern "C" ISBridge* USER_LIB_EXPORT createBridge(tinyxml2::XMLElement *bridge_element)
 {
     return loadNGSIv2ToFastRTPSBridge(bridge_element);
 }
@@ -33,7 +33,7 @@ tinyxml2::XMLElement* _assignOptionalElement(tinyxml2::XMLElement *element, std:
     return element->FirstChildElement(name.c_str());
 }
 
-RSBridgeNGSIv2ToFastRTPS* loadNGSIv2ToFastRTPSBridge(tinyxml2::XMLElement *bridge_element)
+ISBridgeNGSIv2ToFastRTPS* loadNGSIv2ToFastRTPSBridge(tinyxml2::XMLElement *bridge_element)
 {
     try
     {
@@ -189,7 +189,7 @@ RSBridgeNGSIv2ToFastRTPS* loadNGSIv2ToFastRTPSBridge(tinyxml2::XMLElement *bridg
         participant_ngsiv2_subscription_param.host = subscription_host;
         participant_ngsiv2_subscription_param.port = subscription_port;
 
-        RSBridgeNGSIv2ToFastRTPS *ngsiv2_rtps = new RSBridgeNGSIv2ToFastRTPS(participant_ngsiv2_params,
+        ISBridgeNGSIv2ToFastRTPS *ngsiv2_rtps = new ISBridgeNGSIv2ToFastRTPS(participant_ngsiv2_params,
                             participant_fastrtps_params,
                             participant_ngsiv2_subscription_param,
                             publisher_params,
