@@ -9,4 +9,4 @@
 	url = https://github.com/chriskohlhoff/asio
 [submodule "thirdparty/integration-services"]
 	path = thirdparty/integration-services
-	url = https://192.168.1.4/LuisGasco/integration-services
+	url = https://github.com/eProsima/Integration-Services
