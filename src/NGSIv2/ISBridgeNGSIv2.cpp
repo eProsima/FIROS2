@@ -23,7 +23,7 @@
 
 #include <fastrtps/Domain.h>
 
-#include "ISBridgeNGSIv2ToFastRTPS.h"
+#include "ISBridgeNGSIv2.h"
 #include "idl/JsonNGSIv2PubSubTypes.h" // Received type from NGSIv2
 
 #include <algorithm>
@@ -31,42 +31,32 @@
 
 using asio::ip::tcp;
 
-ISBridgeNGSIv2ToFastRTPS::ISBridgeNGSIv2ToFastRTPS(NGSIv2Params par_ngsiv2_params,
-                    ParticipantAttributes par_fastrtps_params,
-                    NGSIv2SubscriptionParams sub_params,
-                    PublisherAttributes pub_params,
-                    const char *file_path
-                ) : mf_participant(nullptr),
-                    mf_publisher(nullptr),
-                    data_type(nullptr),
-                    ngsiv2_host(par_ngsiv2_params.host),
-                    ngsiv2_port(par_ngsiv2_params.port),
-                    ngsiv2_id(par_ngsiv2_params.idPattern),
-                    ngsiv2_listener(ngsiv2_host, ngsiv2_port)
+ISBridgeNGSIv2::ISBridgeNGSIv2(NGSIv2Publisher *pub, NGSIv2Listener *sub, const char* file_path) : file_path(file_path)
 {
-    // Create RTPSParticipant
-    mf_participant = Domain::createParticipant(par_fastrtps_params);
-    if(mf_participant == nullptr) return;
-
-    //Register types
-    data_type = new GenericPubSubType();
-    data_type->setName(pub_params.topic.topicDataType.c_str());
-    Domain::registerType(mf_participant,(TopicDataType*) data_type);
-
-    //Create publisher
-    mf_publisher = Domain::createPublisher(mf_participant,pub_params,nullptr);
-    if(mf_publisher == nullptr) return;
-
-    // Configure and start listener
-    ngsiv2_listener.setPublisher(mf_publisher);
-    ngsiv2_listener.startListenerAndSubscribe(sub_params, file_path);
+    mp_publisher = pub;
+    ms_subscriber = sub;
+    if (file_path)
+    {
+        sub->setTransformation(file_path);
+    }
+    // IS Manager will setup these participants
+    rtps_publisher = nullptr;
+    rtps_subscriber = nullptr;
 }
 
-ISBridgeNGSIv2ToFastRTPS::~ISBridgeNGSIv2ToFastRTPS(){
+NGSIv2Listener::~NGSIv2Listener()
+{
+    if(mf_participant != nullptr) Domain::removeParticipant(mf_participant);
+    if(handle) eProsimaCloseLibrary(handle);
+    exit = true;
+}
+
+NGSIv2Publisher::~NGSIv2Publisher()
+{
     if(mf_participant != nullptr) Domain::removeParticipant(mf_participant);
 }
 
-string ISBridgeNGSIv2ToFastRTPS::NGSIv2Listener::getListenerURL()
+string NGSIv2Listener::getListenerURL()
 {
     stringstream strstr;
     strstr << "http://" << listener_host << ":" << listener_port;
@@ -74,28 +64,42 @@ string ISBridgeNGSIv2ToFastRTPS::NGSIv2Listener::getListenerURL()
     return strstr.str();
 }
 
-ISBridgeNGSIv2ToFastRTPS::NGSIv2Listener::NGSIv2Listener(const string host, const uint16_t port)
+NGSIv2Listener::NGSIv2Listener(const string host, const uint16_t port)
 {
     stringstream strstr;
     strstr << host << ":" << port;
     url = strstr.str();
 
     user_transformation = nullptr;
-}
-
-ISBridgeNGSIv2ToFastRTPS::NGSIv2Listener::~NGSIv2Listener()
-{
-    if(handle) eProsimaCloseLibrary(handle);
-    exit = true;
-}
-
-void ISBridgeNGSIv2ToFastRTPS::NGSIv2Listener::startListenerAndSubscribe(NGSIv2SubscriptionParams sub_params, const char* file_path)
-{
-    listener_host = sub_params.host;
-    listener_port = sub_params.port;
+    listener_host = host;
+    listener_port = port;
     exit = false;
-    std::thread thread(&ISBridgeNGSIv2ToFastRTPS::NGSIv2Listener::listener, this);
+}
 
+NGSIv2Listener* NGSIv2Listener::configureNGSIv2Listener(NGSIv2Params params, NGSIv2SubscriptionParams sub_params)
+{
+    NGSIv2Listener* listener = new NGSIv2Listener(params.host, params.port);
+    listener->sub_params = sub_params;
+
+    listener->handle = nullptr;
+    listener->user_transformation = nullptr;
+
+    return listener;
+}
+
+NGSIv2Publisher * NGSIv2Publisher::configureNGSIv2Publisher(NGSIv2Params params)
+{
+    NGSIv2Publisher* publisher = new NGSIv2Publisher(params.host, params.port);
+
+    publisher->ngsiv2_host = params.host;
+    publisher->ngsiv2_port = params.port;
+    publisher->ngsiv2_id = params.idPattern;
+
+    return publisher;
+}
+
+void NGSIv2Listener::setTransformation(const char* file_path)
+{
     if(file_path){
         handle = eProsimaLoadLibrary(file_path);
         user_transformation = (userf_t)eProsimaGetProcAddress(handle, "transformFromNGSIv2");
@@ -104,16 +108,16 @@ void ISBridgeNGSIv2ToFastRTPS::NGSIv2Listener::startListenerAndSubscribe(NGSIv2S
             user_transformation = (userf_t)eProsimaGetProcAddress(handle, "transform");
         }
     }
+}
+
+void NGSIv2Listener::startListenerAndSubscribe()
+{
+    std::thread thread(&NGSIv2Listener::listener, this);
 
     subscription_id = addSubscription(url, sub_params.idPattern, sub_params.type, sub_params.attrs, sub_params.expression,
         getListenerURL(), sub_params.notif, sub_params.expiration, sub_params.throttling, sub_params.description);
 
     thread.detach();
-}
-
-void ISBridgeNGSIv2ToFastRTPS::NGSIv2Listener::setPublisher(Publisher *fastrtps_pub)
-{
-    this->fastrtps_pub = fastrtps_pub;
 }
 
 void find_and_replace(string& source, string const& find, string const& replace)
@@ -125,7 +129,7 @@ void find_and_replace(string& source, string const& find, string const& replace)
     }
 }
 
-string ISBridgeNGSIv2ToFastRTPS::NGSIv2Listener::addSubscription(const string server, const string idPattern,
+string NGSIv2Listener::addSubscription(const string server, const string idPattern,
                      const string type, const string attrs, const string expression,
                      const string listener, const string notifAttrs, const string expiration,
                      const int throttling, const string description)
@@ -239,12 +243,12 @@ string ISBridgeNGSIv2ToFastRTPS::NGSIv2Listener::addSubscription(const string se
     return "";
 }
 
-void ISBridgeNGSIv2ToFastRTPS::onTerminate()
+void ISBridgeNGSIv2::onTerminate()
 {
-    ngsiv2_listener.deleteSubscription(ngsiv2_listener.url, ngsiv2_listener.subscription_id); // Delete our subcription from origin
+    ((NGSIv2Listener*)ms_subscriber)->deleteSubscription(); // Delete our subcription from origin
 }
 
-void ISBridgeNGSIv2ToFastRTPS::NGSIv2Listener::deleteSubscription(const string server, const string id)
+void NGSIv2Listener::deleteSubscription()
 {
     try
     {
@@ -254,7 +258,7 @@ void ISBridgeNGSIv2ToFastRTPS::NGSIv2Listener::deleteSubscription(const string s
         std::list<std::string> delHeader;
 
         std::stringstream ss;
-        ss << server << "/v2/subscriptions/" << id;
+        ss << url << "/v2/subscriptions/" << subscription_id;
         delRequest.setOpt<Url>(ss.str());
 
         delRequest.setOpt(new curlpp::options::CustomRequest("DELETE"));
@@ -277,7 +281,27 @@ void ISBridgeNGSIv2ToFastRTPS::NGSIv2Listener::deleteSubscription(const string s
     }
 }
 
-void ISBridgeNGSIv2ToFastRTPS::NGSIv2Listener::listener()
+bool NGSIv2Listener::onDataReceived(void* data)
+{
+    string* str = (string*)data;
+    SerializedPayload_t serialized_input(2048);
+    JsonNGSIv2PubSubType json_pst;
+    JsonNGSIv2 json;
+    json.data(*str);
+    json.entityId(""); // No need to parse here (or empty means complete json in data ;) )
+    json_pst.serialize(&json, &serialized_input);
+
+    SerializedPayload_t serialized_output;
+    if(user_transformation){
+        user_transformation(&serialized_input, &serialized_output);
+    }
+    //fastrtps_pub->write(&serialized_output);
+    listener_publisher->publish(&serialized_output);
+    std::cout << "Payload wrote" << std::endl;
+}
+
+
+void NGSIv2Listener::listener()
 {
     try
     {
@@ -308,9 +332,9 @@ void ISBridgeNGSIv2ToFastRTPS::NGSIv2Listener::listener()
             data = data.substr(data.find_first_of("{\""));
 
             std::cout << "Recv " << len << " bytes" << std::endl;
-            //std::cout << data << std::endl;
 
-            //SerializedPayload_t serialized_input(data.length());
+            onDataReceived(&data);
+            /*
             SerializedPayload_t serialized_input(2048);
             JsonNGSIv2PubSubType json_pst;
             JsonNGSIv2 json;
@@ -322,8 +346,10 @@ void ISBridgeNGSIv2ToFastRTPS::NGSIv2Listener::listener()
             if(user_transformation){
                 user_transformation(&serialized_input, &serialized_output);
             }
-            fastrtps_pub->write(&serialized_output);
+            //fastrtps_pub->write(&serialized_output);
+            listener_publisher->publish(&serialized_output);
             std::cout << "Payload wrote" << std::endl;
+            */
         }
     }
     catch (std::exception& e)
@@ -331,3 +357,49 @@ void ISBridgeNGSIv2ToFastRTPS::NGSIv2Listener::listener()
         std::cerr << e.what() << std::endl;
     }
 }
+
+bool NGSIv2Publisher::publish(void* payload)
+{
+    write((SerializedPayload_t*) payload);
+    return true;
+}
+
+string NGSIv2Publisher::write(SerializedPayload_t* payload)
+{
+    try {
+        curlpp::Cleanup cleaner;
+        curlpp::Easy request;
+
+        JsonNGSIv2PubSubType json_pst;
+        JsonNGSIv2 json;
+        json_pst.deserialize(payload, &json);
+
+        //string entityId = getEntityId(json);
+        //string payload = getPayload(json);
+        string entityId = json.entityId();
+        string payload = json.data();
+        request.setOpt(new curlpp::options::Url(url + "/v2/entities/" + entityId + "/attrs"));
+        request.setOpt(new curlpp::options::Verbose(true));
+        std::list<std::string> header;
+        header.push_back("Content-Type: application/json");
+        //header.push_back("Content-Length: application/json");
+
+        request.setOpt(new curlpp::options::HttpHeader(header));
+        request.setOpt(new curlpp::options::PostFields(payload));
+        request.setOpt(new curlpp::options::PostFieldSize(payload.length()));
+
+        std::ostringstream response;
+        request.setOpt(new curlpp::options::WriteStream(&response));
+
+        request.perform();
+
+        cout << response.str() << endl;
+    }
+    catch ( curlpp::LogicError & e ) {
+        std::cout << e.what() << std::endl;
+    }
+    catch ( curlpp::RuntimeError & e ) {
+        std::cout << e.what() << std::endl;
+    }
+}
+

@@ -1,5 +1,4 @@
 #include <iostream>
-#include <tinyxml2.h>
 #include "ISBridgeDummy.h"
 
 #if defined(_WIN32) && defined (BUILD_SHARED_LIBS)
@@ -15,29 +14,30 @@
   #define USER_LIB_EXPORT
 #endif
 
-ISBridgeDummy* loadDummyBridge(tinyxml2::XMLElement *bridge_element);
+ISBridgeDummy* loadDummyBridge(void *config);
 
 // TODO ISBridge must be now an interface (or abstract class) that all Bridges must implement.
-extern "C" ISBridge* USER_LIB_EXPORT createBridge(tinyxml2::XMLElement *bridge_element)
+extern "C" ISBridge* USER_LIB_EXPORT createBridge(const char* config)
 {
     // Add Bridge constructor and...
-    //return new ISBridgeDummy(bridge_element);
+    //return new ISBridgeDummy(config);
 
     // OR parse the config xml here and return a cleaner Bridge class!
-    //return loadDummyBridge(bridge_element);
+    //return loadDummyBridge(config);
 }
 
 // TODO parse the xml and return a configured RSBRidgeDummy
-ISBridgeDummy* loadDummyBridge(tinyxml2::XMLElement *bridge_element)
+ISBridgeDummy* loadDummyBridge(void *config)
 {
+    ISBridgeDummyConfig *dummyConfig = (ISBridgeDummyConfig*)config;
     try
     {
-        tinyxml2::XMLElement *nodeA_element = bridge_element->FirstChildElement("nodeA");
+        Element *nodeA_element = dummyConfig->FirstChildElement("nodeA");
         if (!nodeA_element)
         {
             throw 0;
         }
-        tinyxml2::XMLElement *nodeB_element = bridge_element->FirstChildElement("nodeB");
+        Element *nodeB_element = dummyConfig->FirstChildElement("nodeB");
         if(!nodeB_element)
         {
             throw 0;
@@ -46,7 +46,7 @@ ISBridgeDummy* loadDummyBridge(tinyxml2::XMLElement *bridge_element)
         // TODO Parse configuration for each node
 
         // TODO Load transformation library function_path
-        const char* function_path = bridge_element->FirstChildElement("transformation")->GetText();
+        const char* function_path = dummyConfig->FirstChildElement("transformation")->GetText();
 
         // TODO NodeA configuration
         DummyNodeAAttributes participant_nodeA_params;

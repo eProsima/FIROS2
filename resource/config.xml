@@ -75,4 +75,37 @@
         <bridge_library_nodeA>/path/to/bridge/library_1</bridge_library_nodeA>
         <bridge_library_nodeB>/path/to/bridge/library_2</bridge_library_nodeB>
     </bridge>
+    <bridge>
+        <!-- RTPS <-> NGSIv2 -->
+        <bridge_type>bidirectional</bridge_type>
+        <rtps>
+            <subscriber>
+                <!-- RTPS subscriber parameters -->
+            </subscriber>
+            <publisher>
+                <!-- RTPS publisher parameters -->
+            </publisher>
+        </rtps>
+        <transformation>/path/to/transformation/library</transformation> <!-- must define transform function -->
+        <bridge_library>/path/to/bridge/library</bridge_library> <!-- RTPS <-> Other logic -->
+        <bridge_configuration> <!-- Configuration for bridge NGSIv2 -->
+            <ngsiv2>
+                <participant>ngsiv2_participant_name</participant>
+                <id>ngsiv2_entity_id</id>
+                <host>ngsiv2_host</host>
+                <port>ngsiv2_port</port>
+                <subscription>
+                    <type>ngsiv2_entity_type</type> <!-- optional -->
+                    <attrs>ngsiv2_condition_attrs_list</attrs> <!-- optional, comma separated -->
+                    <expression>ngsiv2_condition_expression</expression> <!-- optional -->
+                    <notifs>ngsiv2_notification_attrs_list</notifs> <!-- comma separated -->
+                    <listener_host>listener_host</listener_host>
+                    <listener_port>listener_port</listener_port>
+                    <expiration>ngsiv2_expiration_time</expiration> <!-- optional -->
+                    <throttling>ngsiv2_throttling</throttling> <!-- optional -->
+                    <description>ngsiv2_description</description> <!-- optional -->
+                </subscription>
+            </ngsiv2>
+        </bridge_configuration>
+    </bridge>
 </is>
