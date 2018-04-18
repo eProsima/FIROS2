@@ -6,10 +6,11 @@ For this example we are going to setup a FIROS2 Bridge to be used to communicate
 
 - Installed and working ROS2 with Fast-RTPS and FIROS2.
 - *ROS2* [Talker/Listener example](https://github.com/ros2/ros2/wiki/Linux-Development-Setup#try-some-examples>).
+- FIWARE Orion contextBroker available for testing.
 
 ### Bridge library:
 
-In this example, we will use the builtin library *rsrtpsngsiv2lib*, included with the installation of FIROS2.
+In this example, we will use the builtin library *isbridgengsiv2lib*, included with the installation of FIROS2.
 
 ### IDL files:
 
@@ -64,26 +65,28 @@ In both cases, serialization and deserialization are applied as needed by Serial
 
 The *config.cml* file used in this example is the following:
 
-	<is>
-		<bridge>
-			<bridge_type>unidirectional</bridge_type>
-			<subscriber>
-				<participant>ros2_subscriber</participant>
-				<domain>0</domain>
-				<topic>chatter</topic>
-				<type>std_msgs::msg::dds_::String_</type>
-				<partition>rt</partition>
-			</subscriber>
-			<publisher>
-				<participant>ngsiv2_publisher</participant>
-				<id>Helloworld</id>
-				<host>localhost</host>
-				<port>1026</port>
-			</publisher>
-			<transformToNGSIv2>/home/luisgp/ros2_ws/src/ros2/firos2/examples/helloworld_orion/build/libuserlib.so</transformToNGSIv2>
-			<bridge_library>librsrtpsngsiv2bridgelib.so</bridge_library>
-		</bridge>
-	</is>
+    <is>
+        <bridge>
+            <bridge_type>unidirectional</bridge_type>
+            <subscriber>
+                <participant>ros2_subscriber</participant>
+                <domain>0</domain>
+                <topic>chatter</topic>
+                <type>std_msgs::msg::dds_::String_</type>
+                <partition>rt</partition>
+            </subscriber>
+            <bridge_configuration>
+                <ngsiv2>
+                    <participant>ngsiv2_publisher</participant>
+                    <id>Helloworld</id>
+                    <host>contextBroker_host</host>
+                    <port>contextBroker_port</port>
+                </ngsiv2>
+            </bridge_configuration>
+            <transformation>/path/to/compiled/library/libuserlib.so</transformation>
+            <bridge_library>libisbridgengsiv2lib.so</bridge_library>
+        </bridge>
+    </is>
 
 Our ROS2 Topic is chatter in the partition "rt" and with domain 0. Exactly the same configuration that talker/listener ROS2 example uses.
 NGSIv2 will be configured to connect with a contextBroker server at localhost in port 1026.

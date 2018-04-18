@@ -9,7 +9,7 @@ For this example we are going to setup a FIROS2 Bridge to be used to communicate
 
 ### Bridge library:
 
-In this example, we will use the builtin library *rsngsirtpsv2lib*, included with the installation of FIROS2.
+In this example, we will use the builtin library *isbridgengsiv2lib*, included with the installation of FIROS2.
 
 ### IDL files:
 
@@ -58,7 +58,7 @@ Following the example in templatelib.cpp, we have already created a library to t
 	    else
 	    {
 		std::cout  << "Failed to parse" << errs;
-	    }	
+	    }
 	}
 
 
@@ -70,37 +70,41 @@ In both cases, serialization and deserialization are applied as needed by Serial
 
 The *config.cml* file used in this example is the following:
 
-	<is>
-		<bridge>
-			<bridge_type>unidirectional</bridge_type>
-			<subscriber>
-				<participant>ngsiv2_subscriber</participant>
-				<id>Helloworld</id>
-				<host>localhost</host>
-				<port>1026</port>
-				<subscription>
-					<type>Helloworld</type> <!-- optional -->
-					<notifs>count</notifs> <!-- comma separated -->
-					<listener_host>localhost</listener_host>
-					<listener_port>12345</listener_port>
-				</subscription>
-			</subscriber>
-			<publisher>
-				<participant>ros2_publisher</participant>
-				<domain>0</domain>
-				<topic>chatter</topic>
-				<type>std_msgs::msg::dds_::String_</type>
-				<partition>rt</partition>
-			</publisher>
-			<transformFromNGSIv2>/home/luisgp/ros2_ws/src/ros2/firos2/examples/helloworld_ros2/build/libuserlib.so</transformFromNGSIv2>
-			<bridge_library>librsngsiv2rtpsbridgelib.so</bridge_library>
-		</bridge>
-	</is>
+    <is>
+        <bridge>
+            <bridge_type>unidirectional</bridge_type>
+            <bridge_configuration>
+                <ngsiv2>
+                    <participant>ngsiv2_subscriber</participant>
+                    <id>Helloworld</id>
+                    <host>contextBroker_host</host>
+                    <port>contextBroker_port</port>
+                    <subscription>
+                        <type>Helloworld</type>
+                        <notifs>count</notifs>
+                        <listener_host>localhost</listener_host>
+                        <listener_port>12345</listener_port>
+                    </subscription>
+                    <transformFromNGSIv2>/path/to/compiled/library/libuserlib.so</transformFromNGSIv2>
+                </ngsiv2>
+            </bridge_configuration>
+            <publisher>
+                <participant>ros2_publisher</participant>
+                <domain>0</domain>
+                <topic>chatter</topic>
+                <type>std_msgs::msg::dds_::String_</type>
+                <partition>rt</partition>
+            </publisher>
+            <bridge_library>libisbridgengsiv2lib.so</bridge_library>
+        </bridge>
+    </is>
+
+Note that our transformation library will apply to NGSIv2 listener, so it is declared inside bridge_configuration under the tags "transformFromNGSIv2".
 
 Our ROS2 Topic is chatter in the partition "rt" and with domain 0. Exactly the same configuration that talker/listener ROS2 example uses.
-NGSIv2 will be configured to connect with a contextBroker server at localhost in port 1026, and will configure a subscription to any change in any entity of type "Helloworld", and asks to be notified only *count* attribute. 
+NGSIv2 will be configured to connect with a contextBroker server at localhost in port 1026, and will configure a subscription to any change in any entity of type "Helloworld", and asks to be notified only *count* attribute.
 
-Finally we will listen to these changes at localhost in port 12345 (internally *librsngsiv2rtpsbridgelib* library launches the server to listen at the address specified in the subscription field).
+Finally we will listen to these changes at localhost in port 12345 (internally *libisbridgengsiv2lib* library launches the server to listen at the address specified in the subscription field).
 
 ### Run the example
 

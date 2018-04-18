@@ -13,8 +13,8 @@ package "Orion contextBroker" <<Cloud>> {
 
 package "Integration Services" <<Rectangle>> {
     class UserLibrary {
-        +NodeA_t transformFromNGSIv2(NodeB_t)
-        +NodeB_t transformToNGSIv2(NodeA_t)
+        +RTPS_t transformFromNGSIv2(NGSIv2_t)
+        +NGSIv2_t transform(RTPS_t)
     }
 }
 
@@ -60,34 +60,48 @@ There are several examples to show the behaviour under [examples folder](https:/
 In this template is it possible to set different bridges between topics and entities. FIROS2' bridges subscribes to a topic and update data of the related entity and subscribes to entities and publish data to the related topic. The parameters that have to be defined are (only shown a *bridge* section of the *config.xml* file):
 
 	
-	<bridge>
-		<bridge_type>bidirectional</bridge_type>
-		<ros2>
-			<participant>ros2_participant_name</participant>
-			<domain>0</domain>
-			<topic>ros2_topic_name</topic>
-			<type>ros2_type_name</type>
-			<partition>ros2_partition</partition>
-		</ros2>
-		<ngsiv2>
-			<participant>ngsiv2_participant_name</participant>
-			<id>ngsiv2_entity_id</id>
-			<host>ngsiv2_host</host>
-			<port>ngsiv2_port</port>
-			<subscription>
-				<type>ngsiv2_entity_type</type> <!-- optional -->
-				<attrs>ngsiv2_condition_attrs_list</attrs> <!-- optional, comma separated -->
-				<expression>ngsiv2_condition_expression</expression> <!-- optional -->
-				<notifs>ngsiv2_notification_attrs_list</notifs> <!-- comma separated -->
-				<expiration>ngsiv2_expiration_time</expiration> <!-- optional -->
-				<throttling>ngsiv2_throttling</throttling> <!-- optional -->
-				<description>ngsiv2_description</description> <!-- optional -->
-			</subscription>
-		</ngsiv2>
-		<transformation>/path/to/transformation/library</transformation>
-		<bridge_library_ros2>/path/to/bridge/librsrtpsngsiv2bridgelib.so</bridge_library_ros2>
-		<bridge_library_ngsiv2>/path/to/bridge/librsngsiv2rtpsbridgelib.so</bridge_library_ngsiv2>
-	</bridge>
+
+    <bridge>
+        <bridge_type>bidirectional</bridge_type>
+        <rtps>
+            <subscriber>
+                <participant>rtps_subscriber</participant>
+                <domain>rtps_sub_domain</domain>
+                <topic>rtps_sub_topic</topic>
+                <type>rtps_sub_data_type</type>
+                <partition>rtps_sub_qos_partition</partition>
+            </subscriber>
+            <publisher>
+                <participant>rtps_publisher</participant>
+                <domain>rtps_pub_domain</domain>
+                <topic>rtps_pub_topic</topic>
+                <type>rtps_pub_data_type</type>
+                <partition>rtps_pub_qos_partition</partition>
+            </publisher>
+        </rtps>
+        <bridge_configuration>
+            <ngsiv2>
+                <participant>ngsiv2_participant</participant>
+                <id>ngsiv2_entity_id</id>
+                <host>context_broker_host</host>
+                <port>context_broker_port</port>
+                <subscription>
+                    <type>ngsiv2_entity_type</type> <!-- OPTIONAL -->
+                    <attrs>ngsiv2_condition_attrs_list</attrs> <!-- OPTIONAL, comma separated -->
+                    <expression>ngsiv2_condition_expression</expression> <!-- OPTIONAL -->
+                    <notifs>ngsiv2_notification_attrs_list</notifs> <!-- comma separated -->
+                    <listener_host>listener_host</listener_host>
+                    <listener_port>listener_port</listener_port>
+                    <expiration>ngsiv2_expiration_time</expiration> <!-- OPTIONAL -->
+                    <throttling>ngsiv2_throttling</throttling> <!-- OPTIONAL -->
+                    <description>ngsiv2_description</description> <!-- OPTIONAL -->
+                </subscription>
+                <transformFromNGSIv2>/path/to/ngsiv2/transformation/library</transformFromNGSIv2> <!-- OPTIONAL (NGSIv2) -->
+            </ngsiv2>
+        </bridge_configuration>
+        <transformation>/path/to/transformation/library</transformation>  <!-- OPTIONAL (RTPS) -->
+        <bridge_library>/path/to/bridge/library</bridge_library>
+    </bridge>
 
 
 ### Transformation, mapping and communication
@@ -98,9 +112,11 @@ This function will be compiled apart and loaded in *FIROS2* at runtime.
 
 In this way, the user can map attributes from the input to the output message and at the same time to apply changes over the data. The serialization and deserialization functions are generated with provided tools, so the only thing that the user has to put are the *idl* files used in the bridge.
 
-*FIROS2* provides builtin *NGSIv2 bridge libraries* named *librsrtpsngsiv2bridgelib.so* and *librsngsiv2rtpsbridgelib.so* that will automatically define *publish* and *listen* functions for each node in order to communicate different protocols. 
+*FIROS2* provides a builtin *NGSIv2 bridge library* named *libisbridgengsiv2lib.so* that implements a ISBridgeNGSIv2 with NGSIv2Publisher and NGSIv2Subscriber in order to communicate RTPS and NGSIv2, implementing the interfaces ISBridge, ISPublisher and ISSubscriber respectively.
 
 You can, of course, implement and use your own bridge libraries to define other behaviour.
+
+You can learn more about *Bridge Libraries* and *Transformation Libraries* in the documentation of *[eProsima Integration Services](https://github.com/eProsima/Integration-Services)*.
 
 ### Types and interfaces
 
@@ -108,17 +124,17 @@ The interaction with the *ROS2* IDL is made from *Fast RTPS* *idl* compatible fi
 
 For making easier the creation of types interfaces used by the communication bridges, FIROS2 includes an *idl* generator based on *rosidl_generator_dds_idl* package. *ROS2* messages definitions *msg* are slightly different from *Fast RTPS* *idl* types, but since *ROS2* is running over *Fast RTPS*, for each *msg* file exists an equivalent *idl* file.
 
-<Add ? .. image:: images/firos2_idl.png :align: center>
+[//]: # (Add ? .. image:: images/firos2_idl.png :align: center)
 
 To get a deeper comprehension about the relation between *ROS2* and *Fast RTPS* IDL definitions, you can see [this article](http://design.ros2.org/articles/mapping_dds_types.html). The *FIROS2* *idl* generation feature allows two different options:
 
 - Generate a *Fast RTPS* compatible *idl* file for an specific package. This can be achieved just adding *FIROS2* in the package CMakeLists as a dependency.
 
-<Add ? .. image:: images/idl_specific.png :align: center>
+[//]: # (Add ? .. image:: images/idl_specific.png :align: center)
 
 - Generate *Fast RTPS* compatible *idl* files by default for all the packages defined in the *ROS2* workspace. To make this possible *FIROS2* must be added to the rosidl_default_generators list.
 
-<Add ? .. image:: images/idl_default.png  :align: center>
+[//]: # (Add ? .. image:: images/idl_default.png  :align: center)
 
 The *idl* files will be created inside the workspace build directory at compilation time.
 

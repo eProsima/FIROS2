@@ -99,21 +99,23 @@ The next step is to set the *config.xml* file with the specific parameters of ou
 
 .. code-block:: xml
 
-    <bridge>
-    	<subscriber>
-    		<participant>fastrtps_subscriber</participant>
-    		<domain>80</domain>
-    		<topic>HelloWorldTopic</topic>
-    		<type>HelloWorld</type>
-    	</subscriber>
-    	<publisher>
-    		<participant>ros2_publisher</participant>
-    		<domain>0</domain>
-    		<topic>chatter</topic>
-    		<type>std_msgs::msg::dds_::String_</type>
-    	</publisher>
-    	<transformation>/path/to/compiled/library</transformation>
-    </bridge>
+	<bridge>
+		<bridge_type>unidirectional</bridge_type>
+		<subscriber>
+			<participant>fastrtps_subscriber</participant>
+			<domain>0</domain>
+			<topic>HelloWorldTopic</topic>
+			<type>HelloWorld</type>
+		</subscriber>
+		<publisher>
+			<participant>ros2_publisher</participant>
+			<domain>0</domain>
+			<topic>chatter</topic>
+			<type>std_msgs::msg::dds_::String_</type>
+			<partition>rt</partition>
+		</publisher>
+		<transformation>/path/to/compiled/library</transformation>
+	</bridge>
 
 
 Publisher and subscriber labels are referenced to *Firos2*, which means that the subscriber is going to receive data from the *Fast RTPS* publisher and the publisher is going to send data to the *ROS2* subscriber.
