@@ -2,28 +2,39 @@
 <is>
 	<bridge>
         <bridge_type>bidirectional</bridge_type>
-		<ros2>
-			<participant>ros2_participant</participant>
-			<domain>0</domain>
-			<topic>RobotTopic</topic>
-			<type>RobotSnd</type>
-            <partition>rt</partition>
-		</ros2>
-		<ngsiv2>
-			<participant>ngsiv2_participant</participant>
-			<id>.*</id>
-            <host>localhost</host>
-            <port>1026</port>
-            <subscription>
-                <type>Robot</type> <!-- optional -->
-                <notifs>id,transmission_time,floor,x,y,zeta</notifs> <!-- comma separated -->
-                <listener_host>localhost</listener_host>
-                <listener_port>12345</listener_port>
-            </subscription>
-		</ngsiv2>
+		<rtps>
+            <publisher>
+                <participant>ros2_publisher</participant>
+                <domain>0</domain>
+                <topic>RobotTopic</topic>
+                <type>RobotSnd</type>
+                <partition>rt</partition>
+            </publisher>
+            <subscriber>
+                <participant>ros2_subscriber</participant>
+                <domain>0</domain>
+                <topic>RobotTopic</topic>
+                <type>RobotSnd</type>
+                <partition>rt</partition>
+            </subscriber>
+		</rtps>
+        <bridge_configuration>
+            <ngsiv2>
+                <participant>ngsiv2_participant</participant>
+                <id>.*</id>
+                <host>localhost</host>
+                <port>1026</port>
+                <subscription>
+                    <type>Robot</type> <!-- optional -->
+                    <notifs>id,transmission_time,floor,x,y,zeta</notifs> <!-- comma separated -->
+                    <listener_host>localhost</listener_host>
+                    <listener_port>12345</listener_port>
+                </subscription>
+                <transformation>/home/luisgp/git/eProsima/firos2/examples/TIS_NGSIv2/build/libuserlib.so</transformation> -->
+            </ngsiv2>
+        </bridge_configuration>
 		<transformation>/home/luisgp/git/eProsima/firos2/examples/TIS_NGSIv2/build/libuserlib.so</transformation> -->
-        <bridge_library_nodeA>libisrtpsngsiv2bridgelib.so</bridge_library_nodeA> <!-- Using from installed in ROS2 library path -->
-        <bridge_library_nodeB>libisngsiv2rtpsbridgelib.so</bridge_library_nodeB>
+        <bridge_library>libisbridgengsiv2lib.so</bridge_library>
 	</bridge>
     <!-- Example for CameraInfo. NOTE the two alternatives for retrieve guest_locations and features, depending of implementation.
 	<bridge>

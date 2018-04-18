@@ -56,7 +56,7 @@ extern "C" void USER_LIB_EXPORT transformFromNGSIv2(SerializedPayload_t *seriali
     }
 }
 
-extern "C" void USER_LIB_EXPORT transformToNGSIv2(SerializedPayload_t *serialized_input, SerializedPayload_t *serialized_output){
+extern "C" void USER_LIB_EXPORT transform(SerializedPayload_t *serialized_input, SerializedPayload_t *serialized_output){
     // User types
     RobotRcv robot_data;
     RobotRcvPubSubType robot_pst;
