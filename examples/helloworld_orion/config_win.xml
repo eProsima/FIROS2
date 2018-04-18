@@ -17,8 +17,8 @@
 				<port>1026</port>
 			</ngsiv2>
 		</bridge_configuration>
-		<!-- Linux -->
-        <transformation>/home/luisgp/ros2_ws/src/ros2/firos2/examples/helloworld_orion/build/libuserlib.so</transformation>
-		<bridge_library>libisbridgengsiv2lib.so</bridge_library>
+		<!-- Windows -->
+		<transformation>C:\dev\ros2\src\ros2\firos2\examples\helloworld_orion\build\Release\userlib.dll</transformation>
+		<bridge_library>C:\dev\ros2\build\firos2\Release\isbridgengsiv2lib.dll</bridge_library>
 	</bridge>
 </is>

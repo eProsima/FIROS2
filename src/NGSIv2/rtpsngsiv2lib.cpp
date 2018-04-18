@@ -21,8 +21,8 @@ ISBridgeNGSIv2* loadNGSIv2Bridge(tinyxml2::XMLElement *bridge_element);
 extern "C" ISBridge* USER_LIB_EXPORT createBridge(const char *config)
 {
     tinyxml2::XMLDocument doc;
-    doc.LoadFile(config);
-    return loadNGSIv2Bridge(doc.FirstChildElement("ngsiv2"));
+    doc.Parse(config);
+    return loadNGSIv2Bridge(doc.FirstChildElement("bridge_configuration"));
 }
 
 ISBridgeNGSIv2* loadNGSIv2Bridge(tinyxml2::XMLElement *bridge_element)
@@ -32,7 +32,7 @@ ISBridgeNGSIv2* loadNGSIv2Bridge(tinyxml2::XMLElement *bridge_element)
     {
         ISBridgeNGSIv2 *ngsiv2_rtps;
 
-        tinyxml2::XMLElement *ngsiv2_element = bridge_element; //->FirstChildElement("ngsiv2");
+        tinyxml2::XMLElement *ngsiv2_element = bridge_element->FirstChildElement("ngsiv2");
         if(!ngsiv2_element)
         {
             throw 0;
@@ -56,21 +56,22 @@ ISBridgeNGSIv2* loadNGSIv2Bridge(tinyxml2::XMLElement *bridge_element)
         }
 
         const char* function_path;
-        if (bridge_element->FirstChildElement("transformation"))
+        if (ngsiv2_element->FirstChildElement("transformation"))
         {
-            function_path = bridge_element->FirstChildElement("transformation")->GetText();
+            function_path = ngsiv2_element->FirstChildElement("transformation")->GetText();
         }
         else
         {
-            if (bridge_element->FirstChildElement("transformToNGSIv2"))
+            if (ngsiv2_element->FirstChildElement("transformFromNGSIv2"))
             {
-                function_path = bridge_element->FirstChildElement("transformToNGSIv2")->GetText();
+                function_path = ngsiv2_element->FirstChildElement("transformFromNGSIv2")->GetText();
             }
             else
             {
                 function_path = nullptr;
-                std::cout << "ERROR: No transformation function defined." << std::endl;
-                throw 0;
+                // No function defined for NGSIv2 -> RTPS
+                //std::cout << "ERROR: No transformation function defined." << std::endl;
+                //throw 0;
             }
         }
 
@@ -84,7 +85,7 @@ ISBridgeNGSIv2* loadNGSIv2Bridge(tinyxml2::XMLElement *bridge_element)
         NGSIv2Publisher* publisher = NGSIv2Publisher::configureNGSIv2Publisher(participant_ngsiv2_params);
 
         // Subscription
-        tinyxml2::XMLElement *ngsiv2_sub_element = _assignNextElement(ngsiv2_element, "subscription");
+        tinyxml2::XMLElement *ngsiv2_sub_element = _assignOptionalElement(ngsiv2_element, "subscription");
 
         if (ngsiv2_sub_element)
         {
@@ -141,7 +142,6 @@ ISBridgeNGSIv2* loadNGSIv2Bridge(tinyxml2::XMLElement *bridge_element)
         {
             ngsiv2_rtps = new ISBridgeNGSIv2(publisher, nullptr, function_path);
         }
-
 
         return ngsiv2_rtps;
     }

@@ -68,7 +68,7 @@ public:
     NGSIv2Publisher(const string host, const uint16_t port);
     static NGSIv2Publisher* configureNGSIv2Publisher(NGSIv2Params params);
     void setHostPort(const string host, const uint16_t port);
-    ~NGSIv2Publisher();
+    ~NGSIv2Publisher() override;
     bool publish(void* payload) override;
 };
 
@@ -77,21 +77,16 @@ class NGSIv2Listener : public ISSubscriber
 private:
     asio::io_service* io_service;
     void* handle;
-    //Publisher *fastrtps_pub; // TODO a listener_publisher del padre
     string url;
-    string listener_host;
-    uint16_t listener_port;
     string subscription_id;
     bool exit;
     userf_t user_transformation;
     Participant *mf_participant;
-    std::string ngsiv2_host;
-    uint16_t ngsiv2_port;
     std::string ngsiv2_id;
     NGSIv2SubscriptionParams sub_params;
 public:
     NGSIv2Listener(const string host, const uint16_t port);
-    ~NGSIv2Listener();
+    ~NGSIv2Listener() override;
     static NGSIv2Listener* configureNGSIv2Listener(NGSIv2Params params, NGSIv2SubscriptionParams sub_params);
     string getListenerURL();
     void setTransformation(const char* file_path);
@@ -103,6 +98,7 @@ public:
     void deleteSubscription();
     void listener();
     void startListenerAndSubscribe();
+    void setPublisher(ISPublisher* publisher) override;
     virtual bool onDataReceived(void * data) override;
 };
 

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
 #include <fastrtps/participant/Participant.h>
 #include <fastrtps/attributes/ParticipantAttributes.h>
 #include <fastrtps/subscriber/Subscriber.h>
@@ -35,13 +34,17 @@ ISBridgeNGSIv2::ISBridgeNGSIv2(NGSIv2Publisher *pub, NGSIv2Listener *sub, const 
 {
     mp_publisher = pub;
     ms_subscriber = sub;
-    if (file_path)
+    if (sub && file_path)
     {
         sub->setTransformation(file_path);
     }
     // IS Manager will setup these participants
     rtps_publisher = nullptr;
     rtps_subscriber = nullptr;
+}
+
+ISBridgeNGSIv2::~ISBridgeNGSIv2()
+{
 }
 
 NGSIv2Listener::~NGSIv2Listener()
@@ -59,7 +62,7 @@ NGSIv2Publisher::~NGSIv2Publisher()
 string NGSIv2Listener::getListenerURL()
 {
     stringstream strstr;
-    strstr << "http://" << listener_host << ":" << listener_port;
+    strstr << "http://" << sub_params.host << ":" << sub_params.port;
 
     return strstr.str();
 }
@@ -71,9 +74,19 @@ NGSIv2Listener::NGSIv2Listener(const string host, const uint16_t port)
     url = strstr.str();
 
     user_transformation = nullptr;
-    listener_host = host;
-    listener_port = port;
     exit = false;
+}
+
+NGSIv2Publisher::NGSIv2Publisher(const string host, const uint16_t port)
+{
+    setHostPort(host, port);
+}
+
+void NGSIv2Publisher::setHostPort(const string host, const uint16_t port)
+{
+    stringstream strstr;
+    strstr << host << ":" << port;
+    url = strstr.str();
 }
 
 NGSIv2Listener* NGSIv2Listener::configureNGSIv2Listener(NGSIv2Params params, NGSIv2SubscriptionParams sub_params)
@@ -283,6 +296,11 @@ void NGSIv2Listener::deleteSubscription()
 
 bool NGSIv2Listener::onDataReceived(void* data)
 {
+    if (!data)
+    {
+        return false;
+    }
+
     string* str = (string*)data;
     SerializedPayload_t serialized_input(2048);
     JsonNGSIv2PubSubType json_pst;
@@ -295,9 +313,14 @@ bool NGSIv2Listener::onDataReceived(void* data)
     if(user_transformation){
         user_transformation(&serialized_input, &serialized_output);
     }
-    //fastrtps_pub->write(&serialized_output);
-    listener_publisher->publish(&serialized_output);
-    std::cout << "Payload wrote" << std::endl;
+
+    if (listener_publisher)
+    {
+        bool result = listener_publisher->publish(&serialized_output);
+        //std::cout << "Payload wrote" << std::endl;
+        return result;
+    }
+    return false;
 }
 
 
@@ -309,7 +332,7 @@ void NGSIv2Listener::listener()
         asio::io_service io_service;
         this->io_service = &io_service;
         asio::error_code error;
-        tcp::endpoint myendpoint(tcp::v4(), listener_port);
+        tcp::endpoint myendpoint(tcp::v4(), sub_params.port);
         tcp::acceptor acceptor(io_service, myendpoint);
 
         while (!exit)
@@ -331,7 +354,7 @@ void NGSIv2Listener::listener()
             string data = ss.str();
             data = data.substr(data.find_first_of("{\""));
 
-            std::cout << "Recv " << len << " bytes" << std::endl;
+            //std::cout << "Recv " << len << " bytes" << std::endl;
 
             onDataReceived(&data);
             /*
@@ -364,6 +387,12 @@ bool NGSIv2Publisher::publish(void* payload)
     return true;
 }
 
+void NGSIv2Listener::setPublisher(ISPublisher* publisher)
+{
+    listener_publisher = publisher;
+    startListenerAndSubscribe();
+}
+
 string NGSIv2Publisher::write(SerializedPayload_t* payload)
 {
     try {
@@ -394,6 +423,7 @@ string NGSIv2Publisher::write(SerializedPayload_t* payload)
         request.perform();
 
         cout << response.str() << endl;
+        return response.str();
     }
     catch ( curlpp::LogicError & e ) {
         std::cout << e.what() << std::endl;
@@ -401,5 +431,6 @@ string NGSIv2Publisher::write(SerializedPayload_t* payload)
     catch ( curlpp::RuntimeError & e ) {
         std::cout << e.what() << std::endl;
     }
+    return "";
 }
 

@@ -20,6 +20,8 @@ find_package(fastrtps REQUIRED)
 find_package(fastcdr REQUIRED)
 
 add_definitions(-DBUILD_SHARED_LIBS -Disbridgengsiv2lib_EXPORTS)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+set(BUILD_SHARED_LIBS TRUE)
 
 if(WIN32)
 	LINK_DIRECTORIES(thirdparty/curl/lib)

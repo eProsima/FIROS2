@@ -14,8 +14,8 @@
 					<listener_host>localhost</listener_host>
 					<listener_port>12345</listener_port>
 				</subscription>
-				<!-- Linux -->
-				<transformFromNGSIv2>/home/luisgp/ros2_ws/src/ros2/firos2/examples/helloworld_ros2/build/libuserlib.so</transformFromNGSIv2>
+				<!-- Windows -->
+				<transformFromNGSIv2>C:\dev\ros2\src\ros2\firos2\examples\helloworld_ros2\build\Release\userlib.dll</transformFromNGSIv2>
 			</ngsiv2>
 		</bridge_configuration>
 		<publisher>
@@ -25,7 +25,7 @@
 			<type>std_msgs::msg::dds_::String_</type>
 			<partition>rt</partition>
 		</publisher>
-        <!-- Linux -->
-		<bridge_library>libisbridgengsiv2lib.so</bridge_library>
+        <!-- Windows -->
+		<bridge_library>C:\dev\ros2\build\firos2\Release\isbridgengsiv2lib.dll</bridge_library>
 	</bridge>
 </is>
