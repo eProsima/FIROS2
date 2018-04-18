@@ -1,111 +1,119 @@
 <?xml version="1.0"?>
-<!-- Complete <bridge> node will be sent to each bridge_library to be parsed by itself. -->
 <is>
-    <!-- Generic bridges -->
     <bridge>
-        <bridge_type>unidirectional</bridge_type>
-        <subscriber> <!-- subscriber node may change depending of bridge_library implementation -->
-            <!-- CUSTOM subscriber parameters -->
-        </subscriber>
-        <publisher> <!-- publisher node may change depending of bridge_library implementation -->
-            <!-- CUSTOM publisher parameters -->
-        </publisher>
-        <transformation>/path/to/transformation/library</transformation> <!-- must define transform function -->
-        <bridge_library>/path/to/bridge/library</bridge_library> <!-- must load tranform function as well -->
-    </bridge>
-    <bridge>
-        <bridge_type>bidirectional</bridge_type>
-        <nodeA>
-            <!-- CUSTOM nodeA parameters -->
-        </nodeA>
-        <nodeB>
-            <!-- CUSTOM nodeB parameters -->
-        </nodeB>
-        <transformation>/path/to/transformation/library</transformation> <!-- must implement both ways. Bridge_library must know what functions to search -->
-        <bridge_library_nodeA>/path/to/bridge/library_1</bridge_library_nodeA> <!-- nodeA -> nodeB logic -->
-        <bridge_library_nodeB>/path/to/bridge/library_2</bridge_library_nodeB> <!-- nodeB -> nodeA logic -->
-    </bridge>
-    <!-- Example bridges -->
-    <bridge>
+        <!-- RTPS -> RTPS -->
         <bridge_type>unidirectional</bridge_type>
         <subscriber>
-            <participant>subscriber_participant_name</participant>
-            <domain>subscriber_domain</domain>
-            <topic>subscriber_topic_name</topic>
-            <type>subscriber_type_name</type>
-            <partition>subscriber_partition</partition>  <!-- optional -->
+            <participant>rtps_subscriber</participant>
+            <domain>rtps_sub_domain</domain>
+            <topic>rtps_sub_topic</topic>
+            <type>rtps_sub_data_type</type>
+            <partition>rtps_sub_qos_partition</partition> <!-- OPTIONAL -->
         </subscriber>
         <publisher>
-            <participant>publisher_participant_name</participant>
-            <domain>subscriber_domain</domain>
-            <topic>publisher_topic_name</topic>
-            <type>publisher_type_name</type>
-            <partition>publisher_partition</partition>  <!-- optional -->
+            <participant>rtps_publisher</participant>
+            <domain>rtps_pub_domain</domain>
+            <topic>rtps_pub_topic</topic>
+            <type>rtps_pub_data_type</type>
+            <partition>rtps_pub_qos_partition</partition> <!-- OPTIONAL -->
         </publisher>
-        <transformation>/path/to/transformation/library</transformation>
-        <bridge_library>/path/to/bridge/library</bridge_library> <!-- optional -->
+        <transformation>/path/to/transformation/library</transformation> <!-- OPTIONAL, must define transform function -->
     </bridge>
+
     <bridge>
-        <bridge_type>bidirectional</bridge_type>
-        <ros2>
-            <participant>ros2_participant_name</participant>
-            <domain>0</domain>
-            <topic>ros2_topic_name</topic>
-            <type>ros2_type_name</type>
-            <partition>ros2_partition</partition>
-        </ros2>
-        <ngsiv2>
-            <participant>ngsiv2_participant_name</participant>
-            <id>ngsiv2_entity_id</id>
-            <host>ngsiv2_host</host>
-            <port>ngsiv2_port</port>
-            <subscription>
-                <type>ngsiv2_entity_type</type> <!-- optional -->
-                <attrs>ngsiv2_condition_attrs_list</attrs> <!-- optional, comma separated -->
-                <expression>ngsiv2_condition_expression</expression> <!-- optional -->
-                <notifs>ngsiv2_notification_attrs_list</notifs> <!-- comma separated -->
-                <listener_host>listener_host</listener_host>
-                <listener_port>listener_port</listener_port>
-                <expiration>ngsiv2_expiration_time</expiration> <!-- optional -->
-                <throttling>ngsiv2_throttling</throttling> <!-- optional -->
-                <description>ngsiv2_description</description> <!-- optional -->
-            </subscription>
-        </ngsiv2>
-        <transformation>/path/to/transformation/library</transformation>
-        <bridge_library_nodeA>/path/to/bridge/library_1</bridge_library_nodeA>
-        <bridge_library_nodeB>/path/to/bridge/library_2</bridge_library_nodeB>
-    </bridge>
-    <bridge>
-        <!-- RTPS <-> NGSIv2 -->
-        <bridge_type>bidirectional</bridge_type>
-        <rtps>
-            <subscriber>
-                <!-- RTPS subscriber parameters -->
-            </subscriber>
-            <publisher>
-                <!-- RTPS publisher parameters -->
-            </publisher>
-        </rtps>
-        <transformation>/path/to/transformation/library</transformation> <!-- must define transform function -->
-        <bridge_library>/path/to/bridge/library</bridge_library> <!-- RTPS <-> Other logic -->
-        <bridge_configuration> <!-- Configuration for bridge NGSIv2 -->
+        <!-- RTPS -> NGSIv2 -->
+        <bridge_type>unidirectional</bridge_type>
+        <subscriber>
+            <participant>rtps_subscriber</participant>
+            <domain>rtps_sub_domain</domain>
+            <topic>rtps_sub_topic</topic>
+            <type>rtps_sub_data_type</type>
+            <partition>rtps_sub_qos_partition</partition> <!-- OPTIONAL -->
+        </subscriber>
+        <transformation>/path/to/transformation/library</transformation> <!-- OPTIONAL, must define transform function -->
+        <bridge_library>/path/to/bridge/library</bridge_library> <!-- must load tranform function as well -->
+        <bridge_configuration>
             <ngsiv2>
-                <participant>ngsiv2_participant_name</participant>
+                <participant>ngsiv2_participant</participant>
                 <id>ngsiv2_entity_id</id>
-                <host>ngsiv2_host</host>
-                <port>ngsiv2_port</port>
+                <host>context_broker_host</host>
+                <port>context_broker_port</port>
+            </ngsiv2>
+        </bridge_configuration>
+    </bridge>
+
+    <bridge>
+        <!-- NGSIv2 -> RTPS -->
+        <bridge_type>unidirectional</bridge_type>
+        <publisher>
+            <participant>rtps_publisher</participant>
+            <domain>rtps_pub_domain</domain>
+            <topic>rtps_pub_topic</topic>
+            <type>rtps_pub_data_type</type>
+            <partition>rtps_pub_qos_partition</partition> <!-- OPTIONAL -->
+        </publisher>
+        <bridge_library>/path/to/bridge/library</bridge_library> <!-- must load tranform function as well -->
+        <bridge_configuration>
+            <ngsiv2>
+                <participant>ngsiv2_participant</participant>
+                <id>ngsiv2_entity_id</id>
+                <host>context_broker_host</host>
+                <port>context_broker_port</port>
                 <subscription>
-                    <type>ngsiv2_entity_type</type> <!-- optional -->
-                    <attrs>ngsiv2_condition_attrs_list</attrs> <!-- optional, comma separated -->
-                    <expression>ngsiv2_condition_expression</expression> <!-- optional -->
+                    <type>ngsiv2_entity_type</type> <!-- OPTIONAL -->
+                    <attrs>ngsiv2_condition_attrs_list</attrs> <!-- OPTIONAL, comma separated -->
+                    <expression>ngsiv2_condition_expression</expression> <!-- OPTIONAL -->
                     <notifs>ngsiv2_notification_attrs_list</notifs> <!-- comma separated -->
                     <listener_host>listener_host</listener_host>
                     <listener_port>listener_port</listener_port>
-                    <expiration>ngsiv2_expiration_time</expiration> <!-- optional -->
-                    <throttling>ngsiv2_throttling</throttling> <!-- optional -->
-                    <description>ngsiv2_description</description> <!-- optional -->
+                    <expiration>ngsiv2_expiration_time</expiration> <!-- OPTIONAL -->
+                    <throttling>ngsiv2_throttling</throttling> <!-- OPTIONAL -->
+                    <description>ngsiv2_description</description> <!-- OPTIONAL -->
                 </subscription>
+                <transformFromNGSIv2>/path/to/ngsiv2/transformation/library</transformFromNGSIv2> <!-- OPTIONAL -->
             </ngsiv2>
         </bridge_configuration>
+    </bridge>
+
+    <bridge>
+        <bridge_type>bidirectional</bridge_type>
+        <rtps>
+            <subscriber>
+                <participant>rtps_subscriber</participant>
+                <domain>rtps_sub_domain</domain>
+                <topic>rtps_sub_topic</topic>
+                <type>rtps_sub_data_type</type>
+                <partition>rtps_sub_qos_partition</partition>
+            </subscriber>
+            <publisher>
+                <participant>rtps_publisher</participant>
+                <domain>rtps_pub_domain</domain>
+                <topic>rtps_pub_topic</topic>
+                <type>rtps_pub_data_type</type>
+                <partition>rtps_pub_qos_partition</partition>
+            </publisher>
+        </rtps>
+        <bridge_configuration>
+            <ngsiv2>
+                <participant>ngsiv2_participant</participant>
+                <id>ngsiv2_entity_id</id>
+                <host>context_broker_host</host>
+                <port>context_broker_port</port>
+                <subscription>
+                    <type>ngsiv2_entity_type</type> <!-- OPTIONAL -->
+                    <attrs>ngsiv2_condition_attrs_list</attrs> <!-- OPTIONAL, comma separated -->
+                    <expression>ngsiv2_condition_expression</expression> <!-- OPTIONAL -->
+                    <notifs>ngsiv2_notification_attrs_list</notifs> <!-- comma separated -->
+                    <listener_host>listener_host</listener_host>
+                    <listener_port>listener_port</listener_port>
+                    <expiration>ngsiv2_expiration_time</expiration> <!-- OPTIONAL -->
+                    <throttling>ngsiv2_throttling</throttling> <!-- OPTIONAL -->
+                    <description>ngsiv2_description</description> <!-- OPTIONAL -->
+                </subscription>
+                <transformFromNGSIv2>/path/to/ngsiv2/transformation/library</transformFromNGSIv2> <!-- OPTIONAL (NGSIv2) -->
+            </ngsiv2>
+        </bridge_configuration>
+        <transformation>/path/to/transformation/library</transformation>  <!-- OPTIONAL (RTPS) -->
+        <bridge_library>/path/to/bridge/library</bridge_library>
     </bridge>
 </is>
