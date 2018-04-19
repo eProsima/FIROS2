@@ -43,6 +43,12 @@ In the case of Windows:
     > cd C:\dev\ros2\src\ros2
     > git clone --recursive https://github.com/eProsima/firos2
 
+On windows you must compile [*cURL Library*](https://github.com/curl/curl) that is included as thirdpary submodule:
+
+    > cd C:\dev\ros2\src\ros2\firos2\thirdparty\curl
+    > buildconf.bat
+    > cd winbuild
+    > nmake /f Makefile.vc mode=dll VC=14
 
 Once this is done, it can be compiled like any other *ROS2* package. For example:
 

@@ -188,6 +188,16 @@ Let's suppose our ROS2 path is **~/ros2**
 	$ cmake ..
 	$ make
 
+In Windows:
+
+	> cd C:\dev\ros2
+	> call install\local_setup.bat
+	> cd src\ros2\firos2\examples\TIS_NGSIv2
+    > mkdir build && cd build
+    > cmake .. -G "Visual Studio 14 2015 Win64"
+    > cmake --build . --config Release
+    > cd Release
+    
 Three auxiliary utilities are compiled:
 
 **cb_create_robot**: Allows you to create a robot with the expected structure in the Orion contextBroker.

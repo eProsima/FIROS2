@@ -118,6 +118,16 @@ Let's suppose our ROS2 path is **~/ros2**
 	$ cmake ..
 	$ make
 
+In Windows:
+
+	> cd C:\dev\ros2
+	> call install\local_setup.bat
+	> cd src\ros2\firos2\examples\helloworld_ros2
+    > mkdir build && cd build
+    > cmake .. -G "Visual Studio 14 2015 Win64"
+    > cmake --build . --config Release
+    > cd Release
+
 Two auxiliary utilities are compiled:
 
 **cb_create_helloworld**: Allows you to create a "Helloworld" entity with the expected structure in the Orion contextBroker.
