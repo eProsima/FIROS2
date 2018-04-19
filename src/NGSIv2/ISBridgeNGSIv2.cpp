@@ -258,7 +258,10 @@ string NGSIv2Listener::addSubscription(const string server, const string idPatte
 
 void ISBridgeNGSIv2::onTerminate()
 {
-    ((NGSIv2Listener*)ms_subscriber)->deleteSubscription(); // Delete our subcription from origin
+    if (ms_subscriber)
+    {
+        ((NGSIv2Listener*)ms_subscriber)->deleteSubscription(); // Delete our subcription from origin
+    }
 }
 
 void NGSIv2Listener::deleteSubscription()
@@ -308,7 +311,7 @@ bool NGSIv2Listener::onDataReceived(void* data)
     json.data(*str);
     json.entityId(""); // No need to parse here (or empty means complete json in data ;) )
     json_pst.serialize(&json, &serialized_input);
-
+    //std::cout << "Received: " << *str << std::endl;
     SerializedPayload_t serialized_output;
     if(user_transformation){
         user_transformation(&serialized_input, &serialized_output);
@@ -356,7 +359,14 @@ void NGSIv2Listener::listener()
 
             //std::cout << "Recv " << len << " bytes" << std::endl;
 
-            onDataReceived(&data);
+            if (len < 2048)
+            {
+                onDataReceived(&data);
+            }
+            else
+            {
+                std::cout << "Received message too big (>= 2048 B). It will be ignored." << std::endl;
+            }
             /*
             SerializedPayload_t serialized_input(2048);
             JsonNGSIv2PubSubType json_pst;
