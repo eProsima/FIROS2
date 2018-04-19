@@ -18,7 +18,7 @@
 
 ISBridgeNGSIv2* loadNGSIv2Bridge(tinyxml2::XMLElement *bridge_element);
 
-extern "C" ISBridge* USER_LIB_EXPORT createBridge(const char *config)
+extern "C" USER_LIB_EXPORT ISBridge* createBridge(const char *config)
 {
     tinyxml2::XMLDocument doc;
     doc.Parse(config);

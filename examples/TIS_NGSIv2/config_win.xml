@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<is>
+    <bridge>
+        <bridge_type>bidirectional</bridge_type>
+        <rtps>
+            <publisher>
+                <participant>ros2_publisher</participant>
+                <domain>0</domain>
+                <topic>RobotTopic</topic>
+                <type>RobotSnd</type>
+                <partition>rt</partition>
+            </publisher>
+            <subscriber>
+                <participant>ros2_subscriber</participant>
+                <domain>0</domain>
+                <topic>RobotTopic</topic>
+                <type>RobotSnd</type>
+                <partition>rt</partition>
+            </subscriber>
+        </rtps>
+        <bridge_configuration>
+            <ngsiv2>
+                <participant>ngsiv2_participant</participant>
+                <id>.*</id>
+                <host>192.168.122.1</host>
+                <port>1026</port>
+                <subscription>
+                    <type>Robot</type> <!-- optional -->
+                    <notifs>id,transmission_time,floor,x,y,zeta</notifs>
+                    <listener_host>192.168.122.224</listener_host>
+                    <listener_port>12345</listener_port>
+                </subscription>
+                <transformation>C:\dev\ros2\src\ros2\firos2\examples\TIS_NGSIv2\build\Release\userlib.dll</transformation>
+            </ngsiv2>
+        </bridge_configuration>
+        <transformation>C:\dev\ros2\src\ros2\firos2\examples\TIS_NGSIv2\build\Release\userlib.dll</transformation>
+        <bridge_library>C:\dev\ros2\build\firos2\Release\isbridgengsiv2lib.dll</bridge_library>
+    </bridge>
+</is>

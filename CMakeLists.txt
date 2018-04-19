@@ -19,12 +19,16 @@ find_package(ament_cmake REQUIRED)
 find_package(fastrtps REQUIRED)
 find_package(fastcdr REQUIRED)
 
+#set(CURL_BUILD_DIR thirdparty/curl/builds/libcurl-vc14-x64-release-static-ipv6-sspi-winssl)
+set(CURL_BUILD_DIR thirdparty/curl/builds/libcurl-vc14-x64-release-dll-ipv6-sspi-winssl)
+
 add_definitions(-DBUILD_SHARED_LIBS -Disbridgengsiv2lib_EXPORTS)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(BUILD_SHARED_LIBS TRUE)
 
 if(WIN32)
-	LINK_DIRECTORIES(thirdparty/curl/lib)
+    LINK_DIRECTORIES(${CURL_BUILD_DIR}/lib)
+	LINK_DIRECTORIES(${CURL_BUILD_DIR}/bin)
 endif()
 
 add_executable(firos2 src/main.cpp
@@ -60,10 +64,13 @@ if (WIN32)
 	file(GLOB_RECURSE CURLPP_SOURCES thirdparty/curlpp/src/*)
 
 	add_library(cURLpp ${CURLPP_HEADERS} ${CURLPP_SOURCES})
-    target_include_directories(cURLpp PUBLIC thirdparty/curlpp/include thirdparty/curl/include)
+    target_include_directories(cURLpp PUBLIC thirdparty/curlpp/include ${CURL_BUILD_DIR}/include)
 	set_property(TARGET cURLpp PROPERTY POSITION_INDEPENDENT_CODE ON)
 
-    set(liblist fastrtps_static fastcdr_static TinyXML2 ${CMAKE_DL_LIBS} cURLpp IPHLPAPI shlwapi libcurl_a)
+    #target_link_libraries(cURLpp libcurl_a)
+    #set(liblist fastrtps_static fastcdr_static TinyXML2 ${CMAKE_DL_LIBS} cURLpp IPHLPAPI shlwapi libcurl_a)
+    target_link_libraries(cURLpp libcurl)
+    set(liblist fastrtps_static fastcdr_static TinyXML2 ${CMAKE_DL_LIBS} cURLpp IPHLPAPI shlwapi libcurl)
 else()
     set(liblist fastrtps fastcdr -L/usr/lib/x86_64-linux-gnu tinyxml2 curl curlpp)
 endif()

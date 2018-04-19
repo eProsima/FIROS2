@@ -13,12 +13,12 @@
 			<ngsiv2>
 				<participant>ngsiv2_publisher</participant>
 				<id>Helloworld</id>
-				<host>localhost</host>
+				<host>192.168.122.1</host>
 				<port>1026</port>
 			</ngsiv2>
 		</bridge_configuration>
 		<!-- Windows -->
 		<transformation>C:\dev\ros2\src\ros2\firos2\examples\helloworld_orion\build\Release\userlib.dll</transformation>
-		<bridge_library>C:\dev\ros2\build\firos2\Release\isbridgengsiv2lib.dll</bridge_library>
+		<bridge_library>C:\dev\ros2\install\Lib\isbridgengsiv2lib.dll</bridge_library>
 	</bridge>
 </is>

@@ -6,12 +6,12 @@
 			<ngsiv2>
 				<participant>ngsiv2_subscriber</participant>
 				<id>Helloworld</id>
-				<host>localhost</host>
+				<host>192.168.122.1</host>
 				<port>1026</port>
 				<subscription>
 					<type>Helloworld</type> <!-- optional -->
 					<notifs>count</notifs> <!-- comma separated -->
-					<listener_host>localhost</listener_host>
+					<listener_host>192.168.122.224</listener_host>
 					<listener_port>12345</listener_port>
 				</subscription>
 				<!-- Windows -->
