@@ -59,17 +59,17 @@ NGSIv2Publisher::~NGSIv2Publisher()
     if(mf_participant != nullptr) Domain::removeParticipant(mf_participant);
 }
 
-string NGSIv2Listener::getListenerURL()
+std::string NGSIv2Listener::getListenerURL()
 {
-    stringstream strstr;
+    std::stringstream strstr;
     strstr << "http://" << sub_params.host << ":" << sub_params.port;
 
     return strstr.str();
 }
 
-NGSIv2Listener::NGSIv2Listener(const string host, const uint16_t port)
+NGSIv2Listener::NGSIv2Listener(const std::string &host, const uint16_t &port)
 {
-    stringstream strstr;
+    std::stringstream strstr;
     strstr << host << ":" << port;
     url = strstr.str();
 
@@ -77,19 +77,20 @@ NGSIv2Listener::NGSIv2Listener(const string host, const uint16_t port)
     exit = false;
 }
 
-NGSIv2Publisher::NGSIv2Publisher(const string host, const uint16_t port)
+NGSIv2Publisher::NGSIv2Publisher(const std::string &host, const uint16_t &port)
 {
     setHostPort(host, port);
 }
 
-void NGSIv2Publisher::setHostPort(const string host, const uint16_t port)
+void NGSIv2Publisher::setHostPort(const std::string &host, const uint16_t &port)
 {
-    stringstream strstr;
+    std::stringstream strstr;
     strstr << host << ":" << port;
     url = strstr.str();
 }
 
-NGSIv2Listener* NGSIv2Listener::configureNGSIv2Listener(NGSIv2Params params, NGSIv2SubscriptionParams sub_params)
+NGSIv2Listener* NGSIv2Listener::configureNGSIv2Listener(const NGSIv2Params &params,
+                                                        const NGSIv2SubscriptionParams &sub_params)
 {
     NGSIv2Listener* listener = new NGSIv2Listener(params.host, params.port);
     listener->sub_params = sub_params;
@@ -100,7 +101,7 @@ NGSIv2Listener* NGSIv2Listener::configureNGSIv2Listener(NGSIv2Params params, NGS
     return listener;
 }
 
-NGSIv2Publisher * NGSIv2Publisher::configureNGSIv2Publisher(NGSIv2Params params)
+NGSIv2Publisher * NGSIv2Publisher::configureNGSIv2Publisher(const NGSIv2Params &params)
 {
     NGSIv2Publisher* publisher = new NGSIv2Publisher(params.host, params.port);
 
@@ -133,19 +134,19 @@ void NGSIv2Listener::startListenerAndSubscribe()
     thread.detach();
 }
 
-void find_and_replace(string& source, string const& find, string const& replace)
+void find_and_replace(std::string& source, const std::string &find, const std::string &replace)
 {
-    for(string::size_type i = 0; (i = source.find(find, i)) != string::npos;)
+    for(std::string::size_type i = 0; (i = source.find(find, i)) != std::string::npos;)
     {
         source.replace(i, find.length(), replace);
         i += replace.length();
     }
 }
 
-string NGSIv2Listener::addSubscription(const string server, const string idPattern,
-                     const string type, const string attrs, const string expression,
-                     const string listener, const string notifAttrs, const string expiration,
-                     const int throttling, const string description)
+std::string NGSIv2Listener::addSubscription(const std::string &server, const std::string &idPattern,
+                     const std::string &type, const std::string &attrs, const std::string &expression,
+                     const std::string &listener, const std::string &notifAttrs, const std::string &expiration,
+                     const int &throttling, const std::string &description)
 {
     try
     {
@@ -156,10 +157,10 @@ string NGSIv2Listener::addSubscription(const string server, const string idPatte
         subRequest.setOpt(new curlpp::options::HttpHeader(sheader));
         //subRequest.setOpt(new curlpp::options::Verbose(true));
 
-        string myAttrs = attrs;
-        string myNotifAttrs = notifAttrs;
-        string comma(",");
-        string quotecommaquote("\",\"");
+        std::string myAttrs = attrs;
+        std::string myNotifAttrs = notifAttrs;
+        std::string comma(",");
+        std::string quotecommaquote("\",\"");
         //std::replace(myAttrs.begin(), myAttrs.end(), comma, quotecommaquote);
         //std::replace(myNotifAttrs.begin(), myNotifAttrs.end(), comma, quotecommaquote);
         find_and_replace(myAttrs, comma, quotecommaquote);
@@ -229,7 +230,7 @@ string NGSIv2Listener::addSubscription(const string server, const string idPatte
 
         //cout << response.str() << endl;
 
-        string subsc_id;
+        std::string subsc_id;
         std::istringstream responseHeader(response.str());
 
         for (std::string line; std::getline(responseHeader, line); )
@@ -238,8 +239,8 @@ string NGSIv2Listener::addSubscription(const string server, const string idPatte
             {
                 subsc_id = line.substr(line.find_last_of("/") + 1);
                 subsc_id.pop_back(); // Remove \r tail
-                cout << "Added subscription with ID: " << subsc_id << endl;
-                cout << subsc_id << endl;
+                std::cout << "Added subscription with ID: " << subsc_id << std::endl;
+                std::cout << subsc_id << std::endl;
                 return subsc_id;
             }
         }
@@ -285,7 +286,7 @@ void NGSIv2Listener::deleteSubscription()
         // Send request and get a result.
         delRequest.perform();
 
-        cout << delResponse.str() << endl;
+        std::cout << delResponse.str() << std::endl;
     }
     catch(curlpp::RuntimeError & e)
     {
@@ -304,7 +305,7 @@ bool NGSIv2Listener::onDataReceived(void* data)
         return false;
     }
 
-    string* str = (string*)data;
+    std::string* str = (std::string*)data;
     SerializedPayload_t serialized_input(2048);
     JsonNGSIv2PubSubType json_pst;
     JsonNGSIv2 json;
@@ -331,7 +332,7 @@ void NGSIv2Listener::listener()
 {
     try
     {
-        array<char, 2048> buf;
+        std::array<char, 2048> buf;
         asio::io_service io_service;
         this->io_service = &io_service;
         asio::error_code error;
@@ -351,10 +352,10 @@ void NGSIv2Listener::listener()
                 throw asio::system_error(error); // Some other error.
 
             //std::cout.write(buf.data(), len);
-            stringstream ss;
+            std::stringstream ss;
             ss << buf.data();
 
-            string data = ss.str();
+            std::string data = ss.str();
             data = data.substr(data.find_first_of("{\""));
 
             //std::cout << "Recv " << len << " bytes" << std::endl;
@@ -367,22 +368,6 @@ void NGSIv2Listener::listener()
             {
                 std::cout << "Received message too big (>= 2048 B). It will be ignored." << std::endl;
             }
-            /*
-            SerializedPayload_t serialized_input(2048);
-            JsonNGSIv2PubSubType json_pst;
-            JsonNGSIv2 json;
-            json.data(data);
-            json.entityId(""); // No need to parse here (or empty means complete json in data ;) )
-            json_pst.serialize(&json, &serialized_input);
-
-            SerializedPayload_t serialized_output;
-            if(user_transformation){
-                user_transformation(&serialized_input, &serialized_output);
-            }
-            //fastrtps_pub->write(&serialized_output);
-            listener_publisher->publish(&serialized_output);
-            std::cout << "Payload wrote" << std::endl;
-            */
         }
     }
     catch (std::exception& e)
@@ -403,7 +388,7 @@ void NGSIv2Listener::setPublisher(ISPublisher* publisher)
     startListenerAndSubscribe();
 }
 
-string NGSIv2Publisher::write(SerializedPayload_t* payload)
+std::string NGSIv2Publisher::write(SerializedPayload_t* payload)
 {
     try {
         curlpp::Cleanup cleaner;
@@ -413,10 +398,10 @@ string NGSIv2Publisher::write(SerializedPayload_t* payload)
         JsonNGSIv2 json;
         json_pst.deserialize(payload, &json);
 
-        //string entityId = getEntityId(json);
-        //string payload = getPayload(json);
-        string entityId = json.entityId();
-        string payload = json.data();
+        //std::string entityId = getEntityId(json);
+        //std::string payload = getPayload(json);
+        std::string entityId = json.entityId();
+        std::string payload = json.data();
         request.setOpt(new curlpp::options::Url(url + "/v2/entities/" + entityId + "/attrs"));
         request.setOpt(new curlpp::options::Verbose(true));
         std::list<std::string> header;
@@ -432,7 +417,7 @@ string NGSIv2Publisher::write(SerializedPayload_t* payload)
 
         request.perform();
 
-        cout << response.str() << endl;
+        std::cout << response.str() << std::endl;
         return response.str();
     }
     catch ( curlpp::LogicError & e ) {

@@ -45,7 +45,6 @@
 #include <curlpp/Easy.hpp>
 #include <curlpp/Options.hpp>
 
-using namespace std;
 using namespace eprosima::fastrtps;
 using namespace eprosima::fastrtps::rtps;
 using namespace curlpp::options;
@@ -56,8 +55,8 @@ typedef void (*userf_t)(SerializedPayload_t *serialized_input, SerializedPayload
 class NGSIv2Publisher : public ISPublisher
 {
 private:
-    string url;
-    string write(SerializedPayload_t *payload);
+    std::string url;
+    std::string write(SerializedPayload_t *payload);
     Publisher *mf_publisher;
     Participant *mf_participant;
     std::string ngsiv2_host;
@@ -65,9 +64,9 @@ private:
     std::string ngsiv2_id;
 public:
     NGSIv2Publisher();
-    NGSIv2Publisher(const string host, const uint16_t port);
-    static NGSIv2Publisher* configureNGSIv2Publisher(NGSIv2Params params);
-    void setHostPort(const string host, const uint16_t port);
+    NGSIv2Publisher(const std::string &host, const uint16_t &port);
+    static NGSIv2Publisher* configureNGSIv2Publisher(const NGSIv2Params &params);
+    void setHostPort(const std::string &host, const uint16_t &port);
     ~NGSIv2Publisher() override;
     bool publish(void* payload) override;
 };
@@ -77,24 +76,25 @@ class NGSIv2Listener : public ISSubscriber
 private:
     asio::io_service* io_service;
     void* handle;
-    string url;
-    string subscription_id;
+    std::string url;
+    std::string subscription_id;
     bool exit;
     userf_t user_transformation;
     Participant *mf_participant;
     std::string ngsiv2_id;
     NGSIv2SubscriptionParams sub_params;
 public:
-    NGSIv2Listener(const string host, const uint16_t port);
+    NGSIv2Listener(const std::string &host, const uint16_t &port);
     ~NGSIv2Listener() override;
-    static NGSIv2Listener* configureNGSIv2Listener(NGSIv2Params params, NGSIv2SubscriptionParams sub_params);
-    string getListenerURL();
+    static NGSIv2Listener* configureNGSIv2Listener(const NGSIv2Params &params,
+                                                   const NGSIv2SubscriptionParams &sub_params);
+    std::string getListenerURL();
     void setTransformation(const char* file_path);
-    string getAttrList(const std::vector< string > list);
-    string addSubscription(const string server, const string idPattern,
-                    const string type, const string attrs, const string expression,
-                    const string listener, const string notifAttrs, const string expiration = "",
-                    const int throttling = -1, const string description = "");
+    std::string getAttrList(const std::vector< std::string > &list);
+    std::string addSubscription(const std::string &server, const std::string &idPattern,
+                    const std::string &type, const std::string &attrs, const std::string &expression,
+                    const std::string &listener, const std::string &notifAttrs, const std::string &expiration = "",
+                    const int &throttling = -1, const std::string &description = "");
     void deleteSubscription();
     void listener();
     void startListenerAndSubscribe();
