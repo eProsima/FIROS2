@@ -61,7 +61,7 @@ private:
     Participant *mf_participant;
     std::string ngsiv2_host;
     uint16_t ngsiv2_port;
-    std::string ngsiv2_id;
+    //std::string ngsiv2_id;
 public:
     NGSIv2Publisher();
     NGSIv2Publisher(const std::string &host, const uint16_t &port);

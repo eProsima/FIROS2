@@ -107,7 +107,7 @@ NGSIv2Publisher * NGSIv2Publisher::configureNGSIv2Publisher(const NGSIv2Params &
 
     publisher->ngsiv2_host = params.host;
     publisher->ngsiv2_port = params.port;
-    publisher->ngsiv2_id = params.idPattern;
+    //publisher->ngsiv2_id = params.idPattern;
 
     return publisher;
 }
