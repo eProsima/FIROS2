@@ -7,7 +7,6 @@
 
         <publisher name="ros2_publisher">
             <attributes>
-				<domain>0</domain>
 				<topic>chatter</topic>
 				<type>std_msgs::msg::dds_::String_</type>
 	            <partition>rt</partition>

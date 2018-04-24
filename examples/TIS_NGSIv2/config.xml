@@ -1,81 +1,82 @@
 <?xml version="1.0"?>
 <is>
-    <bridge>
-        <bridge_type>bidirectional</bridge_type>
-        <rtps>
-            <publisher>
-                <participant>ros2_publisher</participant>
-                <domain>0</domain>
+    <participant name="ros2">
+        <attributes>
+            <domain>0</domain>
+        </attributes>
+
+        <publisher name="ros2_publisher">
+            <attributes>
                 <topic>RobotTopic</topic>
                 <type>RobotSnd</type>
                 <partition>rt</partition>
-            </publisher>
-            <subscriber>
-                <participant>ros2_subscriber</participant>
-                <domain>0</domain>
+            </attributes>
+        </publisher>
+
+        <subscriber name="ros2_subscriber">
+            <attributes>
                 <topic>RobotTopic</topic>
                 <type>RobotSnd</type>
                 <partition>rt</partition>
-            </subscriber>
-        </rtps>
-        <bridge_configuration>
-            <ngsiv2>
-                <participant>ngsiv2_participant</participant>
-                <id>.*</id>
-                <host>localhost</host>
-                <port>1026</port>
-                <subscription>
-                    <type>Robot</type> <!-- optional -->
-                    <notifs>id,transmission_time,floor,x,y,zeta</notifs>
-                    <listener_host>localhost</listener_host>
-                    <listener_port>12345</listener_port>
-                </subscription>
-                <transformation>/home/luisgp/git/eProsima/firos2/examples/TIS_NGSIv2/build/libuserlib.so</transformation>
-            </ngsiv2>
-        </bridge_configuration>
-        <transformation>/home/luisgp/git/eProsima/firos2/examples/TIS_NGSIv2/build/libuserlib.so</transformation>
-        <bridge_library>libisbridgengsiv2lib.so</bridge_library>
-    </bridge>
-    <!-- Example for CameraInfo. NOTE the two alternatives for retrieve guest_locations and features, depending of implementation.
-    <bridge>
-        <bridge_type>bidirectional</bridge_type>
-        <rtps>
-            <publisher>
-                <participant>ros2_pub_participant</participant>
-                <domain>0</domain>
-                <topic>CameraTopic</topic>
-                <type>CameraInfo</type>
-                <partition>rt</partition>
-            </publisher>
-            <subscriber>
-                <participant>ros2_sub_participant</participant>
-                <domain>0</domain>
-                <topic>CameraTopic</topic>
-                <type>CameraInfo</type>
-                <partition>rt</partition>
-            </subscriber>
-        </rtps>
-        <bridge_configuration>
-            <ngsiv2>
-                <participant>ngsiv2_participant</participant>
-                <id>.*</id>
-                <host>localhost</host>
-                <port>1026</port>
-                <subscription>
-                    <type>Camera</type>
+            </attributes>
+        </subscriber>
+    </participant>
 
-                    <notifs>id,transmission_time,number_of_people,floor,x,y,color,other</notifs>
-                    <OR/>
-                    <notifs>id,transmission_time,number_of_people,guest_locations,guest_features</notifs>
+    <bridge name="ngsiv2">
+        <library>libisbridgengsiv2lib.so</library> <!-- Path to the NGSIv2 library -->
 
-                    <listener_host>localhost</listener_host>
-                    <listener_port>12346</listener_port>
-                </subscription>
-                <transformation>/home/luisgp/git/eProsima/firos2/examples/TIS_NGSIv2/build/libuserlib2.so</transformation>
-            </ngsiv2>
-        </bridge_configuration>
-        <transformation>/home/luisgp/git/eProsima/firos2/examples/TIS_NGSIv2/build/libuserlib2.so</transformation>
-        <bridge_library>libisbridgengsiv2lib.so</bridge_library>
+        <subscriber name="ngsiv2_subscriber">
+            <property>
+                <name>host</name>
+                <value>localhost</value>
+            </property>
+            <property>
+                <name>port</name>
+                <value>1026</value>
+            </property>
+            <property>
+                <name>id</name>
+                <value>.*</value>
+            </property>
+            <property>
+                <name>type</name>
+                <value>Robot</value>
+            </property>
+            <property>
+                <name>notifs</name>
+                <value>id,transmission_time,floor,x,y,zeta</value>
+            </property>
+            <property>
+                <name>listener_host</name>
+                <value>localhost</value>
+            </property>
+            <property>
+                <name>listener_port</name>
+                <value>12345</value>
+            </property>
+        </subscriber>
+
+        <publisher name="ngsiv2_publisher">
+            <property>
+                <name>host</name>
+                <value>localhost</value>
+            </property>
+            <property>
+                <name>port</name>
+                <value>1026</value>
+            </property>
+        </publisher>
     </bridge>
-    -->
+
+    <connector name="ros2_ngsiv2"> 
+        <subscriber participant_name="ros2" subscriber_name="ros2_subscriber"/>
+        <publisher participant_name="ngsiv2" publisher_name="ngsiv2_publisher"/>
+        <transformation file="/home/luisgp/git/eProsima/firos2/examples/TIS_NGSIv2/build/libuserlib.so" function="transform"/>
+    </connector>
+
+    <connector name="ngsiv2_ros2"> 
+        <subscriber participant_name="ngsiv2" subscriber_name="ngsiv2_subscriber"/>
+        <publisher participant_name="ros2" publisher_name="ros2_publisher"/>
+        <transformation file="/home/luisgp/git/eProsima/firos2/examples/TIS_NGSIv2/build/libuserlib.so" function="transformFromNGSIv2"/>
+    </connector>
 </is>
