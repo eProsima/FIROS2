@@ -18,25 +18,11 @@
 
 #include <iostream>
 
-#include "fastrtps/participant/Participant.h"
-#include "fastrtps/attributes/ParticipantAttributes.h"
-#include "fastrtps/publisher/Publisher.h"
-#include "fastrtps/publisher/PublisherListener.h"
-#include "fastrtps/attributes/PublisherAttributes.h"
-#include "fastrtps/subscriber/Subscriber.h"
-#include "fastrtps/subscriber/SubscriberListener.h"
-#include "fastrtps/subscriber/SampleInfo.h"
-#include "fastrtps/attributes/SubscriberAttributes.h"
 #include "../../thirdparty/integration-services/src/ISBridge.h"
 #include "../../thirdparty/integration-services/src/GenericPubSubTypes.h"
-#include "../../thirdparty/integration-services/src/dynamicload/dynamicload.h"
 #include <asio.hpp>
 
 #include "NGSIv2Params.h"
-
-#ifdef _WIN32
-#define CURL_STATICLIB
-#endif
 
 #include <curlpp/cURLpp.hpp>
 #include <curlpp/Options.hpp>
@@ -50,22 +36,16 @@ using namespace eprosima::fastrtps::rtps;
 using namespace curlpp::options;
 using namespace curlpp::infos;
 
-typedef void (*userf_t)(SerializedPayload_t *serialized_input, SerializedPayload_t *serialized_output);
-
 class NGSIv2Publisher : public ISPublisher
 {
 private:
     std::string url;
     std::string write(SerializedPayload_t *payload);
-    Publisher *mf_publisher;
-    Participant *mf_participant;
     std::string ngsiv2_host;
     uint16_t ngsiv2_port;
-    //std::string ngsiv2_id;
 public:
-    NGSIv2Publisher();
-    NGSIv2Publisher(const std::string &host, const uint16_t &port);
-    static NGSIv2Publisher* configureNGSIv2Publisher(const NGSIv2Params &params);
+    NGSIv2Publisher(const std::string &name) : ISPublisher(name) {}
+    NGSIv2Publisher(const std::string &name, const std::string &host, const uint16_t &port);
     void setHostPort(const std::string &host, const uint16_t &port);
     ~NGSIv2Publisher() override;
     bool publish(void* payload) override;
@@ -75,19 +55,14 @@ class NGSIv2Listener : public ISSubscriber
 {
 private:
     asio::io_service* io_service;
-    void* handle;
     std::string url;
     std::string subscription_id;
     bool exit;
-    userf_t user_transformation;
-    Participant *mf_participant;
     std::string ngsiv2_id;
     NGSIv2SubscriptionParams sub_params;
 public:
-    NGSIv2Listener(const std::string &host, const uint16_t &port);
+    NGSIv2Listener(const std::string &name, const std::string &host, const uint16_t &port);
     ~NGSIv2Listener() override;
-    static NGSIv2Listener* configureNGSIv2Listener(const NGSIv2Params &params,
-                                                   const NGSIv2SubscriptionParams &sub_params);
     std::string getListenerURL();
     void setTransformation(const char* file_path);
     std::string getAttrList(const std::vector< std::string > &list);
@@ -98,20 +73,16 @@ public:
     void deleteSubscription();
     void listener();
     void startListenerAndSubscribe();
-    void setPublisher(ISPublisher* publisher) override;
-    virtual bool onDataReceived(void * data) override;
+    void onDataReceived(void* data);
+    void onTerminate() override;
+    void setSubscriptionParams(const NGSIv2SubscriptionParams &params) { sub_params = params; };
 };
 
 class ISBridgeNGSIv2 : public ISBridge
 {
 public:
-    ISBridgeNGSIv2(NGSIv2Publisher *pub,
-        NGSIv2Listener *sub,
-        const char* file_path);
+    ISBridgeNGSIv2(const std::string &name) : ISBridge(name) {}
     virtual ~ISBridgeNGSIv2();
-    void onTerminate() override;
-private:
-    const char* file_path;
 };
 
 #endif // _Header__SUBSCRIBER_H_

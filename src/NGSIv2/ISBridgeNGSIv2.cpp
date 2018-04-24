@@ -30,33 +30,17 @@
 
 using asio::ip::tcp;
 
-ISBridgeNGSIv2::ISBridgeNGSIv2(NGSIv2Publisher *pub, NGSIv2Listener *sub, const char* file_path) : file_path(file_path)
-{
-    mp_publisher = pub;
-    ms_subscriber = sub;
-    if (sub && file_path)
-    {
-        sub->setTransformation(file_path);
-    }
-    // IS Manager will setup these participants
-    rtps_publisher = nullptr;
-    rtps_subscriber = nullptr;
-}
-
 ISBridgeNGSIv2::~ISBridgeNGSIv2()
 {
 }
 
 NGSIv2Listener::~NGSIv2Listener()
 {
-    if(mf_participant != nullptr) Domain::removeParticipant(mf_participant);
-    if(handle) eProsimaCloseLibrary(handle);
     exit = true;
 }
 
 NGSIv2Publisher::~NGSIv2Publisher()
 {
-    if(mf_participant != nullptr) Domain::removeParticipant(mf_participant);
 }
 
 std::string NGSIv2Listener::getListenerURL()
@@ -67,17 +51,18 @@ std::string NGSIv2Listener::getListenerURL()
     return strstr.str();
 }
 
-NGSIv2Listener::NGSIv2Listener(const std::string &host, const uint16_t &port)
+NGSIv2Listener::NGSIv2Listener(const std::string &name, const std::string &host, const uint16_t &port) :
+    ISSubscriber(name)
 {
     std::stringstream strstr;
     strstr << host << ":" << port;
     url = strstr.str();
 
-    user_transformation = nullptr;
     exit = false;
 }
 
-NGSIv2Publisher::NGSIv2Publisher(const std::string &host, const uint16_t &port)
+NGSIv2Publisher::NGSIv2Publisher(const std::string &name, const std::string &host, const uint16_t &port) :
+    ISPublisher(name)
 {
     setHostPort(host, port);
 }
@@ -89,6 +74,7 @@ void NGSIv2Publisher::setHostPort(const std::string &host, const uint16_t &port)
     url = strstr.str();
 }
 
+/*
 NGSIv2Listener* NGSIv2Listener::configureNGSIv2Listener(const NGSIv2Params &params,
                                                         const NGSIv2SubscriptionParams &sub_params)
 {
@@ -111,18 +97,7 @@ NGSIv2Publisher * NGSIv2Publisher::configureNGSIv2Publisher(const NGSIv2Params &
 
     return publisher;
 }
-
-void NGSIv2Listener::setTransformation(const char* file_path)
-{
-    if(file_path){
-        handle = eProsimaLoadLibrary(file_path);
-        user_transformation = (userf_t)eProsimaGetProcAddress(handle, "transformFromNGSIv2");
-        if (!user_transformation)
-        {
-            user_transformation = (userf_t)eProsimaGetProcAddress(handle, "transform");
-        }
-    }
-}
+*/
 
 void NGSIv2Listener::startListenerAndSubscribe()
 {
@@ -257,12 +232,9 @@ std::string NGSIv2Listener::addSubscription(const std::string &server, const std
     return "";
 }
 
-void ISBridgeNGSIv2::onTerminate()
+void NGSIv2Listener::onTerminate()
 {
-    if (ms_subscriber)
-    {
-        ((NGSIv2Listener*)ms_subscriber)->deleteSubscription(); // Delete our subcription from origin
-    }
+    deleteSubscription();
 }
 
 void NGSIv2Listener::deleteSubscription()
@@ -298,11 +270,11 @@ void NGSIv2Listener::deleteSubscription()
     }
 }
 
-bool NGSIv2Listener::onDataReceived(void* data)
+void NGSIv2Listener::onDataReceived(void* data)
 {
     if (!data)
     {
-        return false;
+        return;
     }
 
     std::string* str = (std::string*)data;
@@ -312,6 +284,9 @@ bool NGSIv2Listener::onDataReceived(void* data)
     json.data(*str);
     json.entityId(""); // No need to parse here (or empty means complete json in data ;) )
     json_pst.serialize(&json, &serialized_input);
+
+    on_received_data(&serialized_input);
+    /*
     //std::cout << "Received: " << *str << std::endl;
     SerializedPayload_t serialized_output;
     if(user_transformation){
@@ -325,6 +300,7 @@ bool NGSIv2Listener::onDataReceived(void* data)
         return result;
     }
     return false;
+    */
 }
 
 
@@ -380,12 +356,6 @@ bool NGSIv2Publisher::publish(void* payload)
 {
     write((SerializedPayload_t*) payload);
     return true;
-}
-
-void NGSIv2Listener::setPublisher(ISPublisher* publisher)
-{
-    listener_publisher = publisher;
-    startListenerAndSubscribe();
 }
 
 std::string NGSIv2Publisher::write(SerializedPayload_t* payload)

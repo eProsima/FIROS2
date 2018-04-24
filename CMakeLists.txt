@@ -37,6 +37,7 @@ if(WIN32)
 
     add_executable(firos2 src/main.cpp
         thirdparty/integration-services/src/ISManager.cpp
+        thirdparty/integration-services/src/ISBridge.cpp
         thirdparty/integration-services/src/ISBridgeRTPS.cpp
         thirdparty/integration-services/src/dynamicload/dynamicload.cpp
         thirdparty/integration-services/src/GenericPubSubTypes.cpp
@@ -55,9 +56,9 @@ if(WIN32)
 
     # Include thirdparty (ASIO only in WIN32)
     add_definitions(-DASIO_STANDALONE)
-    target_include_directories(firos2 PUBLIC thirdparty/tinyxml2 thirdparty/curlpp/include 
+    target_include_directories(firos2 PUBLIC thirdparty/tinyxml2 thirdparty/curlpp/include
         thirdparty/asio/asio/include thirdparty/curlpp/include ${CURL_BUILD_DIR}/include)
-    target_include_directories(isbridgengsiv2lib PUBLIC thirdparty/tinyxml2 thirdparty/curlpp/include 
+    target_include_directories(isbridgengsiv2lib PUBLIC thirdparty/tinyxml2 thirdparty/curlpp/include
         thirdparty/asio/asio/include thirdparty/curlpp/include ${CURL_BUILD_DIR}/include)
 
     #set(liblist fastrtps_static fastcdr_static ${CMAKE_DL_LIBS} IPHLPAPI shlwapi libcurl_a)
@@ -65,6 +66,7 @@ if(WIN32)
 else()
     add_executable(firos2 src/main.cpp
         thirdparty/integration-services/src/ISManager.cpp
+        thirdparty/integration-services/src/ISBridge.cpp
         thirdparty/integration-services/src/ISBridgeRTPS.cpp
         thirdparty/integration-services/src/dynamicload/dynamicload.cpp
         thirdparty/integration-services/src/GenericPubSubTypes.cpp)
