@@ -352,9 +352,9 @@ void NGSIv2Listener::listener()
     }
 }
 
-bool NGSIv2Publisher::publish(void* payload)
+bool NGSIv2Publisher::publish(SerializedPayload_t* payload)
 {
-    write((SerializedPayload_t*) payload);
+    write(payload);
     return true;
 }
 

@@ -48,7 +48,7 @@ public:
     NGSIv2Publisher(const std::string &name, const std::string &host, const uint16_t &port);
     void setHostPort(const std::string &host, const uint16_t &port);
     ~NGSIv2Publisher() override;
-    bool publish(void* payload) override;
+    bool publish(SerializedPayload_t* payload) override;
 };
 
 class NGSIv2Listener : public ISSubscriber
