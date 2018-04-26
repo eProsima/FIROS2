@@ -14,59 +14,20 @@
   #define USER_LIB_EXPORT
 #endif
 
-ISBridgeDummy* loadDummyBridge(void *config);
-
-// TODO ISBridge must be now an interface (or abstract class) that all Bridges must implement.
-extern "C" ISBridge* USER_LIB_EXPORT createBridge(const char* config)
+extern "C" USER_LIB_EXPORT ISBridge* create_bridge(const char* name,
+    const std::vector<std::pair<std::string, std::string>> *config)
 {
-    // Add Bridge constructor and...
-    //return new ISBridgeDummy(config);
-
-    // OR parse the config xml here and return a cleaner Bridge class!
-    //return loadDummyBridge(config);
+    return loadDummyBridge(name);
 }
 
-// TODO parse the xml and return a configured RSBRidgeDummy
-ISBridgeDummy* loadDummyBridge(void *config)
+extern "C" USER_LIB_EXPORT ISSubscriber* create_subscriber(ISBridge *bridge, const char* name,
+    const std::vector<std::pair<std::string, std::string>> *config)
 {
-    ISBridgeDummyConfig *dummyConfig = (ISBridgeDummyConfig*)config;
-    try
-    {
-        Element *nodeA_element = dummyConfig->FirstChildElement("nodeA");
-        if (!nodeA_element)
-        {
-            throw 0;
-        }
-        Element *nodeB_element = dummyConfig->FirstChildElement("nodeB");
-        if(!nodeB_element)
-        {
-            throw 0;
-        }
-
-        // TODO Parse configuration for each node
-
-        // TODO Load transformation library function_path
-        const char* function_path = dummyConfig->FirstChildElement("transformation")->GetText();
-
-        // TODO NodeA configuration
-        DummyNodeAAttributes participant_nodeA_params;
-        participant_nodeA_params.dummyProperty = parsed_value_a;
-        // [...]
-
-        // TODO NodeB configuration
-        DummyNodeBAttributes participant_nodeB_params;
-        participant_nodeB_params.dummyProperty = parsed_value_b;
-        // [...]
-
-        ISBridgeDummy *bridge = new ISBridgeDummy(
-                                    participant_nodeA_params,
-                                    participant_nodeB_params,
-                                    function_path);
-
-        return bridge;
-    }
-    catch (int e_code){
-        std::cout << "Invalid configuration, skipping bridge " << e_code << std::endl;
-    }
+    return loadDummySubscriber(name, config);
 }
 
+extern "C" USER_LIB_EXPORT ISPublisher* create_publisher(ISBridge *bridge, const char* name,
+    const std::vector<std::pair<std::string, std::string>> *config)
+{
+    return loadDummyPublisher(name, config);
+}

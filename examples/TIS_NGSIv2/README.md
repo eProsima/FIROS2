@@ -126,45 +126,88 @@ These function names are not casual. As explained before, we are going to share 
 
 ### Config.xml
 
-The *config.cml* file used in this example is the following:
+The *config.xml* file used in this example is the following:
 
-    <is>
-        <bridge>
-            <bridge_type>bidirectional</bridge_type>
-            <rtps>
-                <publisher>
-                    <participant>ros2_publisher</participant>
-                    <domain>0</domain>
+	<is>
+        <participant name="ros2">
+            <attributes>
+                <domain>0</domain>
+            </attributes>
+
+            <publisher name="ros2_publisher">
+                <attributes>
                     <topic>RobotTopic</topic>
                     <type>RobotSnd</type>
                     <partition>rt</partition>
-                </publisher>
-                <subscriber>
-                    <participant>ros2_subscriber</participant>
-                    <domain>0</domain>
+                </attributes>
+            </publisher>
+
+            <subscriber name="ros2_subscriber">
+                <attributes>
                     <topic>RobotTopic</topic>
                     <type>RobotSnd</type>
                     <partition>rt</partition>
-                </subscriber>
-            </rtps>
-            <bridge_configuration>
-                <ngsiv2>
-                    <participant>ngsiv2_participant</participant>
-                    <id>.*</id>
-                    <host>contextBroker_host</host>
-                    <port>contextBroker_port</port>
-                    <subscription>
-                        <type>Robot</type>
-                        <notifs>id,transmission_time,floor,x,y,zeta</notifs>
-                        <listener_host>localhost</listener_host>
-                        <listener_port>12345</listener_port>
-                    </subscription>
-                    <transformation>/path/to/compiled/library/libuserlib.so</transformation>
-                </ngsiv2>
-            </bridge_configuration>
-            <transformation>/path/to/compiled/library/libuserlib.so</transformation>
-            <bridge_library>libisbridgengsiv2lib.so</bridge_library>
+                </attributes>
+            </subscriber>
+        </participant>
+
+        <bridge name="ngsiv2">
+            <library>libisbridgengsiv2lib.so</library> <!-- Path to the NGSIv2 library -->
+
+            <subscriber name="ngsiv2_subscriber">
+                <property>
+                    <name>host</name>
+                    <value>localhost</value>
+                </property>
+                <property>
+                    <name>port</name>
+                    <value>1026</value>
+                </property>
+                <property>
+                    <name>id</name>
+                    <value>.*</value>
+                </property>
+                <property>
+                    <name>type</name>
+                    <value>Robot</value>
+                </property>
+                <property>
+                    <name>notifs</name>
+                    <value>id,transmission_time,floor,x,y,zeta</value>
+                </property>
+                <property>
+                    <name>listener_host</name>
+                    <value>localhost</value>
+                </property>
+                <property>
+                    <name>listener_port</name>
+                    <value>12345</value>
+                </property>
+            </subscriber>
+
+            <publisher name="ngsiv2_publisher">
+                <property>
+                    <name>host</name>
+                    <value>localhost</value>
+                </property>
+                <property>
+                    <name>port</name>
+                    <value>1026</value>
+                </property>
+            </publisher>
         </bridge>
+
+        <connector name="ros2_ngsiv2"> 
+            <subscriber participant_name="ros2" subscriber_name="ros2_subscriber"/>
+            <publisher participant_name="ngsiv2" publisher_name="ngsiv2_publisher"/>
+            <transformation file="/path/to/compiled/library/libuserlib.so" function="transform"/>
+        </connector>
+
+        <connector name="ngsiv2_ros2"> 
+            <subscriber participant_name="ngsiv2" subscriber_name="ngsiv2_subscriber"/>
+            <publisher participant_name="ros2" publisher_name="ros2_publisher"/>
+            <transformation file="/path/to/compiled/library/libuserlib.so" function="transformFromNGSIv2"/>
+        </connector>
     </is>
 
 Our ROS2 Topic is RobotTopic in the partition "rt" and with domain 0.

@@ -63,30 +63,46 @@ In both cases, serialization and deserialization are applied as needed by Serial
 
 ### Config.xml
 
-The *config.cml* file used in this example is the following:
+The *config.xml* file used in this example is the following:
 
     <is>
-        <bridge>
-            <bridge_type>unidirectional</bridge_type>
-            <subscriber>
-                <participant>ros2_subscriber</participant>
+        <participant name="ros2">
+            <attributes>
                 <domain>0</domain>
-                <topic>chatter</topic>
-                <type>std_msgs::msg::dds_::String_</type>
-                <partition>rt</partition>
+            </attributes>
+
+            <subscriber name="ros2_subscriber">
+                <attributes>
+                    <domain>0</domain>
+                    <topic>chatter</topic>
+                    <type>std_msgs::msg::dds_::String_</type>
+                    <partition>rt</partition>
+                </attributes>
             </subscriber>
-            <bridge_configuration>
-                <ngsiv2>
-                    <participant>ngsiv2_publisher</participant>
-                    <id>Helloworld</id>
-                    <host>contextBroker_host</host>
-                    <port>contextBroker_port</port>
-                </ngsiv2>
-            </bridge_configuration>
-            <transformation>/path/to/compiled/library/libuserlib.so</transformation>
-            <bridge_library>libisbridgengsiv2lib.so</bridge_library>
+        </participant>
+
+        <bridge name="ngsiv2">
+            <library>libisbridgengsiv2lib.so</library> <!-- Path to the NGSIv2 library -->
+
+            <publisher name="ngsiv2_publisher">
+                <property>
+                    <name>host</name>
+                    <value>localhost</value>
+                </property>
+                <property>
+                    <name>port</name>
+                    <value>1026</value>
+                </property>
+            </publisher>
         </bridge>
+
+        <connector name="domain_change"> 
+            <subscriber participant_name="ros2" subscriber_name="ros2_subscriber"/>
+            <publisher participant_name="ngsiv2" publisher_name="ngsiv2_publisher"/>
+            <transformation file="/path/to/compiled/library/libuserlib.so" function="transform"/>
+        </connector>
     </is>
+
 
 Our ROS2 Topic is chatter in the partition "rt" and with domain 0. Exactly the same configuration that talker/listener ROS2 example uses.
 NGSIv2 will be configured to connect with a contextBroker server at localhost in port 1026.

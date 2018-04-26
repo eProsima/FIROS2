@@ -61,54 +61,82 @@ There are several examples to show the behaviour under [examples folder](https:/
 
 ### FIROS2 configuration
 
-*FIROS2* offers different parameters that can be configured. For setting-up a bridge, the user has to define a configuration file with the information about input and output protocols. A generic template can be found on [**config.xml**](https://github.com/eProsima/firos2/blob/master/resource/config.xml)
+*FIROS2* offers different parameters that can be configured. For setting-up a bridge, the user has to define a configuration file with the information about input and output protocols. A generic example can be found on [**config.xml**](https://github.com/eProsima/firos2/blob/master/resource/config.xml)
 
 In this template is it possible to set different bridges between topics and entities. FIROS2' bridges subscribes to a topic and update data of the related entity and subscribes to entities and publish data to the related topic. The parameters that have to be defined are (only shown a *bridge* section of the *config.xml* file):
 
-	
+    <!-- Declares a custom bridge named 'bridge_ngsiv2' -->
+    <bridge name="bridge_ngsiv2">
+        <!-- Path to the NGSIv2 library -->
+        <library>/path/to/ngsiv2bridge.so</library>
 
-    <bridge>
-        <bridge_type>bidirectional</bridge_type>
-        <rtps>
-            <subscriber>
-                <participant>rtps_subscriber</participant>
-                <domain>rtps_sub_domain</domain>
-                <topic>rtps_sub_topic</topic>
-                <type>rtps_sub_data_type</type>
-                <partition>rtps_sub_qos_partition</partition>
-            </subscriber>
-            <publisher>
-                <participant>rtps_publisher</participant>
-                <domain>rtps_pub_domain</domain>
-                <topic>rtps_pub_topic</topic>
-                <type>rtps_pub_data_type</type>
-                <partition>rtps_pub_qos_partition</partition>
-            </publisher>
-        </rtps>
-        <bridge_configuration>
-            <ngsiv2>
-                <participant>ngsiv2_participant</participant>
-                <id>ngsiv2_entity_id</id>
-                <host>context_broker_host</host>
-                <port>context_broker_port</port>
-                <subscription>
-                    <type>ngsiv2_entity_type</type> <!-- OPTIONAL -->
-                    <attrs>ngsiv2_condition_attrs_list</attrs> <!-- OPTIONAL, comma separated -->
-                    <expression>ngsiv2_condition_expression</expression> <!-- OPTIONAL -->
-                    <notifs>ngsiv2_notification_attrs_list</notifs> <!-- comma separated -->
-                    <listener_host>listener_host</listener_host>
-                    <listener_port>listener_port</listener_port>
-                    <expiration>ngsiv2_expiration_time</expiration> <!-- OPTIONAL -->
-                    <throttling>ngsiv2_throttling</throttling> <!-- OPTIONAL -->
-                    <description>ngsiv2_description</description> <!-- OPTIONAL -->
-                </subscription>
-                <transformFromNGSIv2>/path/to/ngsiv2/transformation/library</transformFromNGSIv2> <!-- OPTIONAL (NGSIv2) -->
-            </ngsiv2>
-        </bridge_configuration>
-        <transformation>/path/to/transformation/library</transformation>  <!-- OPTIONAL (RTPS) -->
-        <bridge_library>/path/to/bridge/library</bridge_library>
+        <subscriber name="sub_ngsiv2">
+            <property>
+                <name>id</name>
+                <value>entity_idPattern</value>
+            </property>
+            <property>
+                <name>host</name>
+                <value>context_broker_host</value>
+            </property>
+            <property>
+                <name>port</name>
+                <value>context_broker_port</value>
+            </property>
+            <property> <!-- optional -->
+                <name>type</name>
+                <value>entity_type</value>
+            </property>
+            <property> <!-- optional, comma separated values -->
+                <name>attrs</name>
+                <value>attr1[,attr2...]</value>
+            </property>
+            <property> <!-- optional -->
+                <name>expression</name>
+                <value>condition_expression</value>
+            </property>
+            <property> <!-- optional, comma separated values -->
+                <name>notif</name>
+                <value>notif_attr1[,notif_attr2...]</value>
+            </property>
+            <property>
+                <name>listener_host</name>
+                <value>our_listener_host</value>
+            </property>
+            <property>
+                <name>listener_port</name>
+                <value>our_listener_port</value>
+            </property>
+            <property>
+                <!-- optional. In KB, if not specified, 2KB -->
+                <name>listener_buffer_size</name>
+                <value>our_listener_buffer_size</value>
+            </property>
+            <property> <!-- optional -->
+                <name>expiration</name>
+                <value>subscription_expiration_time</value>
+            </property>
+            <property> <!-- optional -->
+                <name>throttling</name>
+                <value>subscription_throttling</value>
+            </property>
+            <property> <!-- optional -->
+                <name>description</name>
+                <value>subscription_description</value>
+            </property>
+        </subscriber>
+
+        <publisher name="pub_ngsiv2">
+            <property>
+                <name>host</name>
+                <value>context_broker_host</value>
+            </property>
+            <property>
+                <name>port</name>
+                <value>context_broker_port</value>
+            </property>
+        </publisher>
     </bridge>
-
 
 ### Transformation, mapping and communication
 

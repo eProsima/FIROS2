@@ -99,23 +99,42 @@ The next step is to set the *config.xml* file with the specific parameters of ou
 
 .. code-block:: xml
 
-	<bridge>
-		<bridge_type>unidirectional</bridge_type>
-		<subscriber>
-			<participant>fastrtps_subscriber</participant>
-			<domain>0</domain>
-			<topic>HelloWorldTopic</topic>
-			<type>HelloWorld</type>
-		</subscriber>
-		<publisher>
-			<participant>ros2_publisher</participant>
-			<domain>0</domain>
-			<topic>chatter</topic>
-			<type>std_msgs::msg::dds_::String_</type>
-			<partition>rt</partition>
-		</publisher>
-		<transformation>/path/to/compiled/library</transformation>
-	</bridge>
+    <is>
+        <participant name="rtps">
+            <attributes>
+                <domain>0</domain>
+            </attributes>
+
+            <subscriber name="fastrtps_subscriber">
+                <attributes>
+                    <topic>HelloWorldTopic</topic>
+                    <type>HelloWorld</type>
+                </attributes>
+            </subscriber>
+        </participant>
+
+        <participant name="ros2">
+            <attributes>
+                <domain>0</domain>
+            </attributes>
+
+            <publisher name="ros2_publisher">
+                <attributes>
+                    <domain>0</domain>
+                    <topic>chatter</topic>
+                    <type>std_msgs::msg::dds_::String_</type>
+                    <partition>rt</partition>
+                </attributes>
+            </publisher>
+        </participant>
+
+        <connector name="domain_change"> 
+            <subscriber participant_name="rtps" subscriber_name="fastrtps_subscriber"/>
+            <publisher participant_name="ros2" publisher_name="ros2_publisher"/>
+            <transformation file="/path/to/compiled/library/libuserlib.so" function="transform"/>
+        </connector>
+    </is>
+
 
 
 Publisher and subscriber labels are referenced to *Firos2*, which means that the subscriber is going to receive data from the *Fast RTPS* publisher and the publisher is going to send data to the *ROS2* subscriber.
