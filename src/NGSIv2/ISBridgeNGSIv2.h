@@ -51,7 +51,7 @@ public:
     bool publish(SerializedPayload_t* payload) override;
 };
 
-class NGSIv2Listener : public ISSubscriber
+class NGSIv2Subscriber : public ISSubscriber
 {
 private:
     asio::io_service* io_service;
@@ -61,8 +61,8 @@ private:
     std::string ngsiv2_id;
     NGSIv2SubscriptionParams sub_params;
 public:
-    NGSIv2Listener(const std::string &name, const std::string &host, const uint16_t &port);
-    ~NGSIv2Listener() override;
+    NGSIv2Subscriber(const std::string &name, const std::string &host, const uint16_t &port);
+    ~NGSIv2Subscriber() override;
     std::string getListenerURL();
     void setTransformation(const char* file_path);
     std::string getAttrList(const std::vector< std::string > &list);

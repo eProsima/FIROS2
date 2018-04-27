@@ -34,7 +34,7 @@ ISBridgeNGSIv2::~ISBridgeNGSIv2()
 {
 }
 
-NGSIv2Listener::~NGSIv2Listener()
+NGSIv2Subscriber::~NGSIv2Subscriber()
 {
     exit = true;
 }
@@ -43,7 +43,7 @@ NGSIv2Publisher::~NGSIv2Publisher()
 {
 }
 
-std::string NGSIv2Listener::getListenerURL()
+std::string NGSIv2Subscriber::getListenerURL()
 {
     std::stringstream strstr;
     strstr << "http://" << sub_params.host << ":" << sub_params.port;
@@ -51,7 +51,7 @@ std::string NGSIv2Listener::getListenerURL()
     return strstr.str();
 }
 
-NGSIv2Listener::NGSIv2Listener(const std::string &name, const std::string &host, const uint16_t &port) :
+NGSIv2Subscriber::NGSIv2Subscriber(const std::string &name, const std::string &host, const uint16_t &port) :
     ISSubscriber(name)
 {
     std::stringstream strstr;
@@ -75,10 +75,10 @@ void NGSIv2Publisher::setHostPort(const std::string &host, const uint16_t &port)
 }
 
 /*
-NGSIv2Listener* NGSIv2Listener::configureNGSIv2Listener(const NGSIv2Params &params,
+NGSIv2Subscriber* NGSIv2Subscriber::configureNGSIv2Subscriber(const NGSIv2Params &params,
                                                         const NGSIv2SubscriptionParams &sub_params)
 {
-    NGSIv2Listener* listener = new NGSIv2Listener(params.host, params.port);
+    NGSIv2Subscriber* listener = new NGSIv2Subscriber(params.host, params.port);
     listener->sub_params = sub_params;
 
     listener->handle = nullptr;
@@ -99,9 +99,9 @@ NGSIv2Publisher * NGSIv2Publisher::configureNGSIv2Publisher(const NGSIv2Params &
 }
 */
 
-void NGSIv2Listener::startListenerAndSubscribe()
+void NGSIv2Subscriber::startListenerAndSubscribe()
 {
-    std::thread thread(&NGSIv2Listener::listener, this);
+    std::thread thread(&NGSIv2Subscriber::listener, this);
 
     subscription_id = addSubscription(url, sub_params.idPattern, sub_params.type, sub_params.attrs, sub_params.expression,
         getListenerURL(), sub_params.notif, sub_params.expiration, sub_params.throttling, sub_params.description);
@@ -118,7 +118,7 @@ void find_and_replace(std::string& source, const std::string &find, const std::s
     }
 }
 
-std::string NGSIv2Listener::addSubscription(const std::string &server, const std::string &idPattern,
+std::string NGSIv2Subscriber::addSubscription(const std::string &server, const std::string &idPattern,
                      const std::string &type, const std::string &attrs, const std::string &expression,
                      const std::string &listener, const std::string &notifAttrs, const std::string &expiration,
                      const int &throttling, const std::string &description)
@@ -232,12 +232,12 @@ std::string NGSIv2Listener::addSubscription(const std::string &server, const std
     return "";
 }
 
-void NGSIv2Listener::onTerminate()
+void NGSIv2Subscriber::onTerminate()
 {
     deleteSubscription();
 }
 
-void NGSIv2Listener::deleteSubscription()
+void NGSIv2Subscriber::deleteSubscription()
 {
     try
     {
@@ -270,7 +270,7 @@ void NGSIv2Listener::deleteSubscription()
     }
 }
 
-void NGSIv2Listener::onDataReceived(void* data)
+void NGSIv2Subscriber::onDataReceived(void* data)
 {
     if (!data)
     {
@@ -304,7 +304,7 @@ void NGSIv2Listener::onDataReceived(void* data)
 }
 
 
-void NGSIv2Listener::listener()
+void NGSIv2Subscriber::listener()
 {
     try
     {

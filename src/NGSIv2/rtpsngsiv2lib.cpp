@@ -15,7 +15,7 @@
 #endif
 
 ISBridgeNGSIv2* loadNGSIv2Bridge(const char* name);
-NGSIv2Listener* loadNGSIv2Listener(const char* name, const std::vector<std::pair<std::string, std::string>> *config);
+NGSIv2Subscriber* loadNGSIv2Subscriber(const char* name, const std::vector<std::pair<std::string, std::string>> *config);
 NGSIv2Publisher* loadNGSIv2Publisher(const char* name, const std::vector<std::pair<std::string, std::string>> *config);
 
 extern "C" USER_LIB_EXPORT ISBridge* create_bridge(const char* name,
@@ -27,7 +27,7 @@ extern "C" USER_LIB_EXPORT ISBridge* create_bridge(const char* name,
 extern "C" USER_LIB_EXPORT ISSubscriber* create_subscriber(ISBridge *bridge, const char* name,
     const std::vector<std::pair<std::string, std::string>> *config)
 {
-    return loadNGSIv2Listener(name, config);
+    return loadNGSIv2Subscriber(name, config);
 }
 
 extern "C" USER_LIB_EXPORT ISPublisher* create_publisher(ISBridge *bridge, const char* name,
@@ -48,7 +48,7 @@ ISBridgeNGSIv2* loadNGSIv2Bridge(const char* name)
     }
 }
 
-NGSIv2Listener* loadNGSIv2Listener(const char* name, const std::vector<std::pair<std::string, std::string>> *config)
+NGSIv2Subscriber* loadNGSIv2Subscriber(const char* name, const std::vector<std::pair<std::string, std::string>> *config)
 {
     if (!config)
     {
@@ -127,10 +127,10 @@ NGSIv2Listener* loadNGSIv2Listener(const char* name, const std::vector<std::pair
     //participant_ngsiv2_params.idPattern = ngsiv2_id;
 
     /*
-    NGSIv2Listener* listener = NGSIv2Listener::configureNGSIv2Listener(participant_ngsiv2_params,
+    NGSIv2Subscriber* listener = NGSIv2Subscriber::configureNGSIv2Subscriber(participant_ngsiv2_params,
                                         participant_ngsiv2_subscription_param);
                                         */
-    NGSIv2Listener* listener = new NGSIv2Listener(name, participant_ngsiv2_params.host,
+    NGSIv2Subscriber* listener = new NGSIv2Subscriber(name, participant_ngsiv2_params.host,
                                                      participant_ngsiv2_params.port);
     listener->setSubscriptionParams(participant_ngsiv2_subscription_param);
     listener->startListenerAndSubscribe();
