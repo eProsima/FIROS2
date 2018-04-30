@@ -31,9 +31,10 @@
  * @brief This class represents the TopicDataType of the type JsonNGSIv2 defined by the user in the IDL file.
  * @ingroup JSONNGSIV2
  */
-class JsonNGSIv2PubSubType : public eprosima::fastrtps::TopicDataType {
+class JsonNGSIv2PubSubType : public eprosima::fastrtps::TopicDataType 
+{
 public:
-        typedef JsonNGSIv2 type;
+	typedef JsonNGSIv2 type;
 
 	JsonNGSIv2PubSubType();
 	virtual ~JsonNGSIv2PubSubType();

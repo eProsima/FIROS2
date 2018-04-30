@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 
 project(firos2)
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 include(CheckCXXCompilerFlag)
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANG OR
@@ -35,24 +36,30 @@ if(WIN32)
     file(GLOB_RECURSE CURLPP_HEADERS ${CURLPP_DIR}/include/*)
     file(GLOB_RECURSE CURLPP_SOURCES ${CURLPP_DIR}/src/*)
 
+    set(CURL_FILES ${CURLPP_HEADERS} ${CURLPP_SOURCES})
+    set(IS_LIB_FILES thirdparty/integration-services/src/ISManager.cpp thirdparty/integration-services/src/ISManager.h
+        thirdparty/integration-services/src/ISBridge.cpp thirdparty/integration-services/src/ISBridge.h
+        thirdparty/integration-services/src/ISBridgeRTPS.cpp thirdparty/integration-services/src/ISBridgeRTPS.h
+        thirdparty/integration-services/src/dynamicload/dynamicload.cpp thirdparty/integration-services/src/dynamicload/dynamicload.h
+        thirdparty/integration-services/src/GenericPubSubTypes.cpp thirdparty/integration-services/src/GenericPubSubTypes.h)
+
     add_executable(firos2 src/main.cpp
-        thirdparty/integration-services/src/ISManager.cpp
-        thirdparty/integration-services/src/ISBridge.cpp
-        thirdparty/integration-services/src/ISBridgeRTPS.cpp
-        thirdparty/integration-services/src/dynamicload/dynamicload.cpp
-        thirdparty/integration-services/src/GenericPubSubTypes.cpp
-        ${CURLPP_HEADERS} ${CURLPP_SOURCES}
+        ${IS_LIB_FILES}
+        ${CURL_FILES}
         thirdparty/tinyxml2/tinyxml2.cpp thirdparty/tinyxml2/tinyxml2.h)
+    source_group("is_lib" FILES ${IS_LIB_FILES})
+    source_group("curl" FILES ${CURL_FILES})
 
     add_library(isbridgengsiv2lib
-        src/NGSIv2/ISBridgeNGSIv2.cpp
+        src/NGSIv2/ISBridgeNGSIv2.cpp src/NGSIv2/ISBridgeNGSIv2.h
         src/NGSIv2/rtpsngsiv2lib.cpp
-        src/NGSIv2/idl/JsonNGSIv2.cxx
-        src/NGSIv2/idl/JsonNGSIv2PubSubTypes.cxx
-        thirdparty/integration-services/src/dynamicload/dynamicload.cpp
-        thirdparty/integration-services/src/GenericPubSubTypes.cpp
-        ${CURLPP_HEADERS} ${CURLPP_SOURCES}
+        src/NGSIv2/idl/JsonNGSIv2.cxx src/NGSIv2/idl/JsonNGSIv2.h
+        src/NGSIv2/idl/JsonNGSIv2PubSubTypes.cxx src/NGSIv2/idl/JsonNGSIv2PubSubTypes.h
+        ${IS_LIB_FILES}
+        ${CURL_FILES}
         thirdparty/tinyxml2/tinyxml2.cpp thirdparty/tinyxml2/tinyxml2.h)
+    source_group("curl" FILES ${CURL_FILES})
+    source_group("is_lib" FILES ${IS_LIB_FILES})
 
     # Include thirdparty (ASIO only in WIN32)
     add_definitions(-DASIO_STANDALONE)
@@ -65,19 +72,20 @@ if(WIN32)
     set(liblist fastrtps_static fastcdr_static ${CMAKE_DL_LIBS} IPHLPAPI shlwapi libcurl)
 else()
     add_executable(firos2 src/main.cpp
-        thirdparty/integration-services/src/ISManager.cpp
-        thirdparty/integration-services/src/ISBridge.cpp
-        thirdparty/integration-services/src/ISBridgeRTPS.cpp
-        thirdparty/integration-services/src/dynamicload/dynamicload.cpp
-        thirdparty/integration-services/src/GenericPubSubTypes.cpp)
+        thirdparty/integration-services/src/ISManager.cpp thirdparty/integration-services/src/ISManager.h
+        thirdparty/integration-services/src/ISBridge.cpp thirdparty/integration-services/src/ISBridge.h
+        thirdparty/integration-services/src/ISBridgeRTPS.cpp thirdparty/integration-services/src/ISBridgeRTPS.h
+        thirdparty/integration-services/src/dynamicload/dynamicload.cpp thirdparty/integration-services/src/dynamicload/dynamicload.h
+        thirdparty/integration-services/src/GenericPubSubTypes.cpp thirdparty/integration-services/src/GenericPubSubTypes.h)
 
     add_library(isbridgengsiv2lib SHARED
-        src/NGSIv2/ISBridgeNGSIv2.cpp
+        src/NGSIv2/ISBridgeNGSIv2.cpp src/NGSIv2/ISBridgeNGSIv2.h
         src/NGSIv2/rtpsngsiv2lib.cpp
-        src/NGSIv2/idl/JsonNGSIv2.cxx
-        src/NGSIv2/idl/JsonNGSIv2PubSubTypes.cxx
-        thirdparty/integration-services/src/dynamicload/dynamicload.cpp
-        thirdparty/integration-services/src/GenericPubSubTypes.cpp)
+        src/NGSIv2/idl/JsonNGSIv2.cxx src/NGSIv2/idl/JsonNGSIv2.h
+        src/NGSIv2/idl/JsonNGSIv2PubSubTypes.cxx src/NGSIv2/idl/JsonNGSIv2PubSubTypes.H
+        thirdparty/integration-services/src/dynamicload/dynamicload.cpp thirdparty/integration-services/src/dynamicload/dynamicload.H
+        thirdparty/integration-services/src/GenericPubSubTypes.cpp thirdparty/integration-services/src/GenericPubSubTypes.H
+        thirdparty/integration-services/src/ISBridge.cpp thirdparty/integration-services/src/ISBridge.h)
 
     target_include_directories(firos2 PUBLIC thirdparty/tinyxml2 thirdparty/curlpp/include)
     target_include_directories(isbridgengsiv2lib PUBLIC thirdparty/tinyxml2 thirdparty/curlpp/include)

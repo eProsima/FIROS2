@@ -55,8 +55,8 @@ std::string NGSIv2Subscriber::getListenerURL()
     return strstr.str();
 }
 
-NGSIv2Subscriber::NGSIv2Subscriber(const std::string &name, const std::string &host, const uint16_t &port) :
-    ISSubscriber(name)
+NGSIv2Subscriber::NGSIv2Subscriber(const std::string &name, const std::string &host, const uint16_t &port) 
+: ISSubscriber(name)
 {
     std::stringstream strstr;
     strstr << host << ":" << port;
@@ -65,8 +65,8 @@ NGSIv2Subscriber::NGSIv2Subscriber(const std::string &name, const std::string &h
     exit = false;
 }
 
-NGSIv2Publisher::NGSIv2Publisher(const std::string &name, const std::string &host, const uint16_t &port) :
-    ISPublisher(name)
+NGSIv2Publisher::NGSIv2Publisher(const std::string &name, const std::string &host, const uint16_t &port) 
+: ISPublisher(name)
 {
     setHostPort(host, port);
 }
@@ -161,14 +161,20 @@ std::string NGSIv2Subscriber::addSubscription(const std::string &server, const s
         ssjson << "},";
         ssjson << "\"attrs\": [ " << myNotifAttrs << " ]";
         ssjson << "}";
-        if (!expiration.empty()) { ssjson << ",\"expires\": \"" << expiration << "\""; }
-        if (throttling > 0) { ssjson << ",\"throttling\": " << throttling; }
+        if (!expiration.empty()) 
+        { 
+            ssjson << ",\"expires\": \"" << expiration << "\""; 
+        }
+        if (throttling > 0) 
+        { 
+            ssjson << ",\"throttling\": " << throttling; 
+        }
         ssjson << "}";
 
         std::string json = ssjson.str();
 
         subRequest.setOpt(new curlpp::options::PostFields(json));
-        subRequest.setOpt(new curlpp::options::PostFieldSize(json.length()));
+        subRequest.setOpt(new curlpp::options::PostFieldSize((long)json.length()));
 
         std::stringstream ss;
         ss << server << "/v2/subscriptions/";
@@ -352,7 +358,8 @@ bool NGSIv2Publisher::publish(SerializedPayload_t* payload)
 
 std::string NGSIv2Publisher::write(SerializedPayload_t* payload)
 {
-    try {
+    try 
+    {
         curlpp::Cleanup cleaner;
         curlpp::Easy request;
 
@@ -372,7 +379,7 @@ std::string NGSIv2Publisher::write(SerializedPayload_t* payload)
 
         request.setOpt(new curlpp::options::HttpHeader(header));
         request.setOpt(new curlpp::options::PostFields(payload));
-        request.setOpt(new curlpp::options::PostFieldSize(payload.length()));
+        request.setOpt(new curlpp::options::PostFieldSize((long)payload.length()));
 
         std::ostringstream response;
         request.setOpt(new curlpp::options::WriteStream(&response));
@@ -382,10 +389,12 @@ std::string NGSIv2Publisher::write(SerializedPayload_t* payload)
         std::cout << response.str() << std::endl;
         return response.str();
     }
-    catch ( curlpp::LogicError & e ) {
+    catch (curlpp::LogicError & e) 
+    {
         std::cout << e.what() << std::endl;
     }
-    catch ( curlpp::RuntimeError & e ) {
+    catch (curlpp::RuntimeError & e)
+    {
         std::cout << e.what() << std::endl;
     }
     return "";

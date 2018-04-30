@@ -56,7 +56,8 @@ ISBridgeNGSIv2* loadNGSIv2Bridge(const char* name)
     {
         return new ISBridgeNGSIv2(name);
     }
-    catch (int e_code){
+    catch (int e_code)
+    {
         std::cout << "Invalid configuration, skipping bridge " << e_code << std::endl;
         return nullptr;
     }
