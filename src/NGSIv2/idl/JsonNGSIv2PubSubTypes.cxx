@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/*! 
+/*!
  * @file JsonNGSIv2PubSubTypes.cpp
  * This header file contains the implementation of the serialization functions.
  *
@@ -28,7 +28,7 @@
 using namespace eprosima::fastrtps;
 using namespace eprosima::fastrtps::rtps;
 
-JsonNGSIv2PubSubType::JsonNGSIv2PubSubType() 
+JsonNGSIv2PubSubType::JsonNGSIv2PubSubType()
 {
     setName("JsonNGSIv2");
     m_typeSize = (uint32_t)JsonNGSIv2::getMaxCdrSerializedSize() + 4 /*encapsulation*/;
@@ -36,13 +36,13 @@ JsonNGSIv2PubSubType::JsonNGSIv2PubSubType()
     m_keyBuffer = (unsigned char*)malloc(JsonNGSIv2::getKeyMaxCdrSerializedSize()>16 ? JsonNGSIv2::getKeyMaxCdrSerializedSize() : 16);
 }
 
-JsonNGSIv2PubSubType::~JsonNGSIv2PubSubType() 
+JsonNGSIv2PubSubType::~JsonNGSIv2PubSubType()
 {
     if(m_keyBuffer!=nullptr)
         free(m_keyBuffer);
 }
 
-bool JsonNGSIv2PubSubType::serialize(void *data, SerializedPayload_t *payload) 
+bool JsonNGSIv2PubSubType::serialize(void *data, SerializedPayload_t *payload)
 {
     JsonNGSIv2 *p_type = (JsonNGSIv2*) data;
     eprosima::fastcdr::FastBuffer fastbuffer((char*) payload->data, payload->max_size); // Object that manages the raw buffer.
@@ -65,7 +65,7 @@ bool JsonNGSIv2PubSubType::serialize(void *data, SerializedPayload_t *payload)
     return true;
 }
 
-bool JsonNGSIv2PubSubType::deserialize(SerializedPayload_t* payload, void* data) 
+bool JsonNGSIv2PubSubType::deserialize(SerializedPayload_t* payload, void* data)
 {
     JsonNGSIv2* p_type = (JsonNGSIv2*) data; 	//Convert DATA to pointer of your type
     eprosima::fastcdr::FastBuffer fastbuffer((char*)payload->data, payload->length); // Object that manages the raw buffer.
@@ -87,7 +87,7 @@ bool JsonNGSIv2PubSubType::deserialize(SerializedPayload_t* payload, void* data)
     return true;
 }
 
-std::function<uint32_t()> JsonNGSIv2PubSubType::getSerializedSizeProvider(void* data) 
+std::function<uint32_t()> JsonNGSIv2PubSubType::getSerializedSizeProvider(void* data)
 {
     return [data]() -> uint32_t
     {
@@ -95,17 +95,17 @@ std::function<uint32_t()> JsonNGSIv2PubSubType::getSerializedSizeProvider(void* 
     };
 }
 
-void* JsonNGSIv2PubSubType::createData() 
+void* JsonNGSIv2PubSubType::createData()
 {
     return (void*)new JsonNGSIv2();
 }
 
-void JsonNGSIv2PubSubType::deleteData(void* data) 
+void JsonNGSIv2PubSubType::deleteData(void* data)
 {
     delete((JsonNGSIv2*)data);
 }
 
-bool JsonNGSIv2PubSubType::getKey(void *data, InstanceHandle_t* handle) 
+bool JsonNGSIv2PubSubType::getKey(void *data, InstanceHandle_t* handle)
 {
     if(!m_isGetKeyDefined)
     {
@@ -116,19 +116,19 @@ bool JsonNGSIv2PubSubType::getKey(void *data, InstanceHandle_t* handle)
     eprosima::fastcdr::FastBuffer fastbuffer((char*)m_keyBuffer,JsonNGSIv2::getKeyMaxCdrSerializedSize()); 	// Object that manages the raw buffer.
     eprosima::fastcdr::Cdr ser(fastbuffer, eprosima::fastcdr::Cdr::BIG_ENDIANNESS); 	// Object that serializes the data.
     p_type->serializeKey(ser);
-    if(JsonNGSIv2::getKeyMaxCdrSerializedSize()>16)	
+    if(JsonNGSIv2::getKeyMaxCdrSerializedSize()>16)
     {
         m_md5.init();
         m_md5.update(m_keyBuffer,(unsigned int)ser.getSerializedDataLength());
         m_md5.finalize();
-        for(uint8_t i = 0;i<16;++i)    	
+        for(uint8_t i = 0;i<16;++i)
         {
             handle->value[i] = m_md5.digest[i];
         }
     }
     else
     {
-        for(uint8_t i = 0;i<16;++i)    	
+        for(uint8_t i = 0;i<16;++i)
         {
             handle->value[i] = m_keyBuffer[i];
         }

@@ -41,13 +41,12 @@ class NGSIv2Publisher : public ISPublisher
 private:
     std::string url;
     std::string write(SerializedPayload_t *payload);
-    std::string ngsiv2_host;
-    uint16_t ngsiv2_port;
+    NGSIv2Params part_params;
 public:
     NGSIv2Publisher(const std::string &name) : ISPublisher(name) {}
-    NGSIv2Publisher(const std::string &name, const std::string &host, const uint16_t &port);
-    void setHostPort(const std::string &host, const uint16_t &port);
+    NGSIv2Publisher(const std::string &name, const NGSIv2Params &params);
     ~NGSIv2Publisher() override;
+
     bool publish(SerializedPayload_t* payload) override;
 };
 
@@ -60,8 +59,9 @@ private:
     bool exit;
     std::string ngsiv2_id;
     NGSIv2SubscriptionParams sub_params;
+    NGSIv2Params part_params;
 public:
-    NGSIv2Subscriber(const std::string &name, const std::string &host, const uint16_t &port);
+    NGSIv2Subscriber(const std::string &name, const NGSIv2Params &params);
     ~NGSIv2Subscriber() override;
     std::string getListenerURL();
     void setTransformation(const char* file_path);

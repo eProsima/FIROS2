@@ -10,6 +10,18 @@ public:
     std::string idPattern;
     std::string host;
     uint16_t port;
+    uint16_t retries;
+    uint16_t httpTimeout;
+
+    NGSIv2Params()
+        : name("")
+        , idPattern("")
+        , host("")
+        , port(0)
+        , retries(0)
+        , httpTimeout(0)
+    {
+    }
 };
 
 class NGSIv2SubscriptionParams

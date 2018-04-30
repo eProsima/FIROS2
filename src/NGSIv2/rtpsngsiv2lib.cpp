@@ -14,6 +14,8 @@ static const std::string s_sListenerBufferSize("listener_buffer_size");
 static const std::string s_sExpiration("expiration");
 static const std::string s_sThrottling("throttling");
 static const std::string s_sDescription("description");
+static const std::string s_sRetries("http_retries");
+static const std::string s_sHttpTimeout("http_timeout");
 
 #if defined(_WIN32) && defined (BUILD_SHARED_LIBS)
 	#if defined (_MSC_VER)
@@ -86,6 +88,14 @@ NGSIv2Subscriber* loadNGSIv2Subscriber(const char* name, const std::vector<std::
             {
                 participant_ngsiv2_params.port = std::stoi(pair.second);
             }
+            else if (pair.first.compare(s_sHttpTimeout) == 0)
+            {
+                participant_ngsiv2_params.httpTimeout = std::stoi(pair.second);
+            }
+            else if (pair.first.compare(s_sRetries) == 0)
+            {
+                participant_ngsiv2_params.retries = std::stoi(pair.second);
+            }
             else if (pair.first.compare(s_sId) == 0)
             {
                 participant_ngsiv2_subscription_param.idPattern = pair.second;
@@ -137,8 +147,7 @@ NGSIv2Subscriber* loadNGSIv2Subscriber(const char* name, const std::vector<std::
         }
     }
 
-    NGSIv2Subscriber* listener = new NGSIv2Subscriber(name, participant_ngsiv2_params.host,
-                                                     participant_ngsiv2_params.port);
+    NGSIv2Subscriber* listener = new NGSIv2Subscriber(name, participant_ngsiv2_params);
     listener->setSubscriptionParams(participant_ngsiv2_subscription_param);
     listener->startListenerAndSubscribe();
 
@@ -167,6 +176,14 @@ NGSIv2Publisher* loadNGSIv2Publisher(const char* name, const std::vector<std::pa
             {
                 participant_ngsiv2_params.port = std::stoi(pair.second);
             }
+            else if (pair.first.compare(s_sRetries) == 0)
+            {
+                participant_ngsiv2_params.retries = std::stoi(pair.second);
+            }
+            else if (pair.first.compare(s_sHttpTimeout) == 0)
+            {
+                participant_ngsiv2_params.httpTimeout = std::stoi(pair.second);
+            }
         }
         catch(...)
         {
@@ -174,8 +191,6 @@ NGSIv2Publisher* loadNGSIv2Publisher(const char* name, const std::vector<std::pa
         }
     }
 
-    NGSIv2Publisher* publisher = new NGSIv2Publisher(name, participant_ngsiv2_params.host,
-                                                     participant_ngsiv2_params.port);
-
+    NGSIv2Publisher* publisher = new NGSIv2Publisher(name, participant_ngsiv2_params);
     return publisher;
 }

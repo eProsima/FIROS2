@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/*! 
+/*!
  * @file JsonNGSIv2.cpp
  * This source file contains the definition of the described types in the IDL file.
  *
@@ -59,7 +59,6 @@ JsonNGSIv2& JsonNGSIv2::operator=(const JsonNGSIv2 &x)
 {
     m_entityId = x.m_entityId;
     m_data = x.m_data;
-    
     return *this;
 }
 
@@ -67,31 +66,22 @@ JsonNGSIv2& JsonNGSIv2::operator=(JsonNGSIv2 &&x)
 {
     m_entityId = std::move(x.m_entityId);
     m_data = std::move(x.m_data);
-    
     return *this;
 }
 
 size_t JsonNGSIv2::getMaxCdrSerializedSize(size_t current_alignment)
 {
     size_t initial_alignment = current_alignment;
-            
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + 255 + 1;
-
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + 255 + 1;
-
-
     return current_alignment - initial_alignment;
 }
 
 size_t JsonNGSIv2::getCdrSerializedSize(const JsonNGSIv2& data, size_t current_alignment)
 {
     size_t initial_alignment = current_alignment;
-            
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + data.entityId().size() + 1;
-
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + data.data().size() + 1;
-
-
     return current_alignment - initial_alignment;
 }
 
@@ -110,10 +100,6 @@ void JsonNGSIv2::deserialize(eprosima::fastcdr::Cdr &dcdr)
 size_t JsonNGSIv2::getKeyMaxCdrSerializedSize(size_t current_alignment)
 {
 	size_t current_align = current_alignment;
-            
-
-
-
     return current_align;
 }
 
@@ -124,6 +110,4 @@ bool JsonNGSIv2::isKeyDefined()
 
 void JsonNGSIv2::serializeKey(eprosima::fastcdr::Cdr &scdr) const
 {
-	 
-	 
 }

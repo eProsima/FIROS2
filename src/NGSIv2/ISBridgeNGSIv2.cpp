@@ -55,26 +55,23 @@ std::string NGSIv2Subscriber::getListenerURL()
     return strstr.str();
 }
 
-NGSIv2Subscriber::NGSIv2Subscriber(const std::string &name, const std::string &host, const uint16_t &port) 
+NGSIv2Subscriber::NGSIv2Subscriber(const std::string &name, const NGSIv2Params &params)
 : ISSubscriber(name)
+, part_params(params)
 {
     std::stringstream strstr;
-    strstr << host << ":" << port;
+    strstr << params.host << ":" << params.port;
     url = strstr.str();
 
     exit = false;
 }
 
-NGSIv2Publisher::NGSIv2Publisher(const std::string &name, const std::string &host, const uint16_t &port) 
+NGSIv2Publisher::NGSIv2Publisher(const std::string &name, const NGSIv2Params &params)
 : ISPublisher(name)
-{
-    setHostPort(host, port);
-}
-
-void NGSIv2Publisher::setHostPort(const std::string &host, const uint16_t &port)
+, part_params(params)
 {
     std::stringstream strstr;
-    strstr << host << ":" << port;
+    strstr << params.host << ":" << params.port;
     url = strstr.str();
 }
 
@@ -161,13 +158,13 @@ std::string NGSIv2Subscriber::addSubscription(const std::string &server, const s
         ssjson << "},";
         ssjson << "\"attrs\": [ " << myNotifAttrs << " ]";
         ssjson << "}";
-        if (!expiration.empty()) 
-        { 
-            ssjson << ",\"expires\": \"" << expiration << "\""; 
+        if (!expiration.empty())
+        {
+            ssjson << ",\"expires\": \"" << expiration << "\"";
         }
-        if (throttling > 0) 
-        { 
-            ssjson << ",\"throttling\": " << throttling; 
+        if (throttling > 0)
+        {
+            ssjson << ",\"throttling\": " << throttling;
         }
         ssjson << "}";
 
@@ -184,6 +181,7 @@ std::string NGSIv2Subscriber::addSubscription(const std::string &server, const s
 
         subRequest.setOpt(new curlpp::options::WriteStream(&response));
         subRequest.setOpt(new curlpp::options::Header(1));
+        subRequest.setOpt(new curlpp::options::Timeout(part_params.httpTimeout));
 
         // Send request and get a result.
         subRequest.perform();
@@ -344,7 +342,7 @@ bool NGSIv2Publisher::publish(SerializedPayload_t* payload)
 
 std::string NGSIv2Publisher::write(SerializedPayload_t* payload)
 {
-    try 
+    try
     {
         curlpp::Cleanup cleaner;
         curlpp::Easy request;
@@ -363,6 +361,7 @@ std::string NGSIv2Publisher::write(SerializedPayload_t* payload)
         request.setOpt(new curlpp::options::HttpHeader(header));
         request.setOpt(new curlpp::options::PostFields(payload));
         request.setOpt(new curlpp::options::PostFieldSize((long)payload.length()));
+        request.setOpt(new curlpp::options::Timeout(part_params.httpTimeout));
 
         std::ostringstream response;
         request.setOpt(new curlpp::options::WriteStream(&response));
@@ -372,7 +371,7 @@ std::string NGSIv2Publisher::write(SerializedPayload_t* payload)
         //std::cout << response.str() << std::endl;
         return response.str();
     }
-    catch (curlpp::LogicError & e) 
+    catch (curlpp::LogicError & e)
     {
         std::cout << e.what() << std::endl;
     }
