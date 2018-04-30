@@ -34,6 +34,8 @@
 
 using asio::ip::tcp;
 
+bool performAndRetry(int n_retries, curlpp::Easy &request);
+
 ISBridgeNGSIv2::~ISBridgeNGSIv2()
 {
 }
@@ -186,8 +188,6 @@ std::string NGSIv2Subscriber::addSubscription(const std::string &server, const s
         // Send request and get a result.
         subRequest.perform();
 
-        //cout << response.str() << endl;
-
         std::string subsc_id;
         std::istringstream responseHeader(response.str());
 
@@ -235,13 +235,8 @@ void NGSIv2Subscriber::deleteSubscription()
 
         delRequest.setOpt(new curlpp::options::CustomRequest("DELETE"));
 
-        std::ostringstream delResponse;
-        delRequest.setOpt(new curlpp::options::WriteStream(&delResponse));
-
         // Send request and get a result.
-        delRequest.perform();
-
-        std::cout << delResponse.str() << std::endl;
+        performAndRetry(part_params.retries, delRequest);
     }
     catch(curlpp::RuntimeError & e)
     {
@@ -363,13 +358,9 @@ std::string NGSIv2Publisher::write(SerializedPayload_t* payload)
         request.setOpt(new curlpp::options::PostFieldSize((long)payload.length()));
         request.setOpt(new curlpp::options::Timeout(part_params.httpTimeout));
 
-        std::ostringstream response;
-        request.setOpt(new curlpp::options::WriteStream(&response));
+        performAndRetry(part_params.retries, request);
 
-        request.perform();
-
-        //std::cout << response.str() << std::endl;
-        return response.str();
+        return "";
     }
     catch (curlpp::LogicError & e)
     {
@@ -382,3 +373,43 @@ std::string NGSIv2Publisher::write(SerializedPayload_t* payload)
     return "";
 }
 
+bool performAndRetry(int n_retries, curlpp::Easy &request)
+{
+    int tries = 0;
+    bool success = false;
+    std::ostringstream response;
+    do
+    {
+        request.setOpt(new curlpp::options::WriteStream(&response));
+        request.perform();
+        long responseCode = curlpp::infos::ResponseCode::get(request);
+
+        switch (responseCode / 100)
+        {
+            case 1: // 1XX codes
+                success = true;
+                tries = n_retries; // Success
+                break;
+            case 2: // 2XX codes
+                success = true;
+                tries = n_retries; // Success
+                break;
+            case 3: // 3XX codes
+                tries = n_retries; // Abort
+                std::cout << "Connection failed: " << responseCode << std::endl;
+                std::cout << response.str() << std::endl;
+                break;
+            case 4: // 4XX codes
+                std::cout << "Connection failed: " << responseCode << std::endl;
+                tries = n_retries; //Don't retry
+                break;
+            case 5: // 5XX codes
+                std::cout << "Connection failed: " << responseCode << std::endl;
+                break;
+            default:
+                std::cout << response.str() << std::endl;
+                break;
+        }
+    } while (!success && ++tries < n_retries);
+    return success;
+}

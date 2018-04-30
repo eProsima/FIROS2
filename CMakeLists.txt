@@ -27,22 +27,22 @@ add_definitions(-DBUILD_SHARED_LIBS -Disbridgengsiv2lib_EXPORTS)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(BUILD_SHARED_LIBS TRUE)
 
+set(CURLPP_DIR thirdparty/curlpp)
+LINK_DIRECTORIES(${CURL_BUILD_DIR}/lib)
+LINK_DIRECTORIES(${CURL_BUILD_DIR}/bin)
+
+# cURLpp as thirdparty
+file(GLOB_RECURSE CURLPP_HEADERS ${CURLPP_DIR}/include/*)
+file(GLOB_RECURSE CURLPP_SOURCES ${CURLPP_DIR}/src/*)
+
+set(CURL_FILES ${CURLPP_HEADERS} ${CURLPP_SOURCES})
+set(IS_LIB_FILES thirdparty/integration-services/src/ISManager.cpp thirdparty/integration-services/src/ISManager.h
+    thirdparty/integration-services/src/ISBridge.cpp thirdparty/integration-services/src/ISBridge.h
+    thirdparty/integration-services/src/ISBridgeRTPS.cpp thirdparty/integration-services/src/ISBridgeRTPS.h
+    thirdparty/integration-services/src/dynamicload/dynamicload.cpp thirdparty/integration-services/src/dynamicload/dynamicload.h
+    thirdparty/integration-services/src/GenericPubSubTypes.cpp thirdparty/integration-services/src/GenericPubSubTypes.h)
+
 if(WIN32)
-    set(CURLPP_DIR thirdparty/curlpp)
-    LINK_DIRECTORIES(${CURL_BUILD_DIR}/lib)
-    LINK_DIRECTORIES(${CURL_BUILD_DIR}/bin)
-
-    # cURLpp as thirdparty
-    file(GLOB_RECURSE CURLPP_HEADERS ${CURLPP_DIR}/include/*)
-    file(GLOB_RECURSE CURLPP_SOURCES ${CURLPP_DIR}/src/*)
-
-    set(CURL_FILES ${CURLPP_HEADERS} ${CURLPP_SOURCES})
-    set(IS_LIB_FILES thirdparty/integration-services/src/ISManager.cpp thirdparty/integration-services/src/ISManager.h
-        thirdparty/integration-services/src/ISBridge.cpp thirdparty/integration-services/src/ISBridge.h
-        thirdparty/integration-services/src/ISBridgeRTPS.cpp thirdparty/integration-services/src/ISBridgeRTPS.h
-        thirdparty/integration-services/src/dynamicload/dynamicload.cpp thirdparty/integration-services/src/dynamicload/dynamicload.h
-        thirdparty/integration-services/src/GenericPubSubTypes.cpp thirdparty/integration-services/src/GenericPubSubTypes.h)
-
     add_executable(firos2 src/main.cpp
         ${IS_LIB_FILES}
         ${CURL_FILES}
@@ -64,33 +64,31 @@ if(WIN32)
     # Include thirdparty (ASIO only in WIN32)
     add_definitions(-DASIO_STANDALONE)
     target_include_directories(firos2 PUBLIC thirdparty/tinyxml2 thirdparty/curlpp/include
-        thirdparty/asio/asio/include thirdparty/curlpp/include ${CURL_BUILD_DIR}/include)
+        thirdparty/asio/asio/include ${CURL_BUILD_DIR}/include)
     target_include_directories(isbridgengsiv2lib PUBLIC thirdparty/tinyxml2 thirdparty/curlpp/include
-        thirdparty/asio/asio/include thirdparty/curlpp/include ${CURL_BUILD_DIR}/include)
+        thirdparty/asio/asio/include ${CURL_BUILD_DIR}/include)
 
     #set(liblist fastrtps_static fastcdr_static ${CMAKE_DL_LIBS} IPHLPAPI shlwapi libcurl_a)
     set(liblist fastrtps_static fastcdr_static ${CMAKE_DL_LIBS} IPHLPAPI shlwapi libcurl)
 else()
     add_executable(firos2 src/main.cpp
-        thirdparty/integration-services/src/ISManager.cpp thirdparty/integration-services/src/ISManager.h
-        thirdparty/integration-services/src/ISBridge.cpp thirdparty/integration-services/src/ISBridge.h
-        thirdparty/integration-services/src/ISBridgeRTPS.cpp thirdparty/integration-services/src/ISBridgeRTPS.h
-        thirdparty/integration-services/src/dynamicload/dynamicload.cpp thirdparty/integration-services/src/dynamicload/dynamicload.h
-        thirdparty/integration-services/src/GenericPubSubTypes.cpp thirdparty/integration-services/src/GenericPubSubTypes.h)
+        ${IS_LIB_FILES}
+        ${CURL_FILES}
+        thirdparty/tinyxml2/tinyxml2.cpp thirdparty/tinyxml2/tinyxml2.h)
 
     add_library(isbridgengsiv2lib SHARED
         src/NGSIv2/ISBridgeNGSIv2.cpp src/NGSIv2/ISBridgeNGSIv2.h
         src/NGSIv2/rtpsngsiv2lib.cpp
         src/NGSIv2/idl/JsonNGSIv2.cxx src/NGSIv2/idl/JsonNGSIv2.h
         src/NGSIv2/idl/JsonNGSIv2PubSubTypes.cxx src/NGSIv2/idl/JsonNGSIv2PubSubTypes.h
-        thirdparty/integration-services/src/dynamicload/dynamicload.cpp thirdparty/integration-services/src/dynamicload/dynamicload.h
-        thirdparty/integration-services/src/GenericPubSubTypes.cpp thirdparty/integration-services/src/GenericPubSubTypes.h
-        thirdparty/integration-services/src/ISBridge.cpp thirdparty/integration-services/src/ISBridge.h)
+        ${IS_LIB_FILES}
+        ${CURL_FILES}
+        thirdparty/tinyxml2/tinyxml2.cpp thirdparty/tinyxml2/tinyxml2.h)
 
     target_include_directories(firos2 PUBLIC thirdparty/tinyxml2 thirdparty/curlpp/include)
     target_include_directories(isbridgengsiv2lib PUBLIC thirdparty/tinyxml2 thirdparty/curlpp/include)
 
-    set(liblist fastrtps fastcdr -L/usr/lib/x86_64-linux-gnu tinyxml2 curl curlpp)
+    set(liblist fastrtps fastcdr -L/usr/lib/x86_64-linux-gnu curl)
 endif()
 
 target_link_libraries(firos2 ${CMAKE_DL_LIBS} ${liblist})
