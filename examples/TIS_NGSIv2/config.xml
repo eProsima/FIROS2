@@ -54,6 +54,10 @@
                 <name>listener_port</name>
                 <value>12345</value>
             </property>
+            <property>
+                <name>listener_buffer_size</name>
+                <value>20480</value>
+            </property>
         </subscriber>
 
         <publisher name="ngsiv2_publisher">

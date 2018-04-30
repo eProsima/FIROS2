@@ -1,6 +1,20 @@
 #include <iostream>
 #include "ISBridgeNGSIv2.h"
 
+static const std::string s_sHost("host");
+static const std::string s_sPort("port");
+static const std::string s_sId("id");
+static const std::string s_sType("type");
+static const std::string s_sAttrs("attrs");
+static const std::string s_sExpression("expression");
+static const std::string s_sNotifs("notifs");
+static const std::string s_sListenerHost("listener_host");
+static const std::string s_sListenerPort("listener_port");
+static const std::string s_sListenerBufferSize("listener_buffer_size");
+static const std::string s_sExpiration("expiration");
+static const std::string s_sThrottling("throttling");
+static const std::string s_sDescription("description");
+
 #if defined(_WIN32) && defined (BUILD_SHARED_LIBS)
 	#if defined (_MSC_VER)
 		#pragma warning(disable: 4251)
@@ -63,60 +77,58 @@ NGSIv2Subscriber* loadNGSIv2Subscriber(const char* name, const std::vector<std::
     {
         try
         {
-            if (pair.first.compare("host") == 0)
+            if (pair.first.compare(s_sHost) == 0)
             {
                 participant_ngsiv2_params.host = pair.second;
             }
-            else if (pair.first.compare("port") == 0)
+            else if (pair.first.compare(s_sPort) == 0)
             {
                 participant_ngsiv2_params.port = std::stoi(pair.second);
             }
-            else if (pair.first.compare("id") == 0)
+            else if (pair.first.compare(s_sId) == 0)
             {
                 participant_ngsiv2_subscription_param.idPattern = pair.second;
             }
-            else if (pair.first.compare("type") == 0)
+            else if (pair.first.compare(s_sType) == 0)
             {
                 participant_ngsiv2_subscription_param.type = pair.second;
             }
-            else if (pair.first.compare("attrs") == 0)
+            else if (pair.first.compare(s_sAttrs) == 0)
             {
                 participant_ngsiv2_subscription_param.attrs = pair.second;
             }
-            else if (pair.first.compare("expression") == 0)
+            else if (pair.first.compare(s_sExpression) == 0)
             {
                 participant_ngsiv2_subscription_param.expression = pair.second;
             }
-            else if (pair.first.compare("notifs") == 0)
+            else if (pair.first.compare(s_sNotifs) == 0)
             {
                 participant_ngsiv2_subscription_param.notif = pair.second;
             }
-            else if (pair.first.compare("listener_host") == 0)
+            else if (pair.first.compare(s_sListenerHost) == 0)
             {
                 participant_ngsiv2_subscription_param.host = pair.second;
             }
-            else if (pair.first.compare("listener_port") == 0)
+            else if (pair.first.compare(s_sListenerPort) == 0)
             {
                 participant_ngsiv2_subscription_param.port = std::stoi(pair.second);
             }
-            else if (pair.first.compare("expiration") == 0)
+            else if (pair.first.compare(s_sExpiration) == 0)
             {
                 participant_ngsiv2_subscription_param.expiration = pair.second;
             }
-            else if (pair.first.compare("throttling") == 0)
+            else if (pair.first.compare(s_sThrottling) == 0)
             {
                 participant_ngsiv2_subscription_param.throttling = std::stoi(pair.second);
             }
-            else if (pair.first.compare("description") == 0)
+            else if (pair.first.compare(s_sDescription) == 0)
             {
                 participant_ngsiv2_subscription_param.description = pair.second;
             }
-            /*
-            else if (pair.first.compare("listener_buffer_size") == 0)
+            else if (pair.first.compare(s_sListenerBufferSize) == 0)
             {
                 participant_ngsiv2_subscription_param.buffer_size = std::stoi(pair.second);
             }
-            */
         }
         catch(...)
         {
@@ -124,12 +136,6 @@ NGSIv2Subscriber* loadNGSIv2Subscriber(const char* name, const std::vector<std::
         }
     }
 
-    //participant_ngsiv2_params.idPattern = ngsiv2_id;
-
-    /*
-    NGSIv2Subscriber* listener = NGSIv2Subscriber::configureNGSIv2Subscriber(participant_ngsiv2_params,
-                                        participant_ngsiv2_subscription_param);
-                                        */
     NGSIv2Subscriber* listener = new NGSIv2Subscriber(name, participant_ngsiv2_params.host,
                                                      participant_ngsiv2_params.port);
     listener->setSubscriptionParams(participant_ngsiv2_subscription_param);
@@ -152,11 +158,11 @@ NGSIv2Publisher* loadNGSIv2Publisher(const char* name, const std::vector<std::pa
     {
         try
         {
-            if (pair.first.compare("host") == 0)
+            if (pair.first.compare(s_sHost) == 0)
             {
                 participant_ngsiv2_params.host = pair.second;
             }
-            else if (pair.first.compare("port") == 0)
+            else if (pair.first.compare(s_sPort) == 0)
             {
                 participant_ngsiv2_params.port = std::stoi(pair.second);
             }
@@ -167,9 +173,6 @@ NGSIv2Publisher* loadNGSIv2Publisher(const char* name, const std::vector<std::pa
         }
     }
 
-    //participant_ngsiv2_params.idPattern = ngsiv2_id;
-
-    //NGSIv2Publisher* publisher = NGSIv2Publisher::configureNGSIv2Publisher(participant_ngsiv2_params);
     NGSIv2Publisher* publisher = new NGSIv2Publisher(name, participant_ngsiv2_params.host,
                                                      participant_ngsiv2_params.port);
 

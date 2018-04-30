@@ -28,6 +28,10 @@
 #include <algorithm>
 #include <thread>
 
+#ifndef LISTENER_BUFFER_SIZE
+#define LISTENER_BUFFER_SIZE 2048
+#endif
+
 using asio::ip::tcp;
 
 ISBridgeNGSIv2::~ISBridgeNGSIv2()
@@ -73,31 +77,6 @@ void NGSIv2Publisher::setHostPort(const std::string &host, const uint16_t &port)
     strstr << host << ":" << port;
     url = strstr.str();
 }
-
-/*
-NGSIv2Subscriber* NGSIv2Subscriber::configureNGSIv2Subscriber(const NGSIv2Params &params,
-                                                        const NGSIv2SubscriptionParams &sub_params)
-{
-    NGSIv2Subscriber* listener = new NGSIv2Subscriber(params.host, params.port);
-    listener->sub_params = sub_params;
-
-    listener->handle = nullptr;
-    listener->user_transformation = nullptr;
-
-    return listener;
-}
-
-NGSIv2Publisher * NGSIv2Publisher::configureNGSIv2Publisher(const NGSIv2Params &params)
-{
-    NGSIv2Publisher* publisher = new NGSIv2Publisher(params.host, params.port);
-
-    publisher->ngsiv2_host = params.host;
-    publisher->ngsiv2_port = params.port;
-    //publisher->ngsiv2_id = params.idPattern;
-
-    return publisher;
-}
-*/
 
 void NGSIv2Subscriber::startListenerAndSubscribe()
 {
@@ -286,21 +265,6 @@ void NGSIv2Subscriber::onDataReceived(void* data)
     json_pst.serialize(&json, &serialized_input);
 
     on_received_data(&serialized_input);
-    /*
-    //std::cout << "Received: " << *str << std::endl;
-    SerializedPayload_t serialized_output;
-    if(user_transformation){
-        user_transformation(&serialized_input, &serialized_output);
-    }
-
-    if (listener_publisher)
-    {
-        bool result = listener_publisher->publish(&serialized_output);
-        //std::cout << "Payload wrote" << std::endl;
-        return result;
-    }
-    return false;
-    */
 }
 
 
@@ -308,7 +272,8 @@ void NGSIv2Subscriber::listener()
 {
     try
     {
-        std::array<char, 2048> buf;
+        const int buf_size = (sub_params.buffer_size > 0) ? sub_params.buffer_size : LISTENER_BUFFER_SIZE;
+        std::array<char, LISTENER_BUFFER_SIZE> buf;
         asio::io_service io_service;
         this->io_service = &io_service;
         asio::error_code error;
@@ -317,32 +282,59 @@ void NGSIv2Subscriber::listener()
 
         while (!exit)
         {
+            std::stringstream ss;
+            std::string data;
+            size_t len = 0;
+            size_t totalLen = 0;
+
             tcp::socket socket(io_service);
             acceptor.accept(socket);
 
-            size_t len = socket.read_some(asio::buffer(buf), error);
+            do
+            {
+                len = socket.read_some(asio::buffer(buf), error);
+                totalLen += len;
 
-            if (error == asio::error::eof)
-                break; // Connection closed cleanly by peer.
-            else if (error)
-                throw asio::system_error(error); // Some other error.
+                if (error == asio::error::eof)
+                {
+                    break; // Connection closed cleanly by peer.
+                }
+                else if (error)
+                {
+                    throw asio::system_error(error); // Some other error.
+                }
 
-            //std::cout.write(buf.data(), len);
-            std::stringstream ss;
-            ss << buf.data();
+                if (len == LISTENER_BUFFER_SIZE)
+                {
+                    // Add null terminated str if buf is full // TODO Any idea to improve this?
+                    std::array<char, LISTENER_BUFFER_SIZE + 1> buf_temp;
+                    for (int i = 0; i < LISTENER_BUFFER_SIZE; ++i)
+                    {
+                        buf_temp[i] = buf[i];
+                    }
 
-            std::string data = ss.str();
+                    buf_temp[LISTENER_BUFFER_SIZE] = '\0';
+                    ss << buf_temp.data();
+                }
+                else
+                {
+                    ss << buf.data();
+                }
+
+                buf.fill(0);
+            } while (len == LISTENER_BUFFER_SIZE && totalLen < buf_size);
+
+            data = ss.str();
             data = data.substr(data.find_first_of("{\""));
-
             //std::cout << "Recv " << len << " bytes" << std::endl;
 
-            if (len < 2048)
+            if (len < buf_size)
             {
                 onDataReceived(&data);
             }
             else
             {
-                std::cout << "Received message too big (>= 2048 B). It will be ignored." << std::endl;
+                std::cout << "Received message too big (>= " << buf_size << " B). It will be ignored." << std::endl;
             }
         }
     }

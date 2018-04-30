@@ -25,6 +25,7 @@ public:
     std::string description;
     std::string host;
     uint16_t port;
+    unsigned int buffer_size;
 };
 
 #endif
