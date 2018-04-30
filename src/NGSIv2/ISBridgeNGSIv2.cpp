@@ -200,7 +200,7 @@ std::string NGSIv2Subscriber::addSubscription(const std::string &server, const s
                 subsc_id = line.substr(line.find_last_of("/") + 1);
                 subsc_id.pop_back(); // Remove \r tail
                 std::cout << "Added subscription with ID: " << subsc_id << std::endl;
-                std::cout << subsc_id << std::endl;
+                //std::cout << subsc_id << std::endl;
                 return subsc_id;
             }
         }
@@ -310,27 +310,13 @@ void NGSIv2Subscriber::listener()
                     throw asio::system_error(error); // Some other error.
                 }
 
-                if (len == LISTENER_BUFFER_SIZE)
-                {
-                    // Add null terminated str if buf is full // TODO Any idea to improve this?
-                    std::array<char, LISTENER_BUFFER_SIZE + 1> buf_temp;
-                    for (int i = 0; i < LISTENER_BUFFER_SIZE; ++i)
-                    {
-                        buf_temp[i] = buf[i];
-                    }
-
-                    buf_temp[LISTENER_BUFFER_SIZE] = '\0';
-                    ss << buf_temp.data();
-                }
-                else
-                {
-                    ss << buf.data();
-                }
+                ss.write(buf.data(), LISTENER_BUFFER_SIZE);
 
                 buf.fill(0);
             } while (len == LISTENER_BUFFER_SIZE && totalLen < buf_size);
 
             data = ss.str();
+            //std::cout << data << std::endl;
             data = data.substr(data.find_first_of("{\""));
             //std::cout << "Recv " << len << " bytes" << std::endl;
 
@@ -367,15 +353,12 @@ std::string NGSIv2Publisher::write(SerializedPayload_t* payload)
         JsonNGSIv2 json;
         json_pst.deserialize(payload, &json);
 
-        //std::string entityId = getEntityId(json);
-        //std::string payload = getPayload(json);
         std::string entityId = json.entityId();
         std::string payload = json.data();
         request.setOpt(new curlpp::options::Url(url + "/v2/entities/" + entityId + "/attrs"));
-        request.setOpt(new curlpp::options::Verbose(true));
+        //request.setOpt(new curlpp::options::Verbose(true));
         std::list<std::string> header;
         header.push_back("Content-Type: application/json");
-        //header.push_back("Content-Length: application/json");
 
         request.setOpt(new curlpp::options::HttpHeader(header));
         request.setOpt(new curlpp::options::PostFields(payload));
@@ -386,7 +369,7 @@ std::string NGSIv2Publisher::write(SerializedPayload_t* payload)
 
         request.perform();
 
-        std::cout << response.str() << std::endl;
+        //std::cout << response.str() << std::endl;
         return response.str();
     }
     catch (curlpp::LogicError & e) 
