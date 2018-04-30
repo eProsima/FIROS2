@@ -82,9 +82,9 @@ else()
         src/NGSIv2/ISBridgeNGSIv2.cpp src/NGSIv2/ISBridgeNGSIv2.h
         src/NGSIv2/rtpsngsiv2lib.cpp
         src/NGSIv2/idl/JsonNGSIv2.cxx src/NGSIv2/idl/JsonNGSIv2.h
-        src/NGSIv2/idl/JsonNGSIv2PubSubTypes.cxx src/NGSIv2/idl/JsonNGSIv2PubSubTypes.H
-        thirdparty/integration-services/src/dynamicload/dynamicload.cpp thirdparty/integration-services/src/dynamicload/dynamicload.H
-        thirdparty/integration-services/src/GenericPubSubTypes.cpp thirdparty/integration-services/src/GenericPubSubTypes.H
+        src/NGSIv2/idl/JsonNGSIv2PubSubTypes.cxx src/NGSIv2/idl/JsonNGSIv2PubSubTypes.h
+        thirdparty/integration-services/src/dynamicload/dynamicload.cpp thirdparty/integration-services/src/dynamicload/dynamicload.h
+        thirdparty/integration-services/src/GenericPubSubTypes.cpp thirdparty/integration-services/src/GenericPubSubTypes.h
         thirdparty/integration-services/src/ISBridge.cpp thirdparty/integration-services/src/ISBridge.h)
 
     target_include_directories(firos2 PUBLIC thirdparty/tinyxml2 thirdparty/curlpp/include)
