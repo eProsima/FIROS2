@@ -23,7 +23,7 @@ find_package(fastcdr REQUIRED)
 #set(CURL_BUILD_DIR thirdparty/curl/builds/libcurl-vc14-x64-release-static-ipv6-sspi-winssl)
 set(CURL_BUILD_DIR thirdparty/curl/builds/libcurl-vc14-x64-release-dll-ipv6-sspi-winssl)
 
-add_definitions(-DBUILD_SHARED_LIBS -Disbridgengsiv2lib_EXPORTS)
+add_definitions(-DBUILD_SHARED_LIBS -Disbridgengsiv2lib_EXPORTS -DLOG_LEVEL_ERROR)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(BUILD_SHARED_LIBS TRUE)
 
@@ -38,6 +38,7 @@ file(GLOB_RECURSE CURLPP_SOURCES ${CURLPP_DIR}/src/*)
 set(CURL_FILES ${CURLPP_HEADERS} ${CURLPP_SOURCES})
 set(IS_LIB_FILES thirdparty/integration-services/src/ISManager.cpp thirdparty/integration-services/src/ISManager.h
     thirdparty/integration-services/src/ISBridge.cpp thirdparty/integration-services/src/ISBridge.h
+    thirdparty/integration-services/src/log/ISLog.h
     thirdparty/integration-services/src/ISBridgeRTPS.cpp thirdparty/integration-services/src/ISBridgeRTPS.h
     thirdparty/integration-services/src/dynamicload/dynamicload.cpp thirdparty/integration-services/src/dynamicload/dynamicload.h
     thirdparty/integration-services/src/GenericPubSubTypes.cpp thirdparty/integration-services/src/GenericPubSubTypes.h)

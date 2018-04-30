@@ -1,5 +1,6 @@
 #include <iostream>
 #include "ISBridgeNGSIv2.h"
+#include "../../thirdparty/integration-services/src/log/ISLog.h"
 
 static const std::string s_sHost("host");
 static const std::string s_sPort("port");
@@ -60,7 +61,7 @@ ISBridgeNGSIv2* loadNGSIv2Bridge(const char* name)
     }
     catch (int e_code)
     {
-        std::cout << "Invalid configuration, skipping bridge " << e_code << std::endl;
+        LOG("Invalid configuration, skipping bridge " << e_code);
         return nullptr;
     }
 }
@@ -143,7 +144,7 @@ NGSIv2Subscriber* loadNGSIv2Subscriber(const char* name, const std::vector<std::
         }
         catch(...)
         {
-            std::cout << "Failed to parse subscriber '" << name << "' properties." << std::endl;
+            LOG("Failed to parse subscriber '" << name << "' properties.");
         }
     }
 
@@ -187,7 +188,7 @@ NGSIv2Publisher* loadNGSIv2Publisher(const char* name, const std::vector<std::pa
         }
         catch(...)
         {
-            std::cout << "Failed to parse publisher '" << name << "' properties." << std::endl;
+            LOG("Failed to parse publisher '" << name << "' properties.");
         }
     }
 

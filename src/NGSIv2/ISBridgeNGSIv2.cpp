@@ -24,6 +24,7 @@
 
 #include "ISBridgeNGSIv2.h"
 #include "idl/JsonNGSIv2PubSubTypes.h" // Received type from NGSIv2
+#include "../../thirdparty/integration-services/src/log/ISLog.h"
 
 #include <algorithm>
 #include <thread>
@@ -197,20 +198,19 @@ std::string NGSIv2Subscriber::addSubscription(const std::string &server, const s
             {
                 subsc_id = line.substr(line.find_last_of("/") + 1);
                 subsc_id.pop_back(); // Remove \r tail
-                std::cout << "Added subscription with ID: " << subsc_id << std::endl;
+                LOG_INFO("Added subscription with ID: " << subsc_id);
                 //std::cout << subsc_id << std::endl;
                 return subsc_id;
             }
         }
-
     }
     catch(curlpp::RuntimeError & e)
     {
-        std::cout << e.what() << std::endl;
+        LOG_ERROR(e.what());
     }
     catch(curlpp::LogicError & e)
     {
-        std::cout << e.what() << std::endl;
+        LOG_ERROR(e.what());
     }
     return "";
 }
@@ -240,11 +240,11 @@ void NGSIv2Subscriber::deleteSubscription()
     }
     catch(curlpp::RuntimeError & e)
     {
-        std::cout << e.what() << std::endl;
+        LOG_ERROR(e.what());
     }
     catch(curlpp::LogicError & e)
     {
-        std::cout << e.what() << std::endl;
+        LOG_ERROR(e.what());
     }
 }
 
@@ -296,6 +296,7 @@ void NGSIv2Subscriber::listener()
 
                 if (error == asio::error::eof)
                 {
+                    LOG_ERROR("Connection closed by server");
                     break; // Connection closed cleanly by peer.
                 }
                 else if (error)
@@ -309,9 +310,9 @@ void NGSIv2Subscriber::listener()
             } while (len == LISTENER_BUFFER_SIZE && totalLen < buf_size);
 
             data = ss.str();
-            //std::cout << data << std::endl;
+            LOG_DEBUG(data);
             data = data.substr(data.find_first_of("{\""));
-            //std::cout << "Recv " << len << " bytes" << std::endl;
+            LOG_DEBUG("Recv " << len << " bytes");
 
             if (len < buf_size)
             {
@@ -319,13 +320,13 @@ void NGSIv2Subscriber::listener()
             }
             else
             {
-                std::cout << "Received message too big (>= " << buf_size << " B). It will be ignored." << std::endl;
+                LOG_WARN("Received message too big (>= " << buf_size << " B). It will be ignored.");
             }
         }
     }
     catch (std::exception& e)
     {
-        std::cerr << e.what() << std::endl;
+        LOG_ERROR(e.what());
     }
 }
 
@@ -364,11 +365,11 @@ std::string NGSIv2Publisher::write(SerializedPayload_t* payload)
     }
     catch (curlpp::LogicError & e)
     {
-        std::cout << e.what() << std::endl;
+        LOG_ERROR(e.what());
     }
     catch (curlpp::RuntimeError & e)
     {
-        std::cout << e.what() << std::endl;
+        LOG_ERROR(e.what());
     }
     return "";
 }
@@ -396,18 +397,18 @@ bool performAndRetry(int n_retries, curlpp::Easy &request)
                 break;
             case 3: // 3XX codes
                 tries = n_retries; // Abort
-                std::cout << "Connection failed: " << responseCode << std::endl;
-                std::cout << response.str() << std::endl;
+                LOG_ERROR("Connection failed: " << responseCode);
+                LOG_INFO(response.str());
                 break;
             case 4: // 4XX codes
-                std::cout << "Connection failed: " << responseCode << std::endl;
+                LOG_ERROR("Connection failed: " << responseCode);
                 tries = n_retries; //Don't retry
                 break;
             case 5: // 5XX codes
-                std::cout << "Connection failed: " << responseCode << std::endl;
+                LOG_ERROR("Connection failed: " << responseCode);
                 break;
             default:
-                std::cout << response.str() << std::endl;
+                LOG(response.str());
                 break;
         }
     } while (!success && ++tries < n_retries);
