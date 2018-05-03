@@ -1,31 +1,57 @@
 <?xml version="1.0"?>
 <is>
-	<bridge>
-		<bridge_type>unidirectional</bridge_type>
-		<bridge_configuration>
-			<ngsiv2>
-				<participant>ngsiv2_subscriber</participant>
-				<id>Helloworld</id>
-				<host>192.168.122.1</host>
-				<port>1026</port>
-				<subscription>
-					<type>Helloworld</type> <!-- optional -->
-					<notifs>count</notifs> <!-- comma separated -->
-					<listener_host>192.168.122.224</listener_host>
-					<listener_port>12345</listener_port>
-				</subscription>
-				<!-- Windows -->
-				<transformFromNGSIv2>C:\dev\ros2\src\ros2\firos2\examples\helloworld_ros2\build\Release\userlib.dll</transformFromNGSIv2>
-			</ngsiv2>
-		</bridge_configuration>
-		<publisher>
-			<participant>ros2_publisher</participant>
-			<domain>0</domain>
-			<topic>chatter</topic>
-			<type>std_msgs::msg::dds_::String_</type>
-			<partition>rt</partition>
-		</publisher>
-        <!-- Windows -->
-		<bridge_library>C:\dev\ros2\build\firos2\Release\isbridgengsiv2lib.dll</bridge_library>
-	</bridge>
+    <participant name="ros2">
+        <attributes>
+            <domain>0</domain>
+        </attributes>
+
+        <publisher name="ros2_publisher">
+            <attributes>
+				<topic>chatter</topic>
+				<type>std_msgs::msg::dds_::String_</type>
+	            <partition>rt</partition>
+            </attributes>
+        </publisher>
+    </participant>
+
+    <bridge name="ngsiv2">
+        <library>C:\dev\ros2\build\firos2\Release\isbridgengsiv2lib.dll</library> <!-- Path to the NGSIv2 library -->
+
+        <subscriber name="ngsiv2_subscriber">
+            <property>
+                <name>host</name>
+                <value>localhost</value>
+            </property>
+            <property>
+                <name>port</name>
+                <value>1026</value>
+            </property>
+            <property>
+                <name>id</name>
+                <value>Helloworld</value>
+            </property>
+            <property>
+                <name>type</name>
+                <value>Helloworld</value>
+            </property>
+            <property>
+                <name>notifs</name>
+                <value>count</value>
+            </property>
+            <property>
+                <name>listener_host</name>
+                <value>localhost</value>
+            </property>
+            <property>
+                <name>listener_port</name>
+                <value>12345</value>
+            </property>
+        </subscriber>
+    </bridge>
+
+    <connector name="domain_change"> 
+        <subscriber participant_name="ngsiv2" subscriber_name="ngsiv2_subscriber"/>
+        <publisher participant_name="ros2" publisher_name="ros2_publisher"/>
+        <transformation file="C:\dev\ros2\src\ros2\firos2\examples\helloworld_ros2\build\Release\userlib.dll" function="transform"/>
+    </connector>
 </is>

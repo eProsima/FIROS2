@@ -52,6 +52,7 @@ if(WIN32)
     source_group("curl" FILES ${CURL_FILES})
 
     add_library(isbridgengsiv2lib
+        src/NGSIv2/NGSIv2Params.cpp src/NGSIv2/NGSIv2Params.h
         src/NGSIv2/ISBridgeNGSIv2.cpp src/NGSIv2/ISBridgeNGSIv2.h
         src/NGSIv2/rtpsngsiv2lib.cpp
         src/NGSIv2/idl/JsonNGSIv2.cxx src/NGSIv2/idl/JsonNGSIv2.h
@@ -78,6 +79,7 @@ else()
         thirdparty/tinyxml2/tinyxml2.cpp thirdparty/tinyxml2/tinyxml2.h)
 
     add_library(isbridgengsiv2lib SHARED
+        src/NGSIv2/NGSIv2Params.cpp src/NGSIv2/NGSIv2Params.h
         src/NGSIv2/ISBridgeNGSIv2.cpp src/NGSIv2/ISBridgeNGSIv2.h
         src/NGSIv2/rtpsngsiv2lib.cpp
         src/NGSIv2/idl/JsonNGSIv2.cxx src/NGSIv2/idl/JsonNGSIv2.h
