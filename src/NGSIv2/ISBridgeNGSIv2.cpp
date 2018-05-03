@@ -411,6 +411,6 @@ bool performAndRetry(int n_retries, curlpp::Easy &request)
                 LOG(response.str());
                 break;
         }
-    } while (!success && ++tries < n_retries);
+    } while (!success && tries++ < n_retries);
     return success;
 }
