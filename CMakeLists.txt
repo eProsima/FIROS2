@@ -78,7 +78,11 @@ if(WIN32)
 
     add_library(isbridgengsiv2lib
         src/NGSIv2/NGSIv2Params.cpp src/NGSIv2/NGSIv2Params.h
-        src/NGSIv2/ISBridgeNGSIv2.cpp src/NGSIv2/ISBridgeNGSIv2.h
+        src/NGSIv2/NGSIv2ISBridge.cpp src/NGSIv2/NGSIv2ISBridge.h
+        src/NGSIv2/NGSIv2Publisher.cpp src/NGSIv2/NGSIv2Publisher.h
+        src/NGSIv2/NGSIv2Subscriber.cpp src/NGSIv2/NGSIv2Subscriber.h
+        src/NGSIv2/NGSIv2Utils.cpp src/NGSIv2/NGSIv2Utils.h
+        src/jsoncpp.cpp
         src/NGSIv2/rtpsngsiv2lib.cpp
         src/NGSIv2/idl/JsonNGSIv2.cxx src/NGSIv2/idl/JsonNGSIv2.h
         src/NGSIv2/idl/JsonNGSIv2PubSubTypes.cxx src/NGSIv2/idl/JsonNGSIv2PubSubTypes.h
@@ -93,7 +97,7 @@ if(WIN32)
     target_include_directories(firos2 PUBLIC thirdparty/tinyxml2 thirdparty/curlpp/include
         thirdparty/asio/asio/include ${CURL_BUILD_DIR}/include)
     target_include_directories(isbridgengsiv2lib PUBLIC thirdparty/tinyxml2 thirdparty/curlpp/include
-        thirdparty/asio/asio/include ${CURL_BUILD_DIR}/include)
+        thirdparty/asio/asio/include ${CURL_BUILD_DIR}/include src)
 
     #set(liblist fastrtps_static fastcdr_static ${CMAKE_DL_LIBS} IPHLPAPI shlwapi libcurl_a)
     set(liblist fastrtps_static fastcdr_static ${CMAKE_DL_LIBS} IPHLPAPI shlwapi libcurl)
@@ -114,7 +118,7 @@ else()
         thirdparty/tinyxml2/tinyxml2.cpp thirdparty/tinyxml2/tinyxml2.h)
 
     target_include_directories(firos2 PUBLIC thirdparty/tinyxml2 thirdparty/curlpp/include)
-    target_include_directories(isbridgengsiv2lib PUBLIC thirdparty/tinyxml2 thirdparty/curlpp/include)
+    target_include_directories(isbridgengsiv2lib PUBLIC thirdparty/tinyxml2 thirdparty/curlpp/include src)
 
     set(liblist fastrtps fastcdr -L/usr/lib/x86_64-linux-gnu curl)
 endif()

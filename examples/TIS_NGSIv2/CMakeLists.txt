@@ -53,10 +53,11 @@ add_executable(RobotExample RobotExample_main.cpp
     RobotRcv.cxx RobotRcvPubSubTypes.cxx
     RobotSnd.cxx RobotSndPubSubTypes.cxx)
 
-add_library(userlib SHARED ${USER_LIB_SOURCES_CXX} userlib.cpp jsoncpp.cpp
+add_library(userlib SHARED ${USER_LIB_SOURCES_CXX} userlib.cpp 
     RobotPosition.cxx RobotPositionPubSubTypes.cxx
     RobotRcv.cxx RobotRcvPubSubTypes.cxx
     RobotSnd.cxx RobotSndPubSubTypes.cxx
+    ../../src/jsoncpp.cpp
     ../../src/NGSIv2/idl/JsonNGSIv2.cxx
     ../../src/NGSIv2/idl/JsonNGSIv2PubSubTypes.cxx)
 

@@ -13,8 +13,8 @@
 // limitations under the License.
 
 
-#ifndef _ISBRIDGENGSIv2_H_
-#define _ISBRIDGENGSIv2_H_
+#ifndef _NGSIv2_SUBSCRIBER_H_
+#define _NGSIv2_SUBSCRIBER_H_
 
 #include <iostream>
 
@@ -29,26 +29,9 @@
 #include <curlpp/Exception.hpp>
 #include <curlpp/Infos.hpp>
 #include <curlpp/Easy.hpp>
-#include <curlpp/Options.hpp>
 
-using namespace eprosima::fastrtps;
-using namespace eprosima::fastrtps::rtps;
 using namespace curlpp::options;
 using namespace curlpp::infos;
-
-class NGSIv2Publisher : public ISPublisher
-{
-private:
-    std::string url;
-    std::string write(SerializedPayload_t *payload);
-    NGSIv2Params part_params;
-public:
-    NGSIv2Publisher(const std::string &name) : ISPublisher(name) {}
-    NGSIv2Publisher(const std::string &name, const NGSIv2Params &params);
-    ~NGSIv2Publisher() override;
-
-    bool publish(SerializedPayload_t* payload) override;
-};
 
 class NGSIv2Subscriber : public ISSubscriber
 {
@@ -75,14 +58,7 @@ public:
     void startListenerAndSubscribe();
     void onDataReceived(void* data);
     void onTerminate() override;
-    void setSubscriptionParams(const NGSIv2SubscriptionParams &params) { sub_params = params; };
+    void setSubscriptionParams(const NGSIv2SubscriptionParams &params);
 };
 
-class ISBridgeNGSIv2 : public ISBridge
-{
-public:
-    ISBridgeNGSIv2(const std::string &name) : ISBridge(name) {}
-    virtual ~ISBridgeNGSIv2();
-};
-
-#endif // _Header__SUBSCRIBER_H_
+#endif // _NGSIv2_SUBSCRIBER_H_

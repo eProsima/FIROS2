@@ -42,7 +42,7 @@ file(GLOB USER_LIB_SOURCES_CPP "userlib.cpp")
 add_library(userlib SHARED ${USER_LIB_SOURCES_CXX} ${USER_LIB_SOURCES_CPP}
     ../../src/NGSIv2/idl/JsonNGSIv2.cxx
     ../../src/NGSIv2/idl/JsonNGSIv2PubSubTypes.cxx
-     jsoncpp.cpp)
+    ../../src/jsoncpp.cpp)
 
 if(WIN32)
     add_executable(cb_create_helloworld cb_create_helloworld.cpp ${CURLPP_HEADERS} ${CURLPP_SOURCES})

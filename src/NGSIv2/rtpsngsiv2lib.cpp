@@ -1,5 +1,7 @@
 #include <iostream>
-#include "ISBridgeNGSIv2.h"
+#include "NGSIv2ISBridge.h"
+#include "NGSIv2Publisher.h"
+#include "NGSIv2Subscriber.h"
 #include "../../thirdparty/integration-services/src/log/ISLog.h"
 
 #if defined(_WIN32) && defined (BUILD_SHARED_LIBS)
@@ -15,7 +17,7 @@
   #define USER_LIB_EXPORT
 #endif
 
-ISBridgeNGSIv2* loadNGSIv2Bridge(const char* name);
+NGSIv2ISBridge* loadNGSIv2Bridge(const char* name);
 NGSIv2Subscriber* loadNGSIv2Subscriber(const char* name, const std::vector<std::pair<std::string, std::string>> *config);
 NGSIv2Publisher* loadNGSIv2Publisher(const char* name, const std::vector<std::pair<std::string, std::string>> *config);
 
@@ -37,11 +39,11 @@ extern "C" USER_LIB_EXPORT ISPublisher* create_publisher(ISBridge *bridge, const
     return loadNGSIv2Publisher(name, config);
 }
 
-ISBridgeNGSIv2* loadNGSIv2Bridge(const char* name)
+NGSIv2ISBridge* loadNGSIv2Bridge(const char* name)
 {
     try
     {
-        return new ISBridgeNGSIv2(name);
+        return new NGSIv2ISBridge(name);
     }
     catch (int e_code)
     {
