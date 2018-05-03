@@ -62,7 +62,9 @@ set(CURL_FILES ${CURLPP_HEADERS} ${CURLPP_SOURCES})
 set(IS_LIB_FILES thirdparty/integration-services/src/ISManager.cpp thirdparty/integration-services/src/ISManager.h
     thirdparty/integration-services/src/ISBridge.cpp thirdparty/integration-services/src/ISBridge.h
     thirdparty/integration-services/src/log/ISLog.h
-    thirdparty/integration-services/src/ISBridgeRTPS.cpp thirdparty/integration-services/src/ISBridgeRTPS.h
+    thirdparty/integration-services/src/RTPSBridge.cpp thirdparty/integration-services/src/RTPSBridge.h
+    thirdparty/integration-services/src/RTPSPublisher.cpp thirdparty/integration-services/src/RTPSPublisher.h
+    thirdparty/integration-services/src/RTPSSubscriber.cpp thirdparty/integration-services/src/RTPSSubscriber.h
     thirdparty/integration-services/src/dynamicload/dynamicload.cpp thirdparty/integration-services/src/dynamicload/dynamicload.h
     thirdparty/integration-services/src/GenericPubSubTypes.cpp thirdparty/integration-services/src/GenericPubSubTypes.h)
 
