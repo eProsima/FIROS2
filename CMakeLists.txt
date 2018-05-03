@@ -68,6 +68,16 @@ set(IS_LIB_FILES thirdparty/integration-services/src/ISManager.cpp thirdparty/in
     thirdparty/integration-services/src/dynamicload/dynamicload.cpp thirdparty/integration-services/src/dynamicload/dynamicload.h
     thirdparty/integration-services/src/GenericPubSubTypes.cpp thirdparty/integration-services/src/GenericPubSubTypes.h)
 
+set(NGSIv2_FILES src/NGSIv2/NGSIv2Params.cpp src/NGSIv2/NGSIv2Params.h
+        src/NGSIv2/NGSIv2ISBridge.cpp src/NGSIv2/NGSIv2ISBridge.h
+        src/NGSIv2/NGSIv2Publisher.cpp src/NGSIv2/NGSIv2Publisher.h
+        src/NGSIv2/NGSIv2Subscriber.cpp src/NGSIv2/NGSIv2Subscriber.h
+        src/NGSIv2/NGSIv2Utils.cpp src/NGSIv2/NGSIv2Utils.h
+        src/jsoncpp.cpp
+        src/NGSIv2/rtpsngsiv2lib.cpp
+        src/NGSIv2/idl/JsonNGSIv2.cxx src/NGSIv2/idl/JsonNGSIv2.h
+        src/NGSIv2/idl/JsonNGSIv2PubSubTypes.cxx src/NGSIv2/idl/JsonNGSIv2PubSubTypes.h)
+
 if(WIN32)
     add_executable(firos2 src/main.cpp
         ${IS_LIB_FILES}
@@ -77,15 +87,7 @@ if(WIN32)
     source_group("curl" FILES ${CURL_FILES})
 
     add_library(isbridgengsiv2lib
-        src/NGSIv2/NGSIv2Params.cpp src/NGSIv2/NGSIv2Params.h
-        src/NGSIv2/NGSIv2ISBridge.cpp src/NGSIv2/NGSIv2ISBridge.h
-        src/NGSIv2/NGSIv2Publisher.cpp src/NGSIv2/NGSIv2Publisher.h
-        src/NGSIv2/NGSIv2Subscriber.cpp src/NGSIv2/NGSIv2Subscriber.h
-        src/NGSIv2/NGSIv2Utils.cpp src/NGSIv2/NGSIv2Utils.h
-        src/jsoncpp.cpp
-        src/NGSIv2/rtpsngsiv2lib.cpp
-        src/NGSIv2/idl/JsonNGSIv2.cxx src/NGSIv2/idl/JsonNGSIv2.h
-        src/NGSIv2/idl/JsonNGSIv2PubSubTypes.cxx src/NGSIv2/idl/JsonNGSIv2PubSubTypes.h
+        ${NGSIv2_FILES}
         ${IS_LIB_FILES}
         ${CURL_FILES}
         thirdparty/tinyxml2/tinyxml2.cpp thirdparty/tinyxml2/tinyxml2.h)
@@ -108,11 +110,7 @@ else()
         thirdparty/tinyxml2/tinyxml2.cpp thirdparty/tinyxml2/tinyxml2.h)
 
     add_library(isbridgengsiv2lib SHARED
-        src/NGSIv2/NGSIv2Params.cpp src/NGSIv2/NGSIv2Params.h
-        src/NGSIv2/ISBridgeNGSIv2.cpp src/NGSIv2/ISBridgeNGSIv2.h
-        src/NGSIv2/rtpsngsiv2lib.cpp
-        src/NGSIv2/idl/JsonNGSIv2.cxx src/NGSIv2/idl/JsonNGSIv2.h
-        src/NGSIv2/idl/JsonNGSIv2PubSubTypes.cxx src/NGSIv2/idl/JsonNGSIv2PubSubTypes.h
+        ${NGSIv2_FILES}
         ${IS_LIB_FILES}
         ${CURL_FILES}
         thirdparty/tinyxml2/tinyxml2.cpp thirdparty/tinyxml2/tinyxml2.h)
