@@ -23,7 +23,30 @@ find_package(fastcdr REQUIRED)
 #set(CURL_BUILD_DIR thirdparty/curl/builds/libcurl-vc14-x64-release-static-ipv6-sspi-winssl)
 set(CURL_BUILD_DIR thirdparty/curl/builds/libcurl-vc14-x64-release-dll-ipv6-sspi-winssl)
 
-add_definitions(-DBUILD_SHARED_LIBS -Disbridgengsiv2lib_EXPORTS -DLOG_LEVEL_ERROR)
+add_definitions(-DBUILD_SHARED_LIBS -Disbridgengsiv2lib_EXPORTS)
+
+IF (NOT DEFINED LOG_LEVEL_DEBUG)
+    SET(LOG_LEVEL_DEBUG OFF)
+ENDIF()
+ADD_DEFINITIONS(-DLOG_LEVEL_DEBUG=${LOG_LEVEL_DEBUG})
+
+IF (NOT DEFINED LOG_LEVEL_INFO)
+    SET(LOG_LEVEL_INFO OFF)
+ENDIF()
+ADD_DEFINITIONS(-DLOG_LEVEL_INFO=${LOG_LEVEL_INFO})
+
+IF (NOT DEFINED LOG_LEVEL_WARN)
+    SET(LOG_LEVEL_WARN OFF)
+ENDIF()
+ADD_DEFINITIONS(-DLOG_LEVEL_WARN=${LOG_LEVEL_WARN})
+
+IF (NOT DEFINED LOG_LEVEL_ERROR)
+    SET(LOG_LEVEL_ERROR ON)
+ENDIF()
+ADD_DEFINITIONS(-DLOG_LEVEL_ERROR=${LOG_LEVEL_ERROR})
+
+configure_file(thirdparty/integration-services/src/log/ISLog.h.in ${PROJECT_SOURCE_DIR}/thirdparty/integration-services/src/log/ISLog.h)
+
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(BUILD_SHARED_LIBS TRUE)
 

@@ -2,6 +2,7 @@
 #include "RobotSndPubSubTypes.h"
 #include "RobotRcvPubSubTypes.h"
 #include "../../src/NGSIv2/idl/JsonNGSIv2PubSubTypes.h"
+#include "../../thirdparty/integration-services/src/log/ISLog.h"
 
 #include "json/json.h"
 
@@ -40,7 +41,7 @@ extern "C" void USER_LIB_EXPORT transformFromNGSIv2(SerializedPayload_t *seriali
         Json::Value data = root["data"];
         Json::Value robot = data[0];
         robot_data.robot_id(robot["id"].asString());
-        std::cout << "Parsing robot with ID = " << robot_data.robot_id() << std::endl;
+        LOG_INFO("Parsing robot with ID = " << robot_data.robot_id());
         robot_data.transmission_time(robot["transmission_time"]["value"].asString());
         robot_data.position().floor(robot["floor"]["value"].asLargestUInt());
         robot_data.position().x(robot["x"]["value"].asLargestUInt());
@@ -52,7 +53,7 @@ extern "C" void USER_LIB_EXPORT transformFromNGSIv2(SerializedPayload_t *seriali
     }
     else
     {
-        std::cout  << "Failed to parse" << errs;
+        LOG_ERROR("Failed to parse" << errs);
     }
 }
 
@@ -77,7 +78,7 @@ extern "C" void USER_LIB_EXPORT transform(SerializedPayload_t *serialized_input,
     ss << "\"state\": {\"value\": " << ((robot_data.state() == State::ACTION) ? "\"ACTION\"" : "\"STAND_BY\"") << "} }";
     string_data.entityId(robot_data.robot_id());
     string_data.data(ss.str());
-    std::cout << string_data.data() << std::endl;
+    LOG_INFO(<string_data.data());
 
     // Serialization
     serialized_output->reserve(string_pst.m_typeSize);
