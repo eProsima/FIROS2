@@ -14,6 +14,7 @@ static const std::string s_sExpiration("expiration");
 static const std::string s_sThrottling("throttling");
 static const std::string s_sDescription("description");
 static const std::string s_sRetries("http_retries");
+static const std::string s_sRetryWait("retry_wait");
 static const std::string s_sHttpTimeout("http_timeout");
 
 
@@ -22,6 +23,7 @@ NGSIv2Params::NGSIv2Params()
     , host("")
     , port(0)
     , retries(0)
+    , retryWait_ms(1000)
     , httpTimeout(0)
 {
 }
@@ -47,6 +49,10 @@ bool NGSIv2Params::LoadConfig(const std::vector<std::pair<std::string, std::stri
             else if (pair.first.compare(s_sRetries) == 0)
             {
                 retries = std::stoi(pair.second);
+            }
+            else if (pair.first.compare(s_sRetryWait) == 0)
+            {
+                retryWait_ms = std::stoi(pair.second);
             }
         }
         catch (...)

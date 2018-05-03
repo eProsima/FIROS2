@@ -13,6 +13,7 @@ public:
     std::string host;
     uint16_t port;
     uint16_t retries;
+    uint16_t retryWait_ms;
     uint16_t httpTimeout;
 
     NGSIv2Params();

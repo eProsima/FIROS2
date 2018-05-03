@@ -28,6 +28,7 @@
 
 #include <algorithm>
 #include <thread>
+#include <chrono>
 
 #ifndef LISTENER_BUFFER_SIZE
 #define LISTENER_BUFFER_SIZE 2048
@@ -35,7 +36,7 @@
 
 using asio::ip::tcp;
 
-bool performAndRetry(int n_retries, curlpp::Easy &request);
+bool performAndRetry(const NGSIv2Params &params, curlpp::Easy &request);
 
 ISBridgeNGSIv2::~ISBridgeNGSIv2()
 {
@@ -236,7 +237,7 @@ void NGSIv2Subscriber::deleteSubscription()
         delRequest.setOpt(new curlpp::options::CustomRequest("DELETE"));
 
         // Send request and get a result.
-        performAndRetry(part_params.retries, delRequest);
+        performAndRetry(part_params, delRequest);
     }
     catch(curlpp::RuntimeError & e)
     {
@@ -359,7 +360,7 @@ std::string NGSIv2Publisher::write(SerializedPayload_t* payload)
         request.setOpt(new curlpp::options::PostFieldSize((long)payload.length()));
         request.setOpt(new curlpp::options::Timeout(part_params.httpTimeout));
 
-        performAndRetry(part_params.retries, request);
+        performAndRetry(part_params, request);
 
         return "";
     }
@@ -374,42 +375,56 @@ std::string NGSIv2Publisher::write(SerializedPayload_t* payload)
     return "";
 }
 
-bool performAndRetry(int n_retries, curlpp::Easy &request)
+bool performAndRetry(const NGSIv2Params &params, curlpp::Easy &request)
 {
     int tries = 0;
     bool success = false;
+    int n_retries = params.retries;
+    int sleep_ms = params.retryWait_ms;
     std::ostringstream response;
     do
     {
-        request.setOpt(new curlpp::options::WriteStream(&response));
-        request.perform();
-        long responseCode = curlpp::infos::ResponseCode::get(request);
-
-        switch (responseCode / 100)
+        if (tries > 0)
         {
-            case 1: // 1XX codes
-                success = true;
-                tries = n_retries; // Success
-                break;
-            case 2: // 2XX codes
-                success = true;
-                tries = n_retries; // Success
-                break;
-            case 3: // 3XX codes
-                tries = n_retries; // Abort
-                LOG_ERROR("Connection failed: " << responseCode);
-                LOG_INFO(response.str());
-                break;
-            case 4: // 4XX codes
-                LOG_ERROR("Connection failed: " << responseCode);
-                tries = n_retries; //Don't retry
-                break;
-            case 5: // 5XX codes
-                LOG_ERROR("Connection failed: " << responseCode);
-                break;
-            default:
-                LOG(response.str());
-                break;
+            LOG_INFO("Retrying... #" << tries);
+            std::this_thread::sleep_for(std::chrono::milliseconds(sleep_ms));
+        }
+        request.setOpt(new curlpp::options::WriteStream(&response));
+        try
+        {
+            request.perform();
+            long responseCode = curlpp::infos::ResponseCode::get(request);
+
+            switch (responseCode / 100)
+            {
+                case 1: // 1XX codes
+                    success = true;
+                    tries = n_retries; // Success
+                    break;
+                case 2: // 2XX codes
+                    success = true;
+                    tries = n_retries; // Success
+                    break;
+                case 3: // 3XX codes
+                    tries = n_retries; // Abort
+                    LOG_ERROR("Connection failed: " << responseCode);
+                    LOG_INFO(response.str());
+                    break;
+                case 4: // 4XX codes
+                    LOG_ERROR("Connection failed: " << responseCode);
+                    tries = n_retries; //Don't retry
+                    break;
+                case 5: // 5XX codes
+                    LOG_ERROR("Connection failed: " << responseCode);
+                    break;
+                default:
+                    LOG(response.str());
+                    break;
+            }
+        }
+        catch (curlpp::RuntimeError & e)
+        {
+            LOG_ERROR(e.what());
         }
     } while (!success && tries++ < n_retries);
     return success;

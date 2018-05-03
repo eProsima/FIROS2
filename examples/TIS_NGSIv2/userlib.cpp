@@ -78,7 +78,7 @@ extern "C" void USER_LIB_EXPORT transform(SerializedPayload_t *serialized_input,
     ss << "\"state\": {\"value\": " << ((robot_data.state() == State::ACTION) ? "\"ACTION\"" : "\"STAND_BY\"") << "} }";
     string_data.entityId(robot_data.robot_id());
     string_data.data(ss.str());
-    LOG_INFO(<string_data.data());
+    LOG_INFO(string_data.data());
 
     // Serialization
     serialized_output->reserve(string_pst.m_typeSize);

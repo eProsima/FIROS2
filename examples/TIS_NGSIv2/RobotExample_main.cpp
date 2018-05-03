@@ -32,10 +32,17 @@ int main(int argc, char** argv)
 {
     std::cout << "Starting "<< std::endl;
     int type = 1;
+    int waitTime = 10;
     if(argc > 1)
     {
         if(strcmp(argv[1],"publisher")==0)
+        {
             type = 1;
+            if (argc > 2)
+            {
+                waitTime = atoi(argv[2]);
+            }
+        }
         else if(strcmp(argv[1],"subscriber")==0)
             type = 2;
     }
@@ -51,7 +58,7 @@ int main(int argc, char** argv)
     {
         case 1:
             {
-                RobotExamplePublisher mypub;
+                RobotExamplePublisher mypub(waitTime);
                 if(mypub.init())
                 {
                     mypub.run(100000);

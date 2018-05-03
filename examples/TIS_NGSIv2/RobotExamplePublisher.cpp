@@ -29,7 +29,7 @@
 using namespace eprosima::fastrtps;
 using namespace eprosima::fastrtps::rtps;
 
-RobotExamplePublisher::RobotExamplePublisher():mp_participant(nullptr),
+RobotExamplePublisher::RobotExamplePublisher(int waitTime): wait_time(waitTime), mp_participant(nullptr),
 mp_publisher(nullptr)
 {
 
@@ -116,7 +116,7 @@ void RobotExamplePublisher::run(uint32_t samples)
         {
             std::cout << "Robot: "<<m_Hello.robot_id() << " teleported to floor: " << m_Hello.position().floor() << std::endl;
         }
-        eClock::my_sleep(10000);
+        eClock::my_sleep(wait_time * 1000);
     }
 }
 
