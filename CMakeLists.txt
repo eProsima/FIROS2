@@ -78,6 +78,8 @@ set(NGSIv2_FILES src/NGSIv2/NGSIv2Params.cpp src/NGSIv2/NGSIv2Params.h
         src/NGSIv2/idl/JsonNGSIv2.cxx src/NGSIv2/idl/JsonNGSIv2.h
         src/NGSIv2/idl/JsonNGSIv2PubSubTypes.cxx src/NGSIv2/idl/JsonNGSIv2PubSubTypes.h)
 
+set(THIRDPARTY_INCLUDE thirdparty/tinyxml2 thirdparty/curlpp/include thirdparty/asio/asio/include)
+
 if(WIN32)
     add_executable(firos2 src/main.cpp
         ${IS_LIB_FILES}
@@ -96,10 +98,8 @@ if(WIN32)
 
     # Include thirdparty (ASIO only in WIN32)
     add_definitions(-DASIO_STANDALONE)
-    target_include_directories(firos2 PUBLIC thirdparty/tinyxml2 thirdparty/curlpp/include
-        thirdparty/asio/asio/include ${CURL_BUILD_DIR}/include)
-    target_include_directories(isbridgengsiv2lib PUBLIC thirdparty/tinyxml2 thirdparty/curlpp/include
-        thirdparty/asio/asio/include ${CURL_BUILD_DIR}/include src)
+    target_include_directories(firos2 PUBLIC ${THIRDPARTY_INCLUDE} ${CURL_BUILD_DIR}/include)
+    target_include_directories(isbridgengsiv2lib PUBLIC ${THIRDPARTY_INCLUDE} ${CURL_BUILD_DIR}/include src)
 
     #set(liblist fastrtps_static fastcdr_static ${CMAKE_DL_LIBS} IPHLPAPI shlwapi libcurl_a)
     set(liblist fastrtps_static fastcdr_static ${CMAKE_DL_LIBS} IPHLPAPI shlwapi libcurl)
@@ -115,8 +115,8 @@ else()
         ${CURL_FILES}
         thirdparty/tinyxml2/tinyxml2.cpp thirdparty/tinyxml2/tinyxml2.h)
 
-    target_include_directories(firos2 PUBLIC thirdparty/tinyxml2 thirdparty/curlpp/include)
-    target_include_directories(isbridgengsiv2lib PUBLIC thirdparty/tinyxml2 thirdparty/curlpp/include src)
+    target_include_directories(firos2 PUBLIC ${THIRDPARTY_INCLUDE})
+    target_include_directories(isbridgengsiv2lib PUBLIC ${THIRDPARTY_INCLUDE} src)
 
     set(liblist fastrtps fastcdr -L/usr/lib/x86_64-linux-gnu curl)
 endif()
