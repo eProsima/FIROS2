@@ -71,19 +71,38 @@ In both cases, serialization and deserialization are applied as needed by Serial
 The *config.xml* file used in this example is the following:
 
     <is>
-        <participant name="ros2">
-            <attributes>
-                <domain>0</domain>
-            </attributes>
+        <topic_types>
+            <type name="std_msgs::msg::dds_::String_">
+                <participants>
+                    <participant name="ros2"/>
+                </participants>
+            </type>
+        </topic_types>
 
-            <publisher name="ros2_publisher">
-                <attributes>
-                    <topic>chatter</topic>
-                    <type>std_msgs::msg::dds_::String_</type>
-                    <partition>rt</partition>
-                </attributes>
+        <profiles>
+            <participant profile_name="ros2">
+                <rtps>
+                    <builtin>
+                        <domainId>0</domainId>
+                    </builtin>
+                </rtps>
+            </participant>
+
+            <publisher profile_name="ros2_publisher">
+                <topic>
+                    <name>chatter</name>
+                    <dataType>std_msgs::msg::dds_::String_</dataType>
+                </topic>
+                <qos>
+                    <partition>
+                        <names>
+                            <name>rt</name>
+                        </names>
+                    </partition>
+                </qos>
+                <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
             </publisher>
-        </participant>
+        </profiles>
 
         <bridge name="ngsiv2">
             <library>libisbridgengsiv2lib.so</library> <!-- Path to the NGSIv2 library -->

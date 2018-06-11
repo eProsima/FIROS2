@@ -1,26 +1,53 @@
 <?xml version="1.0"?>
 <is>
-    <participant name="ros2_participant">
-        <attributes>
-            <domain>ros2_domain</domain>
-        </attributes>
+    <topic_types>
+        <type name="ROS2_Type">
+            <participants>
+                <participant name="ros2_participant"/>
+            </participants>
+        </type>
+    </topic_types>
 
-        <publisher name="ros2_publisher">
-            <attributes>
-                <topic>ROS2_Topic</topic>
-                <type>ROS2_Type</type>
-                <partition>rt</partition>
-            </attributes>
-        </publisher>
+    <profiles>
 
-        <subscriber name="ros2_subscriber">
-            <attributes>
-                <topic>ROS2_Topic</topic>
-                <type>ROS2_Type</type>
-                <partition>rt</partition>
-            </attributes>
+        <participant profile_name="ros2_participant">
+            <rtps>
+                <builtin>
+                    <domainId>ros2_domain</domainId>
+                </builtin>
+            </rtps>
+        </participant>
+
+        <subscriber profile_name="ros2_subscriber">
+            <topic>
+                <name>ROS2_Topic</name>
+                <dataType>ROS2_Type</dataType>
+            </topic>
+            <qos>
+                <partition>
+                    <names>
+                        <name>rt</name>
+                    </names>
+                </partition>
+            </qos>
+            <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
         </subscriber>
-    </participant>
+
+        <publisher profile_name="ros2_publisher">
+            <topic>
+                <name>ROS2_Topic</name>
+                <dataType>ROS2_Type</dataType>
+            </topic>
+            <qos>
+                <partition>
+                    <names>
+                        <name>rt</name>
+                    </names>
+                </partition>
+            </qos>
+            <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+        </publisher>
+    </profiles>
 
     <!-- Declares a custom bridge named 'bridge_ngsiv2' -->
     <bridge name="bridge_ngsiv2">

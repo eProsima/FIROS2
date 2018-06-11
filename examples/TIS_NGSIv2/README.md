@@ -129,27 +129,54 @@ These function names are not casual. As explained before, we are going to share 
 The *config.xml* file used in this example is the following:
 
 	<is>
-        <participant name="ros2">
-            <attributes>
-                <domain>0</domain>
-            </attributes>
+		<topic_types>
+			<type name="RobotSnd">
+				<participants>
+					<participant name="ros2"/>
+				</participants>
+			</type>
+		</topic_types>
 
-            <publisher name="ros2_publisher">
-                <attributes>
-                    <topic>RobotTopic</topic>
-                    <type>RobotSnd</type>
-                    <partition>rt</partition>
-                </attributes>
-            </publisher>
+		<profiles>
 
-            <subscriber name="ros2_subscriber">
-                <attributes>
-                    <topic>RobotTopic</topic>
-                    <type>RobotSnd</type>
-                    <partition>rt</partition>
-                </attributes>
-            </subscriber>
-        </participant>
+			<participant profile_name="ros2">
+				<rtps>
+					<builtin>
+						<domainId>0</domainId>
+					</builtin>
+				</rtps>
+			</participant>
+
+			<subscriber profile_name="ros2_subscriber">
+				<topic>
+					<name>RobotTopic</name>
+					<dataType>RobotSnd</dataType>
+				</topic>
+				<qos>
+					<partition>
+						<names>
+							<name>rt</name>
+						</names>
+					</partition>
+				</qos>
+				<historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+			</subscriber>
+
+			<publisher profile_name="ros2_publisher">
+				<topic>
+					<name>RobotTopic</name>
+					<dataType>RobotSnd</dataType>
+				</topic>
+				<qos>
+					<partition>
+						<names>
+							<name>rt</name>
+						</names>
+					</partition>
+				</qos>
+				<historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+			</publisher>
+		</profiles>
 
         <bridge name="ngsiv2">
             <library>libisbridgengsiv2lib.so</library> <!-- Path to the NGSIv2 library -->
