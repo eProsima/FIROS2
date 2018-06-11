@@ -63,6 +63,8 @@ add_library(userlib SHARED ${USER_LIB_SOURCES_CXX} userlib.cpp
 
 #add_library(userlib2 SHARED ${USER_LIB_SOURCES_CXX} userlib2.cpp jsoncpp.cpp ...)
 
+target_include_directories(userlib PUBLIC ../../src)
+
 target_link_libraries(userlib fastrtps fastcdr ${CMAKE_DL_LIBS})
 #target_link_libraries(userlib2 fastrtps fastcdr ${CMAKE_DL_LIBS})
 target_link_libraries(cb_create_robot  ${liblist})

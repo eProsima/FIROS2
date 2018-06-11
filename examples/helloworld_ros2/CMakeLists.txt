@@ -55,6 +55,8 @@ else()
     add_executable(cb_update_attr cb_update_attr.cpp)
 endif()
 
+target_include_directories(userlib PUBLIC ../../src)
+
 target_link_libraries(userlib fastrtps fastcdr ${CMAKE_DL_LIBS})
 target_link_libraries(cb_create_helloworld ${liblist})
 target_link_libraries(cb_update_attr ${liblist})
