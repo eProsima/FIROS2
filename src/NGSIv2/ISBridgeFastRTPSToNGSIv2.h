@@ -77,7 +77,7 @@ private:
         NGSIv2Publisher(const string host, const uint16_t port);
         void setHostPort(const string host, const uint16_t port);
         ~NGSIv2Publisher();
-        string write(SerializedPayload_t *payload);
+        void write(SerializedPayload_t *payload);
     } ngsiv2_publisher;
 
     class SubListener : public SubscriberListener{

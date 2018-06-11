@@ -150,7 +150,7 @@ string getPayload(const string json)
     return json.substr(json.find_first_of("@") + 1);
 }
 */
-string ISBridgeFastRTPSToNGSIv2::NGSIv2Publisher::write(SerializedPayload_t* payload)
+void ISBridgeFastRTPSToNGSIv2::NGSIv2Publisher::write(SerializedPayload_t* payload)
 {
     try {
         curlpp::Cleanup cleaner;
