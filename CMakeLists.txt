@@ -70,7 +70,15 @@ if (WIN32)
 
     set(liblist fastrtps_static fastcdr_static TinyXML2 ${CMAKE_DL_LIBS} cURLpp IPHLPAPI shlwapi libcurl_a)
 else()
-    set(liblist fastrtps fastcdr -L/usr/lib/x86_64-linux-gnu tinyxml2 curl curlpp)
+    # cURLpp as thirdparty
+    file(GLOB_RECURSE CURLPP_HEADERS thirdparty/curlpp/include/*)
+    file(GLOB_RECURSE CURLPP_SOURCES thirdparty/curlpp/src/*)
+
+    add_library(cURLpp ${CURLPP_HEADERS} ${CURLPP_SOURCES})
+    target_include_directories(cURLpp PUBLIC thirdparty/curlpp/include)
+    set_property(TARGET cURLpp PROPERTY POSITION_INDEPENDENT_CODE ON)
+
+    set(liblist fastrtps fastcdr -L/usr/lib/x86_64-linux-gnu tinyxml2 curl cURLpp)
 endif()
 
 target_link_libraries(firos2 ${CMAKE_DL_LIBS} ${liblist})
