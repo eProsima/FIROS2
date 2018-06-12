@@ -96,6 +96,14 @@
                 <name>port</name>
                 <value>1026</value>
             </property>
+            <property>
+                <name>http_retries</name>
+                <value>3</value>
+            </property>
+            <property>
+                <name>retry_wait</name>
+                <value>2000</value>
+            </property>
         </publisher>
     </bridge>
 

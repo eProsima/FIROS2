@@ -45,7 +45,9 @@
             </topic>
             <qos>
                 <partition>
-                    <name>rt</name>
+                    <names>
+                        <name>rt</name>
+                    </names>
                 </partition>
             </qos>
             <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
