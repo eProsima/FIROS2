@@ -23,7 +23,7 @@ class NGSIv2Publisher : public ISPublisher
 {
 private:
     std::string url;
-    std::string write(SerializedPayload_t *payload);
+    long write(SerializedPayload_t* payload);
     NGSIv2Params part_params;
 public:
     NGSIv2Publisher(const std::string &name);

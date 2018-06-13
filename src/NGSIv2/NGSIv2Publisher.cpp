@@ -48,11 +48,11 @@ NGSIv2Publisher::NGSIv2Publisher(const std::string &name, const NGSIv2Params &pa
 
 bool NGSIv2Publisher::publish(SerializedPayload_t* payload)
 {
-    write(payload);
-    return true;
+    long code = write(payload);
+    return (code / 100) == 2;
 }
 
-std::string NGSIv2Publisher::write(SerializedPayload_t* payload)
+long NGSIv2Publisher::write(SerializedPayload_t* payload)
 {
     try
     {
@@ -66,7 +66,6 @@ std::string NGSIv2Publisher::write(SerializedPayload_t* payload)
         std::string entityId = json.entityId();
         std::string payload = json.data();
         request.setOpt(new curlpp::options::Url(url + "/v2/entities/" + entityId + "/attrs"));
-        //request.setOpt(new curlpp::options::Verbose(true));
         std::list<std::string> header;
         header.push_back("Content-Type: application/json");
 
@@ -77,15 +76,17 @@ std::string NGSIv2Publisher::write(SerializedPayload_t* payload)
 
         performAndRetry(part_params.retries, request);
 
-        return "";
+        return curlpp::infos::ResponseCode::get(request);
     }
     catch (curlpp::LogicError & e)
     {
         LOG_ERROR(e.what());
+        return 601;
     }
     catch (curlpp::RuntimeError & e)
     {
         LOG_ERROR(e.what());
+        return 602;
     }
-    return "";
+    return 600;
 }
