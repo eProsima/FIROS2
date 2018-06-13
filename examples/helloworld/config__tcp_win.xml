@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<is>
+    <topic_types>
+        <type name="HelloWorld">
+            <participants>
+                <participant name="rtps"/>
+            </participants>
+        </type>
+        <type name="std_msgs::msg::dds_::String_">
+            <participants>
+                <participant name="ros2"/>
+            </participants>
+        </type>
+    </topic_types>
+
+    <profiles>
+
+        <participant profile_name="rtps">
+            <rtps>
+                <userTransports>
+                    <transport_id>TCPv4_Client</transport_id>
+                </userTransports>   
+                <defaultUnicastLocatorList>
+                    <locator>
+                        <kind>TCPv4</kind>
+                        <address>127.0.0.1</address>
+                        <ports_>
+                            <physical_port>5100</physical_port>
+                            <logical_port>7411</logical_port>
+                        </ports_>
+                    </locator>
+                </defaultUnicastLocatorList>
+                <builtin>
+                    <domainId>0</domainId>
+                    <leaseDuration>
+                        <durationbyname>INFINITE</durationbyname>
+                    </leaseDuration>
+                    <leaseAnnouncement>
+                        <durationbyval>
+                            <seconds>0</seconds>
+                            <fraction>333</fraction>
+                        </durationbyval>
+                    </leaseAnnouncement>
+                    <metatrafficUnicastLocatorList>
+                        <locator>
+                            <kind>TCPv4</kind>
+                            <address>127.0.0.1</address>
+                            <ports_>
+                                <physical_port>5100</physical_port>
+                                <logical_port>7403</logical_port>
+                            </ports_>
+                        </locator>
+                    </metatrafficUnicastLocatorList>
+                    <initialPeersList>
+                        <locator>
+                            <kind>TCPv4</kind>
+                            <address>127.0.0.1</address>
+                            <ports_>
+                                <physical_port>5100</physical_port>
+                                <logical_port>7402</logical_port>
+                            </ports_>
+                        </locator>
+                        <locator>
+                            <kind>TCPv4</kind>
+                            <address>127.0.0.1</address>
+                            <ports_>
+                                <physical_port>5100</physical_port>
+                                <logical_port>7410</logical_port>
+                            </ports_>
+                        </locator>
+                    </initialPeersList>
+                </builtin>
+                <use_IP4_to_send>true</use_IP4_to_send>
+                <use_IP6_to_send>false</use_IP6_to_send>
+                <useBuiltinTransports>false</useBuiltinTransports>
+            </rtps>
+        </participant>
+
+        <participant profile_name="ros2">
+            <rtps>
+                <builtin>
+                    <domainId>0</domainId>
+                </builtin>
+            </rtps>
+        </participant>
+
+        <subscriber profile_name="fastrtps_subscriber">
+            <topic>
+                <name>HelloWorldTopic</name>
+                <dataType>HelloWorld</dataType>
+            </topic>
+            <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+        </subscriber>
+
+        <publisher profile_name="ros2_publisher">
+            <topic>
+                <name>chatter</name>
+                <dataType>std_msgs::msg::dds_::String_</dataType>
+            </topic>
+            <qos>
+                <partition>
+                    <names>
+                        <name>rt</name>
+                    </names>
+                </partition>
+            </qos>
+            <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+        </publisher>
+    </profiles>
+
+    <connector name="domain_change"> 
+        <subscriber participant_name="rtps" subscriber_name="fastrtps_subscriber"/>
+        <publisher participant_name="ros2" publisher_name="ros2_publisher"/>
+        <transformation file="C:/git/ros2/src/ros2/firos2/examples/helloworld/build/Debug/userlib.dll" function="transform"/>
+    </connector>
+</is>
