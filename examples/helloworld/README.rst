@@ -179,3 +179,8 @@ Now, we only have to launch the two examples and the *Firos2* node from *ROS2*. 
     I heard: [HelloWorld: 8]
     I heard: [HelloWorld: 9]
     I heard: [HelloWorld: 10]
+
+Fast-RTPS HelloworldTCP Example
+-------------------------------
+
+Additional config file *config_tcp.xml* allows to communicate the HelloworldTCP example from Fast-RTPS with ROS2.
