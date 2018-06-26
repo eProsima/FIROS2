@@ -16,9 +16,9 @@ get_filename_component(FILE_PREFIX_DIR "${CMAKE_CURRENT_LIST_DIR}/../../" ABSOLU
 
 if(MSVC14)
     if(CMAKE_CL_64)
-        include("${FILE_PREFIX_DIR}/x64Win64VS2015/integration_services/cmake/integration_servicesConfig.cmake")
+        include("${FILE_PREFIX_DIR}/x64Win64VS2015/firos2/cmake/firos2Config.cmake")
     else()
-        include("${FILE_PREFIX_DIR}/i86Win32VS2015/integration_services/cmake/integration_servicesConfig.cmake")
+        include("${FILE_PREFIX_DIR}/i86Win32VS2015/firos2/cmake/firos2Config.cmake")
     endif()
 else()
     message(FATAL_ERROR "Not supported version of Visual Studio")

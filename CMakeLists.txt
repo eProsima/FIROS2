@@ -74,8 +74,8 @@ cmake_policy(SET CMP0057 NEW)
 
 include(${PROJECT_SOURCE_DIR}/cmake/common/eprosima_libraries.cmake)
 
-find_package(fastrtps REQUIRED)
 find_package(fastcdr REQUIRED)
+find_package(fastrtps REQUIRED)
 
 SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
 SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
@@ -93,8 +93,11 @@ set(INCLUDE_SOURCE_DIR src/ CACHE PATH "Installation directory for C++ sources")
 set(LIB_INSTALL_DIR lib/ CACHE PATH "Installation directory for libraries")
 set(DATA_INSTALL_DIR share/ CACHE PATH "Installation directory for data")
 
-#set(CURL_BUILD_DIR thirdparty/curl/builds/libcurl-vc14-x64-release-static-ipv6-sspi-winssl)
-set(CURL_BUILD_DIR thirdparty/curl/builds/libcurl-vc14-x64-release-dll-ipv6-sspi-winssl)
+if(CMAKE_CL_64)
+    set(CURL_BUILD_DIR thirdparty/curl/builds/libcurl-vc14-x64-release-dll-ipv6-sspi-winssl)
+else()
+    set(CURL_BUILD_DIR thirdparty/curl/builds/libcurl-vc14-x86-release-dll-ipv6-sspi-winssl)
+endif()
 
 add_definitions(-DBUILD_SHARED_LIBS -Disbridgengsiv2lib_EXPORTS)
 add_definitions(-D${PROJECT_NAME_UPPER}_SOURCE)
@@ -231,7 +234,7 @@ if(WIN32)
     target_include_directories(isbridgengsiv2lib PRIVATE ${THIRDPARTY_INCLUDE} ${CURL_BUILD_DIR}/include src)
 
     #set(liblist fastrtps_static fastcdr_static ${CMAKE_DL_LIBS} IPHLPAPI shlwapi libcurl_a)
-    set(liblist fastrtps_static fastcdr_static ${CMAKE_DL_LIBS} IPHLPAPI shlwapi libcurl)
+    set(liblist fastrtps fastcdr ${CMAKE_DL_LIBS} IPHLPAPI shlwapi libcurl)
 else()
     add_executable(firos2 src/main.cpp
         ${IS_LIB_FILES}
