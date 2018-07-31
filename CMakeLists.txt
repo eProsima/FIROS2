@@ -139,7 +139,7 @@ LINK_DIRECTORIES(${CURL_BUILD_DIR}/bin)
 # cURLpp as thirdparty
 #file(GLOB_RECURSE CURLPP_HEADERS ${CURLPP_DIR}/include/*)
 #file(GLOB_RECURSE CURLPP_SOURCES ${CURLPP_DIR}/src/*)
-set(CURLPP_HEADERS 
+set(CURLPP_HEADERS
     ${CURLPP_DIR}/include/curlpp/cURLpp.hpp
     ${CURLPP_DIR}/include/curlpp/Easy.hpp
     ${CURLPP_DIR}/include/curlpp/Easy.inl
@@ -175,7 +175,7 @@ set(CURLPP_HEADERS
     ${CURLPP_DIR}/include/utilspp/TypeList.hpp
     ${CURLPP_DIR}/include/utilspp/TypeTrait.hpp)
 
-set(CURLPP_SOURCES 
+set(CURLPP_SOURCES
     ${CURLPP_DIR}/src/curlpp/cURLpp.cpp
     ${CURLPP_DIR}/src/curlpp/Easy.cpp
     ${CURLPP_DIR}/src/curlpp/Exception.cpp
@@ -191,7 +191,7 @@ set(CURLPP_SOURCES
 
 set(CURL_FILES ${CURLPP_HEADERS} ${CURLPP_SOURCES})
 set(IS_LIB_FILES thirdparty/integration-services/src/ISManager.cpp thirdparty/integration-services/src/ISManager.h
-    thirdparty/integration-services/src/ISBridge.cpp thirdparty/integration-services/src/ISBridge.h
+    thirdparty/integration-services/src/ISBridge.h
     thirdparty/integration-services/src/log/ISLog.h
     thirdparty/integration-services/src/RTPSBridge.cpp thirdparty/integration-services/src/RTPSBridge.h
     thirdparty/integration-services/src/RTPSPublisher.cpp thirdparty/integration-services/src/RTPSPublisher.h
@@ -270,11 +270,11 @@ set(CPACK_COMPONENT_HEADERS_DESCRIPTION "eProsima ${PROJECT_NAME_LARGE} C++ Head
 #    ${CURL_FILES}
 #    thirdparty/tinyxml2/tinyxml2.cpp thirdparty/tinyxml2/tinyxml2.h)
 
-set(firos2_SOURCES ${firos2_SOURCES} 
+set(firos2_SOURCES ${firos2_SOURCES}
     ${IS_LIB_FILES}
     ${CURL_FILES}
     thirdparty/tinyxml2/tinyxml2.cpp thirdparty/tinyxml2/tinyxml2.h)
-set(isbridgengsiv2lib_SOURCES ${isbridgengsiv2lib_SOURCES} 
+set(isbridgengsiv2lib_SOURCES ${isbridgengsiv2lib_SOURCES}
     ${NGSIv2_FILES}
     ${IS_LIB_FILES}
     ${CURL_FILES}
@@ -342,7 +342,7 @@ if(EPROSIMA_INSTALLER)
     install(
         FILES
             thirdparty/integration-services/src/ISManager.cpp thirdparty/integration-services/src/ISManager.h
-            thirdparty/integration-services/src/ISBridge.cpp thirdparty/integration-services/src/ISBridge.h
+            thirdparty/integration-services/src/ISBridge.h
             thirdparty/integration-services/src/RTPSBridge.cpp thirdparty/integration-services/src/RTPSBridge.h
             thirdparty/integration-services/src/RTPSPublisher.cpp thirdparty/integration-services/src/RTPSPublisher.h
             thirdparty/integration-services/src/RTPSSubscriber.cpp thirdparty/integration-services/src/RTPSSubscriber.h
@@ -359,7 +359,7 @@ if(EPROSIMA_INSTALLER)
 
     install(
         FILES
-            thirdparty/integration-services/src/dynamicload/dynamicload.cpp 
+            thirdparty/integration-services/src/dynamicload/dynamicload.cpp
             thirdparty/integration-services/src/dynamicload/dynamicload.h
         COMPONENT sources
         DESTINATION ${INCLUDE_SOURCE_DIR}/thirdparty/integration-services/src/dynamicload)
@@ -503,7 +503,7 @@ set(CPACK_COMPONENTS_ALL headers sources licenses examples)
 
 if(WIN32)
     install(
-        FILES ${CURL_BUILD_DIR}/bin/libcurl.dll 
+        FILES ${CURL_BUILD_DIR}/bin/libcurl.dll
         DESTINATION bin
         COMPONENT libraries_${MSVC_ARCH}
         )
