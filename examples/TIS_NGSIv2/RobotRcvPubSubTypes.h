@@ -48,4 +48,4 @@ public:
 	unsigned char* m_keyBuffer;
 };
 
-#endif // _RobotRcv_PUBSUBTYPE_H_
+#endif // _ROBOTRCV_PUBSUBTYPES_H_

@@ -47,4 +47,4 @@ public:
 	unsigned char* m_keyBuffer;
 };
 
-#endif // _RobotPosition_PUBSUBTYPE_H_
+#endif // _ROBOTPOSITION_PUBSUBTYPES_H_

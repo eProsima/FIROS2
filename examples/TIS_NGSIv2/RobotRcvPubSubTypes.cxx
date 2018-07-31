@@ -29,19 +29,22 @@ using namespace eprosima::fastrtps;
 using namespace eprosima::fastrtps::rtps;
 
 
-RobotRcvPubSubType::RobotRcvPubSubType() {
+RobotRcvPubSubType::RobotRcvPubSubType()
+{
     setName("RobotRcv");
     m_typeSize = (uint32_t)RobotRcv::getMaxCdrSerializedSize() + 4 /*encapsulation*/;
     m_isGetKeyDefined = RobotRcv::isKeyDefined();
     m_keyBuffer = (unsigned char*)malloc(RobotRcv::getKeyMaxCdrSerializedSize()>16 ? RobotRcv::getKeyMaxCdrSerializedSize() : 16);
 }
 
-RobotRcvPubSubType::~RobotRcvPubSubType() {
+RobotRcvPubSubType::~RobotRcvPubSubType()
+{
     if(m_keyBuffer!=nullptr)
         free(m_keyBuffer);
 }
 
-bool RobotRcvPubSubType::serialize(void *data, SerializedPayload_t *payload) {
+bool RobotRcvPubSubType::serialize(void *data, SerializedPayload_t *payload)
+{
     RobotRcv *p_type = (RobotRcv*) data;
     eprosima::fastcdr::FastBuffer fastbuffer((char*) payload->data, payload->max_size); // Object that manages the raw buffer.
     eprosima::fastcdr::Cdr ser(fastbuffer, eprosima::fastcdr::Cdr::DEFAULT_ENDIAN,
@@ -63,8 +66,9 @@ bool RobotRcvPubSubType::serialize(void *data, SerializedPayload_t *payload) {
     return true;
 }
 
-bool RobotRcvPubSubType::deserialize(SerializedPayload_t* payload, void* data) {
-    RobotRcv* p_type = (RobotRcv*) data; 	//Convert DATA to pointer of your type
+bool RobotRcvPubSubType::deserialize(SerializedPayload_t* payload, void* data)
+{
+    RobotRcv* p_type = (RobotRcv*) data;     //Convert DATA to pointer of your type
     eprosima::fastcdr::FastBuffer fastbuffer((char*)payload->data, payload->length); // Object that manages the raw buffer.
     eprosima::fastcdr::Cdr deser(fastbuffer, eprosima::fastcdr::Cdr::DEFAULT_ENDIAN,
             eprosima::fastcdr::Cdr::DDS_CDR); // Object that deserializes the data.
@@ -84,18 +88,21 @@ bool RobotRcvPubSubType::deserialize(SerializedPayload_t* payload, void* data) {
     return true;
 }
 
-std::function<uint32_t()> RobotRcvPubSubType::getSerializedSizeProvider(void* data) {
+std::function<uint32_t()> RobotRcvPubSubType::getSerializedSizeProvider(void* data)
+{
     return [data]() -> uint32_t
     {
         return (uint32_t)type::getCdrSerializedSize(*static_cast<RobotRcv*>(data)) + 4 /*encapsulation*/;
     };
 }
 
-void* RobotRcvPubSubType::createData() {
+void* RobotRcvPubSubType::createData()
+{
     return (void*)new RobotRcv();
 }
 
-void RobotRcvPubSubType::deleteData(void* data) {
+void RobotRcvPubSubType::deleteData(void* data)
+{
     delete((RobotRcv*)data);
 }
 
@@ -103,19 +110,19 @@ bool RobotRcvPubSubType::getKey(void *data, InstanceHandle_t* handle) {
     if(!m_isGetKeyDefined)
         return false;
     RobotRcv* p_type = (RobotRcv*) data;
-    eprosima::fastcdr::FastBuffer fastbuffer((char*)m_keyBuffer,RobotRcv::getKeyMaxCdrSerializedSize()); 	// Object that manages the raw buffer.
-    eprosima::fastcdr::Cdr ser(fastbuffer, eprosima::fastcdr::Cdr::BIG_ENDIANNESS); 	// Object that serializes the data.
+    eprosima::fastcdr::FastBuffer fastbuffer((char*)m_keyBuffer,RobotRcv::getKeyMaxCdrSerializedSize());     // Object that manages the raw buffer.
+    eprosima::fastcdr::Cdr ser(fastbuffer, eprosima::fastcdr::Cdr::BIG_ENDIANNESS);     // Object that serializes the data.
     p_type->serializeKey(ser);
-    if(RobotRcv::getKeyMaxCdrSerializedSize()>16)	{
+    if(RobotRcv::getKeyMaxCdrSerializedSize()>16)    {
         m_md5.init();
         m_md5.update(m_keyBuffer,(unsigned int)ser.getSerializedDataLength());
         m_md5.finalize();
-        for(uint8_t i = 0;i<16;++i)    	{
+        for(uint8_t i = 0;i<16;++i)        {
             handle->value[i] = m_md5.digest[i];
         }
     }
     else    {
-        for(uint8_t i = 0;i<16;++i)    	{
+        for(uint8_t i = 0;i<16;++i)        {
             handle->value[i] = m_keyBuffer[i];
         }
     }

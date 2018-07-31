@@ -28,19 +28,22 @@
 using namespace eprosima::fastrtps;
 using namespace eprosima::fastrtps::rtps;
 
-RobotSndPubSubType::RobotSndPubSubType() {
+RobotSndPubSubType::RobotSndPubSubType()
+{
     setName("RobotSnd");
     m_typeSize = (uint32_t)RobotSnd::getMaxCdrSerializedSize() + 4 /*encapsulation*/;
     m_isGetKeyDefined = RobotSnd::isKeyDefined();
     m_keyBuffer = (unsigned char*)malloc(RobotSnd::getKeyMaxCdrSerializedSize()>16 ? RobotSnd::getKeyMaxCdrSerializedSize() : 16);
 }
 
-RobotSndPubSubType::~RobotSndPubSubType() {
+RobotSndPubSubType::~RobotSndPubSubType()
+{
     if(m_keyBuffer!=nullptr)
         free(m_keyBuffer);
 }
 
-bool RobotSndPubSubType::serialize(void *data, SerializedPayload_t *payload) {
+bool RobotSndPubSubType::serialize(void *data, SerializedPayload_t *payload)
+{
     RobotSnd *p_type = (RobotSnd*) data;
     eprosima::fastcdr::FastBuffer fastbuffer((char*) payload->data, payload->max_size); // Object that manages the raw buffer.
     eprosima::fastcdr::Cdr ser(fastbuffer, eprosima::fastcdr::Cdr::DEFAULT_ENDIAN,
@@ -62,8 +65,9 @@ bool RobotSndPubSubType::serialize(void *data, SerializedPayload_t *payload) {
     return true;
 }
 
-bool RobotSndPubSubType::deserialize(SerializedPayload_t* payload, void* data) {
-    RobotSnd* p_type = (RobotSnd*) data; 	//Convert DATA to pointer of your type
+bool RobotSndPubSubType::deserialize(SerializedPayload_t* payload, void* data)
+{
+    RobotSnd* p_type = (RobotSnd*) data;     //Convert DATA to pointer of your type
     eprosima::fastcdr::FastBuffer fastbuffer((char*)payload->data, payload->length); // Object that manages the raw buffer.
     eprosima::fastcdr::Cdr deser(fastbuffer, eprosima::fastcdr::Cdr::DEFAULT_ENDIAN,
             eprosima::fastcdr::Cdr::DDS_CDR); // Object that deserializes the data.
@@ -83,18 +87,21 @@ bool RobotSndPubSubType::deserialize(SerializedPayload_t* payload, void* data) {
     return true;
 }
 
-std::function<uint32_t()> RobotSndPubSubType::getSerializedSizeProvider(void* data) {
+std::function<uint32_t()> RobotSndPubSubType::getSerializedSizeProvider(void* data)
+{
     return [data]() -> uint32_t
     {
         return (uint32_t)type::getCdrSerializedSize(*static_cast<RobotSnd*>(data)) + 4 /*encapsulation*/;
     };
 }
 
-void* RobotSndPubSubType::createData() {
+void* RobotSndPubSubType::createData()
+{
     return (void*)new RobotSnd();
 }
 
-void RobotSndPubSubType::deleteData(void* data) {
+void RobotSndPubSubType::deleteData(void* data)
+{
     delete((RobotSnd*)data);
 }
 
@@ -102,19 +109,19 @@ bool RobotSndPubSubType::getKey(void *data, InstanceHandle_t* handle) {
     if(!m_isGetKeyDefined)
         return false;
     RobotSnd* p_type = (RobotSnd*) data;
-    eprosima::fastcdr::FastBuffer fastbuffer((char*)m_keyBuffer,RobotSnd::getKeyMaxCdrSerializedSize()); 	// Object that manages the raw buffer.
-    eprosima::fastcdr::Cdr ser(fastbuffer, eprosima::fastcdr::Cdr::BIG_ENDIANNESS); 	// Object that serializes the data.
+    eprosima::fastcdr::FastBuffer fastbuffer((char*)m_keyBuffer,RobotSnd::getKeyMaxCdrSerializedSize());     // Object that manages the raw buffer.
+    eprosima::fastcdr::Cdr ser(fastbuffer, eprosima::fastcdr::Cdr::BIG_ENDIANNESS);     // Object that serializes the data.
     p_type->serializeKey(ser);
-    if(RobotSnd::getKeyMaxCdrSerializedSize()>16)	{
+    if(RobotSnd::getKeyMaxCdrSerializedSize()>16)    {
         m_md5.init();
         m_md5.update(m_keyBuffer,(unsigned int)ser.getSerializedDataLength());
         m_md5.finalize();
-        for(uint8_t i = 0;i<16;++i)    	{
+        for(uint8_t i = 0;i<16;++i)        {
             handle->value[i] = m_md5.digest[i];
         }
     }
     else    {
-        for(uint8_t i = 0;i<16;++i)    	{
+        for(uint8_t i = 0;i<16;++i)        {
             handle->value[i] = m_keyBuffer[i];
         }
     }

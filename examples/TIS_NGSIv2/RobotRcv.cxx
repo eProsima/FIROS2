@@ -25,6 +25,7 @@ namespace { char dummy; }
 #endif
 
 #include "RobotRcv.h"
+#include "RobotRcvTypeObject.h"
 
 #include <fastcdr/Cdr.h>
 
@@ -40,6 +41,10 @@ RobotRcv::RobotRcv()
 
 
     m_state = ::ACTION;
+
+
+    // Just to register all known types
+    registerRobotRcvTypes();
 }
 
 RobotRcv::~RobotRcv()
@@ -68,7 +73,7 @@ RobotRcv& RobotRcv::operator=(const RobotRcv &x)
     m_transmission_time = x.m_transmission_time;
     m_destination = x.m_destination;
     m_state = x.m_state;
-    
+
     return *this;
 }
 
@@ -78,20 +83,25 @@ RobotRcv& RobotRcv::operator=(RobotRcv &&x)
     m_transmission_time = std::move(x.m_transmission_time);
     m_destination = std::move(x.m_destination);
     m_state = x.m_state;
-    
+
     return *this;
 }
 
 size_t RobotRcv::getMaxCdrSerializedSize(size_t current_alignment)
 {
     size_t initial_alignment = current_alignment;
-            
+
+    /* std::string */
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + 255 + 1;
 
+    /* std::string */
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + 255 + 1;
 
+    /* RobotPosition */
     current_alignment += RobotPosition::getMaxCdrSerializedSize(current_alignment);
+    /* State */
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
+
 
 
     return current_alignment - initial_alignment;
@@ -99,14 +109,20 @@ size_t RobotRcv::getMaxCdrSerializedSize(size_t current_alignment)
 
 size_t RobotRcv::getCdrSerializedSize(const RobotRcv& data, size_t current_alignment)
 {
+    (void)data;
     size_t initial_alignment = current_alignment;
-            
+
+    /* std::string robot_id */
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + data.robot_id().size() + 1;
 
+    /* std::string transmission_time */
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + data.transmission_time().size() + 1;
 
+    /* RobotPosition destination */
     current_alignment += RobotPosition::getCdrSerializedSize(data.destination(), current_alignment);
+    /* State state */
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
+
 
 
     return current_alignment - initial_alignment;
@@ -117,7 +133,7 @@ void RobotRcv::serialize(eprosima::fastcdr::Cdr &scdr) const
     scdr << m_robot_id;
     scdr << m_transmission_time;
     scdr << m_destination;
-    scdr << (uint32_t)m_state;
+    scdr << (const uint32_t)m_state;
 }
 
 void RobotRcv::deserialize(eprosima::fastcdr::Cdr &dcdr)
@@ -125,7 +141,9 @@ void RobotRcv::deserialize(eprosima::fastcdr::Cdr &dcdr)
     dcdr >> m_robot_id;
     dcdr >> m_transmission_time;
     dcdr >> m_destination;
-    dcdr >> (uint32_t&)m_state;
+    uint32_t enum_value_state = 0;
+    dcdr >> enum_value_state;
+    m_state = (State)enum_value_state;
 }
 
 size_t RobotRcv::getKeyMaxCdrSerializedSize(size_t current_alignment)
@@ -147,6 +165,7 @@ bool RobotRcv::isKeyDefined()
 
 void RobotRcv::serializeKey(eprosima::fastcdr::Cdr &scdr) const
 {
+	(void) scdr;
 	 
 	 
 	 

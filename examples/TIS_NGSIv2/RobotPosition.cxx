@@ -25,6 +25,7 @@ namespace { char dummy; }
 #endif
 
 #include "RobotPosition.h"
+#include "RobotPositionTypeObject.h"
 
 #include <fastcdr/Cdr.h>
 
@@ -36,9 +37,16 @@ using namespace eprosima::fastcdr::exception;
 RobotPosition::RobotPosition()
 {
     m_floor = 0;
+
     m_x = 0;
+
     m_y = 0;
+
     m_zeta = 0;
+
+
+    // Just to register all known types
+    registerRobotPositionTypes();
 }
 
 RobotPosition::~RobotPosition()
@@ -67,7 +75,7 @@ RobotPosition& RobotPosition::operator=(const RobotPosition &x)
     m_x = x.m_x;
     m_y = x.m_y;
     m_zeta = x.m_zeta;
-    
+
     return *this;
 }
 
@@ -77,21 +85,29 @@ RobotPosition& RobotPosition::operator=(RobotPosition &&x)
     m_x = x.m_x;
     m_y = x.m_y;
     m_zeta = x.m_zeta;
-    
+
     return *this;
 }
 
 size_t RobotPosition::getMaxCdrSerializedSize(size_t current_alignment)
 {
     size_t initial_alignment = current_alignment;
-            
+
+    /* uint32_t */
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
 
+
+    /* uint32_t */
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
 
+
+    /* uint32_t */
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
 
+
+    /* uint32_t */
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
+
 
 
     return current_alignment - initial_alignment;
@@ -99,15 +115,24 @@ size_t RobotPosition::getMaxCdrSerializedSize(size_t current_alignment)
 
 size_t RobotPosition::getCdrSerializedSize(const RobotPosition& data, size_t current_alignment)
 {
+    (void)data;
     size_t initial_alignment = current_alignment;
-            
+
+    /* uint32_t floor */
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
 
+
+    /* uint32_t x */
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
 
+
+    /* uint32_t y */
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
 
+
+    /* uint32_t zeta */
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4);
+
 
 
     return current_alignment - initial_alignment;
@@ -148,6 +173,7 @@ bool RobotPosition::isKeyDefined()
 
 void RobotPosition::serializeKey(eprosima::fastcdr::Cdr &scdr) const
 {
+	(void) scdr;
 	 
 	 
 	 

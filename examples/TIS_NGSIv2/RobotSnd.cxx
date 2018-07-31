@@ -25,6 +25,7 @@ namespace { char dummy; }
 #endif
 
 #include "RobotSnd.h"
+#include "RobotSndTypeObject.h"
 
 #include <fastcdr/Cdr.h>
 
@@ -38,6 +39,9 @@ RobotSnd::RobotSnd()
 
 
 
+
+    // Just to register all known types
+    registerRobotSndTypes();
 }
 
 RobotSnd::~RobotSnd()
@@ -63,7 +67,7 @@ RobotSnd& RobotSnd::operator=(const RobotSnd &x)
     m_robot_id = x.m_robot_id;
     m_transmission_time = x.m_transmission_time;
     m_position = x.m_position;
-    
+
     return *this;
 }
 
@@ -72,18 +76,21 @@ RobotSnd& RobotSnd::operator=(RobotSnd &&x)
     m_robot_id = std::move(x.m_robot_id);
     m_transmission_time = std::move(x.m_transmission_time);
     m_position = std::move(x.m_position);
-    
+
     return *this;
 }
 
 size_t RobotSnd::getMaxCdrSerializedSize(size_t current_alignment)
 {
     size_t initial_alignment = current_alignment;
-            
+
+    /* std::string */
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + 255 + 1;
 
+    /* std::string */
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + 255 + 1;
 
+    /* RobotPosition */
     current_alignment += RobotPosition::getMaxCdrSerializedSize(current_alignment);
 
     return current_alignment - initial_alignment;
@@ -91,12 +98,16 @@ size_t RobotSnd::getMaxCdrSerializedSize(size_t current_alignment)
 
 size_t RobotSnd::getCdrSerializedSize(const RobotSnd& data, size_t current_alignment)
 {
+    (void)data;
     size_t initial_alignment = current_alignment;
-            
+
+    /* std::string robot_id */
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + data.robot_id().size() + 1;
 
+    /* std::string transmission_time */
     current_alignment += 4 + eprosima::fastcdr::Cdr::alignment(current_alignment, 4) + data.transmission_time().size() + 1;
 
+    /* RobotPosition position */
     current_alignment += RobotPosition::getCdrSerializedSize(data.position(), current_alignment);
 
     return current_alignment - initial_alignment;
@@ -134,6 +145,7 @@ bool RobotSnd::isKeyDefined()
 
 void RobotSnd::serializeKey(eprosima::fastcdr::Cdr &scdr) const
 {
+	(void) scdr;
 	 
 	 
 	 
