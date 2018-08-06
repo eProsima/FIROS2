@@ -31,6 +31,7 @@ public:
     ~NGSIv2Publisher() override;
 
     bool publish(SerializedPayload_t* payload) override;
+    bool publish(eprosima::fastrtps::types::DynamicData* payload) override { return false; }
 };
 
 #endif // _NGSIv2_PUBLISHER_H_
