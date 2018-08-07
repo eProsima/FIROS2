@@ -100,6 +100,7 @@ else()
 endif()
 
 add_definitions(-DBUILD_SHARED_LIBS -Disbridgengsiv2lib_EXPORTS)
+add_definitions(-DBUILD_SHARED_LIBS -Disdynbridgengsiv2lib_EXPORTS)
 add_definitions(-D${PROJECT_NAME_UPPER}_SOURCE)
 
 IF (NOT DEFINED LOG_LEVEL_DEBUG)
@@ -210,6 +211,14 @@ set(NGSIv2_FILES src/NGSIv2/NGSIv2Params.cpp src/NGSIv2/NGSIv2Params.h
         src/NGSIv2/idl/JsonNGSIv2.cxx src/NGSIv2/idl/JsonNGSIv2.h
         src/NGSIv2/idl/JsonNGSIv2PubSubTypes.cxx src/NGSIv2/idl/JsonNGSIv2PubSubTypes.h)
 
+set(DYN_NGSIv2_FILES src/DynNGSIv2/NGSIv2Params.cpp src/DynNGSIv2/NGSIv2Params.h
+        src/DynNGSIv2/DynNGSIv2ISBridge.cpp src/DynNGSIv2/DynNGSIv2ISBridge.h
+        src/DynNGSIv2/DynNGSIv2Publisher.cpp src/DynNGSIv2/DynNGSIv2Publisher.h
+        src/DynNGSIv2/DynNGSIv2Subscriber.cpp src/DynNGSIv2/DynNGSIv2Subscriber.h
+        src/DynNGSIv2/NGSIv2Utils.cpp src/DynNGSIv2/NGSIv2Utils.h
+        src/jsoncpp.cpp
+        src/DynNGSIv2/rtpsngsiv2lib.cpp)
+
 set(THIRDPARTY_INCLUDE thirdparty/tinyxml2 thirdparty/curlpp/include thirdparty/asio/asio/include)
 
 if(WIN32)
@@ -225,6 +234,13 @@ if(WIN32)
         ${IS_LIB_FILES}
         ${CURL_FILES}
         thirdparty/tinyxml2/tinyxml2.cpp thirdparty/tinyxml2/tinyxml2.h)
+
+    add_library(isdynbridgengsiv2lib
+        ${DYN_NGSIv2_FILES}
+        ${IS_LIB_FILES}
+        ${CURL_FILES}
+        thirdparty/tinyxml2/tinyxml2.cpp thirdparty/tinyxml2/tinyxml2.h)
+
     source_group("curl" FILES ${CURL_FILES})
     source_group("is_lib" FILES ${IS_LIB_FILES})
 
@@ -232,6 +248,7 @@ if(WIN32)
     add_definitions(-DASIO_STANDALONE)
     target_include_directories(firos2 PRIVATE ${THIRDPARTY_INCLUDE} ${CURL_BUILD_DIR}/include)
     target_include_directories(isbridgengsiv2lib PRIVATE ${THIRDPARTY_INCLUDE} ${CURL_BUILD_DIR}/include src)
+    target_include_directories(isdynbridgengsiv2lib PRIVATE ${THIRDPARTY_INCLUDE} ${CURL_BUILD_DIR}/include src)
 
     #set(liblist fastrtps_static fastcdr_static ${CMAKE_DL_LIBS} IPHLPAPI shlwapi libcurl_a)
     set(liblist fastrtps fastcdr ${CMAKE_DL_LIBS} IPHLPAPI shlwapi libcurl)
@@ -247,8 +264,15 @@ else()
         ${CURL_FILES}
         thirdparty/tinyxml2/tinyxml2.cpp thirdparty/tinyxml2/tinyxml2.h)
 
+    add_library(isdynbridgengsiv2lib SHARED
+        ${DYN_NGSIv2_FILES}
+        ${IS_LIB_FILES}
+        ${CURL_FILES}
+        thirdparty/tinyxml2/tinyxml2.cpp thirdparty/tinyxml2/tinyxml2.h)
+
     target_include_directories(firos2 PRIVATE ${THIRDPARTY_INCLUDE})
     target_include_directories(isbridgengsiv2lib PRIVATE ${THIRDPARTY_INCLUDE} src)
+    target_include_directories(isdynbridgengsiv2lib PRIVATE ${THIRDPARTY_INCLUDE} src)
 
     set(liblist fastrtps fastcdr -L/usr/lib/x86_64-linux-gnu curl)
 endif()
@@ -256,6 +280,10 @@ endif()
 target_link_libraries(firos2 ${CMAKE_DL_LIBS} ${liblist})
 
 target_link_libraries(isbridgengsiv2lib
+    ${liblist}
+    ${CMAKE_DL_LIBS})
+
+target_link_libraries(isdynbridgengsiv2lib
     ${liblist}
     ${CMAKE_DL_LIBS})
 
@@ -279,8 +307,14 @@ set(isbridgengsiv2lib_SOURCES ${isbridgengsiv2lib_SOURCES}
     ${IS_LIB_FILES}
     ${CURL_FILES}
     thirdparty/tinyxml2/tinyxml2.cpp thirdparty/tinyxml2/tinyxml2.h)
+set(isdynbridgengsiv2lib_SOURCES ${isdynbridgengsiv2lib_SOURCES}
+    ${DYN_NGSIv2_FILES}
+    ${IS_LIB_FILES}
+    ${CURL_FILES}
+    thirdparty/tinyxml2/tinyxml2.cpp thirdparty/tinyxml2/tinyxml2.h)
 set_property(GLOBAL PROPERTY firos2_SOURCES_PROPERTY ${firos2_SOURCES})
 set_property(GLOBAL PROPERTY isbridgengsiv2lib_SOURCES_PROPERTY ${isbridgengsiv2lib_SOURCES})
+set_property(GLOBAL PROPERTY isdynbridgengsiv2lib_SOURCES_PROPERTY ${isdynbridgengsiv2lib_SOURCES})
 
 ###############################################################################
 # Test system configuration
@@ -476,9 +510,19 @@ if(MSVC OR MSVC_IDE)
         EXPORT ${PROJECT_NAME}Targets
         COMPONENT libraries_${MSVC_ARCH}
         DESTINATION ${LIB_INSTALL_DIR})
+    install(
+        TARGETS isdynbridgengsiv2lib
+        EXPORT ${PROJECT_NAME}Targets
+        COMPONENT libraries_${MSVC_ARCH}
+        DESTINATION ${LIB_INSTALL_DIR})
 else()
     install(
         TARGETS isbridgengsiv2lib
+        EXPORT ${PROJECT_NAME}Targets
+        COMPONENT libraries}
+        DESTINATION ${LIB_INSTALL_DIR})
+    install(
+        TARGETS isdynbridgengsiv2lib
         EXPORT ${PROJECT_NAME}Targets
         COMPONENT libraries}
         DESTINATION ${LIB_INSTALL_DIR})
@@ -486,6 +530,9 @@ endif()
 
 export(
     TARGETS isbridgengsiv2lib
+    FILE ${BIN_INSTALL_DIR}cmake/config/${PROJECT_NAME}Targets.cmake)
+export(
+    TARGETS isdynbridgengsiv2lib
     FILE ${BIN_INSTALL_DIR}cmake/config/${PROJECT_NAME}Targets.cmake)
 
 install(

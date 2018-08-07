@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<is>
+    <topic_types>
+        <type name="RobotSnd">
+            <participants>
+                <participant name="ros2"/>
+            </participants>
+            <library>/home/luisgp/git/eProsima/firos2/examples/Dyn_TIS_NGSIv2/build/libuserlib.so</library>
+        </type>
+        <type name="RobotRcv">
+            <participants>
+                <participant name="ros2"/>
+            </participants>
+            <library>/home/luisgp/git/eProsima/firos2/examples/Dyn_TIS_NGSIv2/build/libuserlib.so</library>
+        </type>
+    </topic_types>
+
+    <profiles>
+
+        <participant profile_name="ros2">
+            <rtps>
+                <builtin>
+                    <domainId>0</domainId>
+                </builtin>
+            </rtps>
+        </participant>
+
+        <subscriber profile_name="ros2_subscriber">
+            <topic>
+                <name>RobotTopic</name>
+                <dataType>RobotSnd</dataType>
+            </topic>
+            <qos>
+                <partition>
+                    <names>
+                        <name>rt</name>
+                    </names>
+                </partition>
+            </qos>
+            <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+        </subscriber>
+
+        <publisher profile_name="ros2_publisher">
+            <topic>
+                <name>RobotTopic</name>
+                <dataType>RobotSnd</dataType>
+            </topic>
+            <qos>
+                <partition>
+                    <names>
+                        <name>rt</name>
+                    </names>
+                </partition>
+            </qos>
+            <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+        </publisher>
+    </profiles>
+
+    <bridge name="ngsiv2">
+        <library>libisdynbridgengsiv2lib.so</library> <!-- Path to the NGSIv2 library -->
+
+        <subscriber name="ngsiv2_subscriber">
+            <property>
+                <name>host</name>
+                <value>localhost</value>
+            </property>
+            <property>
+                <name>port</name>
+                <value>1026</value>
+            </property>
+            <property>
+                <name>id</name>
+                <value>.*</value>
+            </property>
+            <property>
+                <name>type</name>
+                <value>Robot</value>
+            </property>
+            <property>
+                <name>notifs</name>
+                <value>id,transmission_time,floor,x,y,zeta</value>
+            </property>
+            <property>
+                <name>listener_host</name>
+                <value>localhost</value>
+            </property>
+            <property>
+                <name>listener_port</name>
+                <value>12345</value>
+            </property>
+            <property>
+                <name>listener_buffer_size</name>
+                <value>20480</value>
+            </property>
+        </subscriber>
+
+        <publisher name="ngsiv2_publisher">
+            <property>
+                <name>host</name>
+                <value>localhost</value>
+            </property>
+            <property>
+                <name>port</name>
+                <value>1026</value>
+            </property>
+            <property>
+                <name>http_retries</name>
+                <value>3</value>
+            </property>
+            <property>
+                <name>retry_wait</name>
+                <value>2000</value>
+            </property>
+        </publisher>
+    </bridge>
+
+    <connector name="ros2_ngsiv2">
+        <subscriber participant_name="ros2" subscriber_name="ros2_subscriber"/>
+        <publisher participant_name="ngsiv2" publisher_name="ngsiv2_publisher"/>
+        <transformation file="/home/luisgp/git/eProsima/firos2/examples/Dyn_TIS_NGSIv2/build/libuserlib.so" function="transform"/>
+    </connector>
+
+    <connector name="ngsiv2_ros2">
+        <subscriber participant_name="ngsiv2" subscriber_name="ngsiv2_subscriber"/>
+        <publisher participant_name="ros2" publisher_name="ros2_publisher"/>
+        <transformation file="/home/luisgp/git/eProsima/firos2/examples/Dyn_TIS_NGSIv2/build/libuserlib.so" function="transformFromNGSIv2"/>
+    </connector>
+</is>

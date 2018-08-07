@@ -40,3 +40,11 @@ extern "C" void USER_LIB_EXPORT transform(SerializedPayload_t *serialized_input,
 	output_pst.serialize(&output_data, serialized_output);
 	*/
 }
+
+/**
+ * Dynamic version
+ */
+extern "C" void USER_LIB_EXPORT transform(DynamicData *input, DynamicData *output)
+{
+
+}

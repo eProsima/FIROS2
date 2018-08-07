@@ -1,7 +1,7 @@
 # eProsima FIROS2
-![http://www.eprosima.com](https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSd0PDlVz1U_7MgdTe0FRIWD0Jc9_YH-gGi0ZpLkr-qgCI6ZEoJZ5GBqQ) 
+![http://www.eprosima.com](https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSd0PDlVz1U_7MgdTe0FRIWD0Jc9_YH-gGi0ZpLkr-qgCI6ZEoJZ5GBqQ)
 
-*eProsima FIROS2* is an application that allows intercommunication between ROS2 and NGSIv2 protocol. 
+*eProsima FIROS2* is an application that allows intercommunication between ROS2 and NGSIv2 protocol.
 Since *FIROS2* is powered by *eProsima Integration Services* it makes possible the creation of bidirectional communication bridges with customized routing, mapping between input and output attributes or data modification between ROS2 and NGSIv2 from FIWARE-Orion contextBroker.
 
 ```plantuml
@@ -58,7 +58,7 @@ Once this is done, it can be compiled like any other *ROS2* package. For example
     $ ament build --only-package firos2
 
 
-	
+
 There are several examples to show the behaviour under [examples folder](https://github.com/eProsima/firos2/examples).
 
 ### FIROS2 configuration
@@ -184,3 +184,10 @@ For send messages to the contextBroker to update entities from changes received 
 The interaction with the *NGSIv2* entities must be implemented by the user in the transformation library.
 
 In the example **TIS_NGSIv2** the tranformation library shown examples of both transformations using the described behaviour.
+
+## Dynamic Types
+
+As example of integration with **Dynamic Types**, Dyn_TIS_NGSIv2 example have been added.
+RobotExample executable uses static types (to show compatibility), but ROS2 publisher/subscriber uses DynamicTypes, as
+well as NGSIv2 that uses a dynamic version of the NGSIv2 JSON library.
+All Dynamic Types related files are under *DynNGSIv2* folder, that generates an aditional dynamic library to be used with dynamic types transformation libraries.
