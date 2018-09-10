@@ -1,13 +1,5 @@
 <?xml version="1.0"?>
 <is>
-    <topic_types>
-        <type name="std_msgs::msg::dds_::String_">
-            <participants>
-                <participant name="ros2"/>
-            </participants>
-        </type>
-    </topic_types>
-
     <profiles>
         <participant profile_name="ros2">
             <rtps>
@@ -15,22 +7,22 @@
                     <domainId>0</domainId>
                 </builtin>
             </rtps>
-        </participant>
 
-        <subscriber profile_name="ros2_subscriber">
-            <topic>
-                <name>chatter</name>
-                <dataType>std_msgs::msg::dds_::String_</dataType>
-            </topic>
-            <qos>
-                <partition>
-                    <names>
-                        <name>rt</name>
-                    </names>
-                </partition>
-            </qos>
-            <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
-        </subscriber>
+            <subscriber profile_name="ros2_subscriber">
+                <topic>
+                    <name>chatter</name>
+                    <dataType>std_msgs::msg::dds_::String_</dataType>
+                </topic>
+                <qos>
+                    <partition>
+                        <names>
+                            <name>rt</name>
+                        </names>
+                    </partition>
+                </qos>
+                <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+            </subscriber>
+        </participant>
     </profiles>
 
     <bridge name="ngsiv2">
@@ -48,9 +40,9 @@
         </publisher>
     </bridge>
 
-    <connector name="domain_change"> 
+    <connector name="domain_change">
         <subscriber participant_name="ros2" subscriber_name="ros2_subscriber"/>
-        <publisher participant_name="ngsiv2" publisher_name="ngsiv2_publisher"/>
+        <publisher bridge_name="ngsiv2" publisher_name="ngsiv2_publisher"/>
         <transformation file="C:\dev\ros2\src\ros2\firos2\examples\helloworld_orion\build\Release\userlib.dll" function="transform"/>
     </connector>
 </is>

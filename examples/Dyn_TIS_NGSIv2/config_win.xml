@@ -2,51 +2,51 @@
 <is>
     <topic_types>
         <type name="RobotSnd">
-            <participants>
-                <participant name="ros2"/>
-            </participants>
+            <library>userlib.dll</library>
+        </type>
+        <type name="RobotRcv">
+            <library>userlib.dll</library>
         </type>
     </topic_types>
 
     <profiles>
-
         <participant profile_name="ros2">
             <rtps>
                 <builtin>
                     <domainId>0</domainId>
                 </builtin>
             </rtps>
+
+            <subscriber profile_name="ros2_subscriber">
+                <topic>
+                    <name>RobotTopic</name>
+                    <dataType>RobotSnd</dataType>
+                </topic>
+                <qos>
+                    <partition>
+                        <names>
+                            <name>rt</name>
+                        </names>
+                    </partition>
+                </qos>
+                <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+            </subscriber>
+
+            <publisher profile_name="ros2_publisher">
+                <topic>
+                    <name>RobotTopic</name>
+                    <dataType>RobotSnd</dataType>
+                </topic>
+                <qos>
+                    <partition>
+                        <names>
+                            <name>rt</name>
+                        </names>
+                    </partition>
+                </qos>
+                <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+            </publisher>
         </participant>
-
-        <subscriber profile_name="ros2_subscriber">
-            <topic>
-                <name>RobotTopic</name>
-                <dataType>RobotSnd</dataType>
-            </topic>
-            <qos>
-                <partition>
-                    <names>
-                        <name>rt</name>
-                    </names>
-                </partition>
-            </qos>
-            <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
-        </subscriber>
-
-        <publisher profile_name="ros2_publisher">
-            <topic>
-                <name>RobotTopic</name>
-                <dataType>RobotSnd</dataType>
-            </topic>
-            <qos>
-                <partition>
-                    <names>
-                        <name>rt</name>
-                    </names>
-                </partition>
-            </qos>
-            <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
-        </publisher>
     </profiles>
 
     <bridge name="ngsiv2">
@@ -107,14 +107,14 @@
         </publisher>
     </bridge>
 
-    <connector name="ros2_ngsiv2"> 
+    <connector name="ros2_ngsiv2">
         <subscriber participant_name="ros2" subscriber_name="ros2_subscriber"/>
-        <publisher participant_name="ngsiv2" publisher_name="ngsiv2_publisher"/>
+        <publisher bridge_name="ngsiv2" publisher_name="ngsiv2_publisher"/>
         <transformation file="C:\dev\ros2\src\ros2\firos2\examples\TIS_NGSIv2\build\Release\userlib.dll" function="transform"/>
     </connector>
 
-    <connector name="ngsiv2_ros2"> 
-        <subscriber participant_name="ngsiv2" subscriber_name="ngsiv2_subscriber"/>
+    <connector name="ngsiv2_ros2">
+        <subscriber bridge_name="ngsiv2" subscriber_name="ngsiv2_subscriber"/>
         <publisher participant_name="ros2" publisher_name="ros2_publisher"/>
         <transformation file="C:\dev\ros2\src\ros2\firos2\examples\TIS_NGSIv2\build\Release\userlib.dll" function="transformFromNGSIv2"/>
     </connector>

@@ -2,58 +2,51 @@
 <is>
     <topic_types>
         <type name="RobotSnd">
-            <participants>
-                <participant name="ros2"/>
-            </participants>
             <library>/home/luisgp/git/eProsima/firos2/examples/Dyn_TIS_NGSIv2/build/libuserlib.so</library>
         </type>
         <type name="RobotRcv">
-            <participants>
-                <participant name="ros2"/>
-            </participants>
             <library>/home/luisgp/git/eProsima/firos2/examples/Dyn_TIS_NGSIv2/build/libuserlib.so</library>
         </type>
     </topic_types>
 
     <profiles>
-
         <participant profile_name="ros2">
             <rtps>
                 <builtin>
                     <domainId>0</domainId>
                 </builtin>
             </rtps>
+
+            <subscriber profile_name="ros2_subscriber">
+                <topic>
+                    <name>RobotTopic</name>
+                    <dataType>RobotSnd</dataType>
+                </topic>
+                <qos>
+                    <partition>
+                        <names>
+                            <name>rt</name>
+                        </names>
+                    </partition>
+                </qos>
+                <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+            </subscriber>
+
+            <publisher profile_name="ros2_publisher">
+                <topic>
+                    <name>RobotTopic</name>
+                    <dataType>RobotSnd</dataType>
+                </topic>
+                <qos>
+                    <partition>
+                        <names>
+                            <name>rt</name>
+                        </names>
+                    </partition>
+                </qos>
+                <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+            </publisher>
         </participant>
-
-        <subscriber profile_name="ros2_subscriber">
-            <topic>
-                <name>RobotTopic</name>
-                <dataType>RobotSnd</dataType>
-            </topic>
-            <qos>
-                <partition>
-                    <names>
-                        <name>rt</name>
-                    </names>
-                </partition>
-            </qos>
-            <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
-        </subscriber>
-
-        <publisher profile_name="ros2_publisher">
-            <topic>
-                <name>RobotTopic</name>
-                <dataType>RobotSnd</dataType>
-            </topic>
-            <qos>
-                <partition>
-                    <names>
-                        <name>rt</name>
-                    </names>
-                </partition>
-            </qos>
-            <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
-        </publisher>
     </profiles>
 
     <bridge name="ngsiv2">
@@ -116,12 +109,12 @@
 
     <connector name="ros2_ngsiv2">
         <subscriber participant_name="ros2" subscriber_name="ros2_subscriber"/>
-        <publisher participant_name="ngsiv2" publisher_name="ngsiv2_publisher"/>
+        <publisher bridge_name="ngsiv2" publisher_name="ngsiv2_publisher"/>
         <transformation file="/home/luisgp/git/eProsima/firos2/examples/Dyn_TIS_NGSIv2/build/libuserlib.so" function="transform"/>
     </connector>
 
     <connector name="ngsiv2_ros2">
-        <subscriber participant_name="ngsiv2" subscriber_name="ngsiv2_subscriber"/>
+        <subscriber bridge_name="ngsiv2" subscriber_name="ngsiv2_subscriber"/>
         <publisher participant_name="ros2" publisher_name="ros2_publisher"/>
         <transformation file="/home/luisgp/git/eProsima/firos2/examples/Dyn_TIS_NGSIv2/build/libuserlib.so" function="transformFromNGSIv2"/>
     </connector>

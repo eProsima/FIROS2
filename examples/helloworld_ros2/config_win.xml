@@ -1,13 +1,5 @@
 <?xml version="1.0"?>
 <is>
-    <topic_types>
-        <type name="std_msgs::msg::dds_::String_">
-            <participants>
-                <participant name="ros2"/>
-            </participants>
-        </type>
-    </topic_types>
-
     <profiles>
         <participant profile_name="ros2">
             <rtps>
@@ -68,8 +60,8 @@
         </subscriber>
     </bridge>
 
-    <connector name="domain_change"> 
-        <subscriber participant_name="ngsiv2" subscriber_name="ngsiv2_subscriber"/>
+    <connector name="domain_change">
+        <subscriber bridge_name="ngsiv2" subscriber_name="ngsiv2_subscriber"/>
         <publisher participant_name="ros2" publisher_name="ros2_publisher"/>
         <transformation file="C:\dev\ros2\src\ros2\firos2\examples\helloworld_ros2\build\Release\userlib.dll" function="transform"/>
     </connector>
