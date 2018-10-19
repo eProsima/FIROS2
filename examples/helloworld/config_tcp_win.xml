@@ -198,6 +198,6 @@
     <connector name="domain_change">
         <subscriber participant_profile="rtps" subscriber_profile="fastrtps_subscriber"/>
         <publisher participant_profile="ros2" publisher_profile="ros2_publisher"/>
-        <transformation file="/home/luisgp/ros2_ws/src/ros2/firos2/examples/helloworld/build/libuserlib.so" function="transform"/>
+        <transformation file="C:/git/ros2/src/ros2/firos2/examples/helloworld/build/Debug/userlib.dll" function="transform"/>
     </connector>
 </is>

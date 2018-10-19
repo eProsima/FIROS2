@@ -7,22 +7,23 @@
                     <domainId>0</domainId>
                 </builtin>
             </rtps>
-
-            <subscriber profile_name="ros2_subscriber">
-                <topic>
-                    <name>chatter</name>
-                    <dataType>std_msgs::msg::dds_::String_</dataType>
-                </topic>
-                <qos>
-                    <partition>
-                        <names>
-                            <name>rt</name>
-                        </names>
-                    </partition>
-                </qos>
-                <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
-            </subscriber>
         </participant>
+
+        <subscriber profile_name="ros2_subscriber">
+            <topic>
+                <name>chatter</name>
+                <dataType>std_msgs::msg::dds_::String_</dataType>
+            </topic>
+            <qos>
+                <partition>
+                    <names>
+                        <name>rt</name>
+                    </names>
+                </partition>
+            </qos>
+            <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+        </subscriber>
+
     </profiles>
 
     <bridge name="ngsiv2">
@@ -41,7 +42,7 @@
     </bridge>
 
     <connector name="domain_change">
-        <subscriber participant_name="ros2" subscriber_name="ros2_subscriber"/>
+        <subscriber participant_profile="ros2" subscriber_profile="ros2_subscriber"/>
         <publisher bridge_name="ngsiv2" publisher_name="ngsiv2_publisher"/>
         <transformation file="/home/luisgp/ros2_ws/src/ros2/firos2/examples/helloworld_orion/build/libuserlib.so" function="transform"/>
     </connector>

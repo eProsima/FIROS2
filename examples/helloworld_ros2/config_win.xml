@@ -62,7 +62,7 @@
 
     <connector name="domain_change">
         <subscriber bridge_name="ngsiv2" subscriber_name="ngsiv2_subscriber"/>
-        <publisher participant_name="ros2" publisher_name="ros2_publisher"/>
+        <publisher participant_profile="ros2" publisher_profile="ros2_publisher"/>
         <transformation file="C:\dev\ros2\src\ros2\firos2\examples\helloworld_ros2\build\Release\userlib.dll" function="transform"/>
     </connector>
 </is>

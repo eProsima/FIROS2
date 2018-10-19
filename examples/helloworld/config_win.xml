@@ -7,15 +7,15 @@
                     <domainId>0</domainId>
                 </builtin>
             </rtps>
-
-            <subscriber profile_name="fastrtps_subscriber">
-                <topic>
-                    <name>HelloWorldTopic</name>
-                    <dataType>HelloWorld</dataType>
-                </topic>
-                <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
-            </subscriber>
         </participant>
+
+        <subscriber profile_name="fastrtps_subscriber">
+            <topic>
+                <name>HelloWorldTopic</name>
+                <dataType>HelloWorld</dataType>
+            </topic>
+            <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+        </subscriber>
 
         <participant profile_name="ros2">
             <rtps>
@@ -23,27 +23,27 @@
                     <domainId>0</domainId>
                 </builtin>
             </rtps>
-
-            <publisher profile_name="ros2_publisher">
-                <topic>
-                    <name>chatter</name>
-                    <dataType>std_msgs::msg::dds_::String_</dataType>
-                </topic>
-                <qos>
-                    <partition>
-                        <names>
-                            <name>rt</name>
-                        </names>
-                    </partition>
-                </qos>
-                <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
-            </publisher>
         </participant>
+
+        <publisher profile_name="ros2_publisher">
+            <topic>
+                <name>chatter</name>
+                <dataType>std_msgs::msg::dds_::String_</dataType>
+            </topic>
+            <qos>
+                <partition>
+                    <names>
+                        <name>rt</name>
+                    </names>
+                </partition>
+            </qos>
+            <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+        </publisher>        
     </profiles>
 
     <connector name="domain_change">
-        <subscriber participant_name="rtps" subscriber_name="fastrtps_subscriber"/>
-        <publisher participant_name="ros2" publisher_name="ros2_publisher"/>
+        <subscriber participant_profile="rtps" subscriber_profile="fastrtps_subscriber"/>
+        <publisher participant_profile="ros2" publisher_profile="ros2_publisher"/>
         <transformation file="C:/git/ros2/src/ros2/firos2/examples/helloworld/build/Debug/userlib.dll" function="transform"/>
     </connector>
 </is>
