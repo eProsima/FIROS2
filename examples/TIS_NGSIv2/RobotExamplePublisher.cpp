@@ -49,7 +49,6 @@ bool RobotExamplePublisher::init()
 
     ParticipantAttributes PParam;
     //PParam.rtps.defaultSendPort = 11511;
-    PParam.rtps.use_IP6_to_send = true;
     PParam.rtps.builtin.use_SIMPLE_RTPSParticipantDiscoveryProtocol = true;
     PParam.rtps.builtin.use_SIMPLE_EndpointDiscoveryProtocol = true;
     PParam.rtps.builtin.m_simpleEDP.use_PublicationReaderANDSubscriptionWriter = true;
@@ -69,7 +68,7 @@ bool RobotExamplePublisher::init()
     PublisherAttributes Wparam;
     Wparam.topic.topicKind = NO_KEY;
     Wparam.topic.topicDataType = "RobotSnd";
-    Wparam.topic.topicName = "RobotTopic";
+    Wparam.topic.topicName = "rt/RobotTopic";
     Wparam.topic.historyQos.kind = KEEP_LAST_HISTORY_QOS;
     Wparam.topic.historyQos.depth = 30;
     Wparam.topic.resourceLimitsQos.max_samples = 50;
@@ -77,7 +76,7 @@ bool RobotExamplePublisher::init()
     Wparam.times.heartbeatPeriod.seconds = 2;
     Wparam.times.heartbeatPeriod.fraction = 200*1000*1000;
     Wparam.qos.m_reliability.kind = RELIABLE_RELIABILITY_QOS;
-    Wparam.qos.m_partition.push_back("rt");
+    //Wparam.qos.m_partition.push_back("rt");
     mp_publisher = Domain::createPublisher(mp_participant,Wparam,(PublisherListener*)&m_listener);
     if(mp_publisher == nullptr)
         return false;

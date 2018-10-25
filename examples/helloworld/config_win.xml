@@ -27,23 +27,16 @@
 
         <publisher profile_name="ros2_publisher">
             <topic>
-                <name>chatter</name>
+                <name>rt/chatter</name>
                 <dataType>std_msgs::msg::dds_::String_</dataType>
             </topic>
-            <qos>
-                <partition>
-                    <names>
-                        <name>rt</name>
-                    </names>
-                </partition>
-            </qos>
             <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
-        </publisher>        
+        </publisher>
     </profiles>
 
     <connector name="domain_change">
         <subscriber participant_profile="rtps" subscriber_profile="fastrtps_subscriber"/>
         <publisher participant_profile="ros2" publisher_profile="ros2_publisher"/>
-        <transformation file="C:/git/ros2/src/ros2/firos2/examples/helloworld/build/Debug/userlib.dll" function="transform"/>
+        <transformation file="build/Debug/userlib.dll" function="transform"/>
     </connector>
 </is>

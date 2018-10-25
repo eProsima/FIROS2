@@ -12,34 +12,20 @@
 
         <subscriber profile_name="ros2_subscriber">
             <topic>
-                <name>RobotTopic</name>
+                <name>rt/RobotTopic</name>
                 <dataType>RobotSnd</dataType>
             </topic>
-            <qos>
-                <partition>
-                    <names>
-                        <name>rt</name>
-                    </names>
-                </partition>
-            </qos>
             <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
         </subscriber>
 
         <publisher profile_name="ros2_publisher">
             <topic>
-                <name>RobotTopic</name>
+                <name>rt/RobotTopic</name>
                 <dataType>RobotSnd</dataType>
             </topic>
-            <qos>
-                <partition>
-                    <names>
-                        <name>rt</name>
-                    </names>
-                </partition>
-            </qos>
             <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
         </publisher>
-        
+
     </profiles>
 
     <bridge name="ngsiv2">
@@ -103,12 +89,12 @@
     <connector name="ros2_ngsiv2">
         <subscriber participant_profile="ros2" subscriber_profile="ros2_subscriber"/>
         <publisher bridge_name="ngsiv2" publisher_name="ngsiv2_publisher"/>
-        <transformation file="C:\dev\ros2\src\ros2\firos2\examples\TIS_NGSIv2\build\Release\userlib.dll" function="transform"/>
+        <transformation file="build\Release\userlib.dll" function="transform"/>
     </connector>
 
     <connector name="ngsiv2_ros2">
         <subscriber bridge_name="ngsiv2" subscriber_name="ngsiv2_subscriber"/>
         <publisher participant_profile="ros2" publisher_profile="ros2_publisher"/>
-        <transformation file="C:\dev\ros2\src\ros2\firos2\examples\TIS_NGSIv2\build\Release\userlib.dll" function="transformFromNGSIv2"/>
+        <transformation file="build\Release\userlib.dll" function="transformFromNGSIv2"/>
     </connector>
 </is>

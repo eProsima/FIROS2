@@ -68,7 +68,7 @@ bool RobotExamplePublisher::init()
     //CREATE THE PUBLISHER
     PublisherAttributes Wparam;
     Wparam.topic.topicKind = NO_KEY;
-    Wparam.topic.topicDataType = "RobotSnd";
+    Wparam.topic.topicDataType = "rt/RobotSnd";
     Wparam.topic.topicName = "RobotTopic";
     Wparam.topic.historyQos.kind = KEEP_LAST_HISTORY_QOS;
     Wparam.topic.historyQos.depth = 30;
@@ -77,7 +77,7 @@ bool RobotExamplePublisher::init()
     Wparam.times.heartbeatPeriod.seconds = 2;
     Wparam.times.heartbeatPeriod.fraction = 200*1000*1000;
     Wparam.qos.m_reliability.kind = RELIABLE_RELIABILITY_QOS;
-    Wparam.qos.m_partition.push_back("rt");
+    //Wparam.qos.m_partition.push_back("rt");
     mp_publisher = Domain::createPublisher(mp_participant,Wparam,(PublisherListener*)&m_listener);
     if(mp_publisher == nullptr)
         return false;
