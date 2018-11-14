@@ -17,7 +17,7 @@
 #define _DYN_NGSIv2_ISBRIDGE_H_
 
 #include <string>
-#include "../../thirdparty/integration-services/src/ISBridge.h"
+#include "ISBridge.h"
 #include "NGSIv2Params.h"
 
 class DynNGSIv2ISBridge : public ISBridge

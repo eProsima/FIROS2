@@ -16,7 +16,7 @@
 #ifndef _NGSIv2_PUBLISHER_H_
 #define _NGSIv2_PUBLISHER_H_
 
-#include "../../thirdparty/integration-services/src/ISBridge.h"
+#include "ISBridge.h"
 #include "NGSIv2Params.h"
 
 class NGSIv2Publisher : public ISPublisher

@@ -15,7 +15,7 @@
 #include "DynNGSIv2Publisher.h"
 #include "NGSIv2Utils.h"
 #include "DynJsonPubSubType.hpp" // Received type from NGSIv2
-#include "../../thirdparty/integration-services/src/log/ISLog.h"
+#include "log/ISLog.h"
 
 #include <curlpp/cURLpp.hpp>
 #include <curlpp/Options.hpp>

@@ -2,7 +2,7 @@
 ![http://www.eprosima.com](https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSd0PDlVz1U_7MgdTe0FRIWD0Jc9_YH-gGi0ZpLkr-qgCI6ZEoJZ5GBqQ)
 
 *eProsima FIROS2* is an application that allows intercommunication between ROS2 and NGSIv2 protocol.
-Since *FIROS2* is powered by *eProsima Integration Services* it makes possible the creation of bidirectional communication bridges with customized routing, mapping between input and output attributes or data modification between ROS2 and NGSIv2 from FIWARE-Orion contextBroker.
+Since *FIROS2* is powered by *eProsima Integration Service* it makes possible the creation of bidirectional communication bridges with customized routing, mapping between input and output attributes or data modification between ROS2 and NGSIv2 from FIWARE-Orion contextBroker.
 
 ```plantuml
 @startuml
@@ -11,7 +11,7 @@ package "Orion contextBroker" <<Cloud>> {
     class Subscription
 }
 
-package "Integration Services" <<Rectangle>> {
+package "Integration Service" <<Rectangle>> {
     class UserLibrary {
         +RTPS_t transformFromNGSIv2(NGSIv2_t)
         +NGSIv2_t transform(RTPS_t)
@@ -152,7 +152,7 @@ In this way, the user can map attributes from the input to the output message an
 
 You can, of course, implement and use your own bridge libraries to define other behaviour.
 
-You can learn more about *Bridge Libraries* and *Transformation Libraries* in the documentation of *[eProsima Integration Services](https://github.com/eProsima/Integration-Services)*.
+You can learn more about *Bridge Libraries* and *Transformation Libraries* in the documentation of *[eProsima Integration Service](https://github.com/eProsima/Integration-Services)*.
 
 ### Types and interfaces
 
@@ -177,7 +177,7 @@ The *idl* files will be created inside the workspace build directory at compilat
 For interaction with *NGSIv2* entities an idl file (and generated files) is provided. This idl is named **JsonNGSIv2.idl** and contains a structure composed by two strings, *entityId* and *data*.
 
 For received messages from *NGSIv2* protocol, only *data* must be filled. In this case *entityId* will be ignored, and it's better to keep it empty.
-*Integration Services* will fill *data* with the complete Json string sent to our listener by the contextBroker server (this is, the subscription result).
+*Integration Service* will fill *data* with the complete Json string sent to our listener by the contextBroker server (this is, the subscription result).
 
 For send messages to the contextBroker to update entities from changes received from *RTPS* subscriber, *JsonNGSIv2" must fill *entityId* with the entityId of the entity modified and *data* with a composed Json containing the attributed to be updated.
 

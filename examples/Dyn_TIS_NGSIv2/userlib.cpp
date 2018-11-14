@@ -1,6 +1,6 @@
 #include <iostream>
 #include "../../src/DynNGSIv2/DynJsonPubSubType.hpp"
-#include "../../thirdparty/integration-services/src/log/ISLog.h"
+#include "../../thirdparty/integration-service/src/log/ISLog.h"
 #include <fastrtps/types/DynamicData.h>
 #include <fastrtps/types/DynamicType.h>
 #include <fastrtps/types/DynamicTypePtr.h>

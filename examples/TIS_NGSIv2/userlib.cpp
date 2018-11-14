@@ -2,7 +2,7 @@
 //#include "RobotSndPubSubTypes.h"
 #include "RobotRcvPubSubTypes.h"
 #include "../../src/NGSIv2/idl/JsonNGSIv2PubSubTypes.h"
-#include "../../thirdparty/integration-services/src/log/ISLog.h"
+#include "../../thirdparty/integration-service/src/log/ISLog.h"
 #include <fastrtps/types/DynamicTypePtr.h>
 #include <fastrtps/types/DynamicTypeBuilderPtr.h>
 #include <fastrtps/types/DynamicDataPtr.h>

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/*! 
+/*!
  * @file JsonNGSIv2PubSubTypes.h
  * This header file contains the declaration of the serialization functions.
  *
@@ -31,7 +31,7 @@
  * @brief This class represents the TopicDataType of the type JsonNGSIv2 defined by the user in the IDL file.
  * @ingroup JSONNGSIV2
  */
-class JsonNGSIv2PubSubType : public eprosima::fastrtps::TopicDataType 
+class JsonNGSIv2PubSubType : public eprosima::fastrtps::TopicDataType
 {
 public:
 	typedef JsonNGSIv2 type;
@@ -41,7 +41,7 @@ public:
 	bool serialize(void *data, eprosima::fastrtps::rtps::SerializedPayload_t *payload);
 	bool deserialize(eprosima::fastrtps::rtps::SerializedPayload_t *payload, void *data);
         std::function<uint32_t()> getSerializedSizeProvider(void* data);
-	bool getKey(void *data, eprosima::fastrtps::rtps::InstanceHandle_t *ihandle);
+	bool getKey(void *data, eprosima::fastrtps::rtps::InstanceHandle_t *ihandle, bool force_md5 = false);
 	void* createData();
 	void deleteData(void * data);
 	MD5 m_md5;

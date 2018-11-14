@@ -105,7 +105,7 @@ void JsonNGSIv2PubSubType::deleteData(void* data)
     delete((JsonNGSIv2*)data);
 }
 
-bool JsonNGSIv2PubSubType::getKey(void *data, InstanceHandle_t* handle)
+bool JsonNGSIv2PubSubType::getKey(void *data, InstanceHandle_t* handle, bool force_md5)
 {
     if(!m_isGetKeyDefined)
     {
@@ -116,7 +116,7 @@ bool JsonNGSIv2PubSubType::getKey(void *data, InstanceHandle_t* handle)
     eprosima::fastcdr::FastBuffer fastbuffer((char*)m_keyBuffer,JsonNGSIv2::getKeyMaxCdrSerializedSize()); 	// Object that manages the raw buffer.
     eprosima::fastcdr::Cdr ser(fastbuffer, eprosima::fastcdr::Cdr::BIG_ENDIANNESS); 	// Object that serializes the data.
     p_type->serializeKey(ser);
-    if(JsonNGSIv2::getKeyMaxCdrSerializedSize()>16)
+    if(force_md5 || JsonNGSIv2::getKeyMaxCdrSerializedSize()>16)
     {
         m_md5.init();
         m_md5.update(m_keyBuffer,(unsigned int)ser.getSerializedDataLength());
@@ -135,4 +135,3 @@ bool JsonNGSIv2PubSubType::getKey(void *data, InstanceHandle_t* handle)
     }
     return true;
 }
-

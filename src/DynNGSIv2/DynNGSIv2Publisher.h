@@ -16,7 +16,7 @@
 #ifndef _DYN_NGSIv2_PUBLISHER_H_
 #define _DYN_NGSIv2_PUBLISHER_H_
 
-#include "../../thirdparty/integration-services/src/ISBridge.h"
+#include "ISBridge.h"
 #include "NGSIv2Params.h"
 
 class DynNGSIv2Publisher : public ISPublisher

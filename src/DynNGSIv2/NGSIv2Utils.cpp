@@ -13,7 +13,7 @@
 // limitations under the License.
 
 #include "NGSIv2Utils.h"
-#include "../../thirdparty/integration-services/src/log/ISLog.h"
+#include "log/ISLog.h"
 
 using asio::ip::tcp;
 

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <memory>
 
-#include "../thirdparty/integration-services/src/ISManager.h"
+#include "ISManager.h"
 
 
 int main(int argc, char * argv[])

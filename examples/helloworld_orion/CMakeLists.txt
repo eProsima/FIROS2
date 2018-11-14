@@ -1,4 +1,4 @@
-project(user_lib)
+project(helloworld_orion)
 cmake_minimum_required(VERSION 2.9)
 
 include(CheckCXXCompilerFlag)
@@ -39,23 +39,51 @@ endif()
 file(GLOB USER_LIB_SOURCES_CXX "*.cxx")
 file(GLOB USER_LIB_SOURCES_CPP "userlib.cpp")
 
-add_library(userlib SHARED ${USER_LIB_SOURCES_CXX} ${USER_LIB_SOURCES_CPP}
+add_library(userlib_orion SHARED ${USER_LIB_SOURCES_CXX} ${USER_LIB_SOURCES_CPP}
     ../../src/NGSIv2/idl/JsonNGSIv2.cxx
     ../../src/NGSIv2/idl/JsonNGSIv2PubSubTypes.cxx)
 
 if(WIN32)
-	add_executable(cb_create_helloworld cb_create_helloworld.cpp ${CURLPP_HEADERS} ${CURLPP_SOURCES})
-	add_executable(cb_get_helloworld cb_get_helloworld.cpp ${CURLPP_HEADERS} ${CURLPP_SOURCES})
-    target_include_directories(cb_create_helloworld PUBLIC ${CURLPP_DIR}/include ${CURL_BUILD_DIR}/include)
-    target_include_directories(cb_get_helloworld PUBLIC ${CURLPP_DIR}/include ${CURL_BUILD_DIR}/include)
+    add_executable(cb_create_helloworld_orion cb_create_helloworld.cpp ${CURLPP_HEADERS} ${CURLPP_SOURCES})
+    add_executable(cb_get_helloworld_orion cb_get_helloworld.cpp ${CURLPP_HEADERS} ${CURLPP_SOURCES})
+    target_include_directories(cb_create_helloworld_orion PUBLIC ${CURLPP_DIR}/include ${CURL_BUILD_DIR}/include)
+    target_include_directories(cb_get_helloworld_orion PUBLIC ${CURLPP_DIR}/include ${CURL_BUILD_DIR}/include)
     configure_file(${CURL_BUILD_DIR}/bin/libcurl.dll ${CMAKE_CURRENT_BINARY_DIR}/Release/libcurl.dll COPYONLY)
 else()
-	add_executable(cb_create_helloworld cb_create_helloworld.cpp ${CURLPP_HEADERS} ${CURLPP_SOURCES})
-	add_executable(cb_get_helloworld cb_get_helloworld.cpp ${CURLPP_HEADERS} ${CURLPP_SOURCES})
-    target_include_directories(cb_create_helloworld PUBLIC ${CURLPP_DIR}/include)
-    target_include_directories(cb_get_helloworld PUBLIC ${CURLPP_DIR}/include)
+	add_executable(cb_create_helloworld_orion cb_create_helloworld.cpp ${CURLPP_HEADERS} ${CURLPP_SOURCES})
+	add_executable(cb_get_helloworld_orion cb_get_helloworld.cpp ${CURLPP_HEADERS} ${CURLPP_SOURCES})
+    target_include_directories(cb_create_helloworld_orion PUBLIC ${CURLPP_DIR}/include)
+    target_include_directories(cb_get_helloworld_orion PUBLIC ${CURLPP_DIR}/include)
 endif()
 
-target_link_libraries(userlib fastrtps fastcdr ${CMAKE_DL_LIBS})
-target_link_libraries(cb_create_helloworld ${liblist})
-target_link_libraries(cb_get_helloworld ${liblist})
+target_link_libraries(userlib_orion fastrtps fastcdr ${CMAKE_DL_LIBS})
+target_link_libraries(cb_create_helloworld_orion ${liblist})
+target_link_libraries(cb_get_helloworld_orion ${liblist})
+
+set_target_properties(userlib_orion PROPERTIES OUTPUT_NAME "userlib")
+set_target_properties(cb_create_helloworld_orion PROPERTIES OUTPUT_NAME "cb_create_robot")
+set_target_properties(cb_get_helloworld_orion PROPERTIES OUTPUT_NAME "cb_get_robot")
+
+install(TARGETS cb_get_helloworld_orion
+    RUNTIME DESTINATION examples/${PROJECT_NAME}/build$<$<BOOL:${WIN32}>:/${CMAKE_BUILD_TYPE}>
+    )
+
+install(TARGETS cb_create_helloworld_orion
+    RUNTIME DESTINATION examples/${PROJECT_NAME}/build$<$<BOOL:${WIN32}>:/${CMAKE_BUILD_TYPE}>
+    )
+
+install(TARGETS userlib_orion
+    LIBRARY DESTINATION examples/${PROJECT_NAME}/build$<$<BOOL:${WIN32}>:/${CMAKE_BUILD_TYPE}>
+    )
+
+install(FILES
+    config$<$<BOOL:${WIN32}>:_win>.xml
+    DESTINATION examples/${PROJECT_NAME}
+    )
+
+if(WIN32)
+    install(FILES
+    ${CURL_BUILD_DIR}/bin/libcurl.dll
+        DESTINATION examples/${PROJECT_NAME}/build$<$<BOOL:${WIN32}>:/${CMAKE_BUILD_TYPE}>
+        )
+endif()

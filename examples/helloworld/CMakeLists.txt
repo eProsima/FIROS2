@@ -1,4 +1,4 @@
-project(user_lib)
+project(helloworld)
 cmake_minimum_required(VERSION 2.9)
 
 include(CheckCXXCompilerFlag)
@@ -29,3 +29,17 @@ if(WIN32)
 endif()
 
 target_link_libraries(userlib fastrtps fastcdr ${CMAKE_DL_LIBS})
+
+install(TARGETS userlib
+    LIBRARY DESTINATION examples/${PROJECT_NAME}/build$<$<BOOL:${WIN32}>:/${CMAKE_BUILD_TYPE}>
+    )
+
+install(FILES
+    config$<$<BOOL:${WIN32}>:_win>.xml
+    DESTINATION examples/${PROJECT_NAME}
+    )
+
+install(FILES
+    config_tcp$<$<BOOL:${WIN32}>:_win>.xml
+    DESTINATION examples/${PROJECT_NAME}
+    )

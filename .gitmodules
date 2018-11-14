@@ -7,9 +7,9 @@
 [submodule "thirdparty/asio"]
 	path = thirdparty/asio
 	url = https://github.com/chriskohlhoff/asio
-[submodule "thirdparty/integration-services"]
-	path = thirdparty/integration-services
-	url = https://gitlab.intranet.eprosima.com/eProsima/integration-services
 [submodule "thirdparty/curl"]
 	path = thirdparty/curl
 	url = https://github.com/curl/curl
+[submodule "thirdparty/integration-service"]
+	path = thirdparty/integration-service
+	url = https://github.com/eProsima/Integration-Service

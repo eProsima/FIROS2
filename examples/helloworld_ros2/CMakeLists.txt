@@ -1,4 +1,4 @@
-project(user_lib)
+project(helloworld_ros2)
 cmake_minimum_required(VERSION 2.9)
 
 include(CheckCXXCompilerFlag)
@@ -39,26 +39,54 @@ endif()
 file(GLOB USER_LIB_SOURCES_CXX "*.cxx")
 file(GLOB USER_LIB_SOURCES_CPP "userlib.cpp")
 
-add_library(userlib SHARED ${USER_LIB_SOURCES_CXX} ${USER_LIB_SOURCES_CPP}
+add_library(userlib_ros2 SHARED ${USER_LIB_SOURCES_CXX} ${USER_LIB_SOURCES_CPP}
     ../../src/NGSIv2/idl/JsonNGSIv2.cxx
     ../../src/NGSIv2/idl/JsonNGSIv2PubSubTypes.cxx
     ../../src/jsoncpp.cpp)
 
 if(WIN32)
-    add_executable(cb_create_helloworld cb_create_helloworld.cpp ${CURLPP_HEADERS} ${CURLPP_SOURCES})
-    add_executable(cb_update_attr cb_update_attr.cpp ${CURLPP_HEADERS} ${CURLPP_SOURCES})
-    target_include_directories(cb_create_helloworld PUBLIC ${CURLPP_DIR}/include ${CURL_BUILD_DIR}/include)
-    target_include_directories(cb_update_attr PUBLIC ${CURLPP_DIR}/include ${CURL_BUILD_DIR}/include)
+    add_executable(cb_create_helloworld_ros2 cb_create_helloworld.cpp ${CURLPP_HEADERS} ${CURLPP_SOURCES})
+    add_executable(cb_update_attr_ros2 cb_update_attr.cpp ${CURLPP_HEADERS} ${CURLPP_SOURCES})
+    target_include_directories(cb_create_helloworld_ros2 PUBLIC ${CURLPP_DIR}/include ${CURL_BUILD_DIR}/include)
+    target_include_directories(cb_update_attr_ros2 PUBLIC ${CURLPP_DIR}/include ${CURL_BUILD_DIR}/include)
     configure_file(${CURL_BUILD_DIR}/bin/libcurl.dll ${CMAKE_CURRENT_BINARY_DIR}/Release/libcurl.dll COPYONLY)
 else()
-    add_executable(cb_create_helloworld cb_create_helloworld.cpp ${CURLPP_HEADERS} ${CURLPP_SOURCES})
-    add_executable(cb_update_attr cb_update_attr.cpp ${CURLPP_HEADERS} ${CURLPP_SOURCES})
-    target_include_directories(cb_create_helloworld PUBLIC ${CURLPP_DIR}/include)
-    target_include_directories(cb_update_attr PUBLIC ${CURLPP_DIR}/include)
+    add_executable(cb_create_helloworld_ros2 cb_create_helloworld.cpp ${CURLPP_HEADERS} ${CURLPP_SOURCES})
+    add_executable(cb_update_attr_ros2 cb_update_attr.cpp ${CURLPP_HEADERS} ${CURLPP_SOURCES})
+    target_include_directories(cb_create_helloworld_ros2 PUBLIC ${CURLPP_DIR}/include)
+    target_include_directories(cb_update_attr_ros2 PUBLIC ${CURLPP_DIR}/include)
 endif()
 
-target_include_directories(userlib PUBLIC ../../src)
+target_include_directories(userlib_ros2 PUBLIC ../../src)
 
-target_link_libraries(userlib fastrtps fastcdr ${CMAKE_DL_LIBS})
-target_link_libraries(cb_create_helloworld ${liblist})
-target_link_libraries(cb_update_attr ${liblist})
+target_link_libraries(userlib_ros2 fastrtps fastcdr ${CMAKE_DL_LIBS})
+target_link_libraries(cb_create_helloworld_ros2 ${liblist})
+target_link_libraries(cb_update_attr_ros2 ${liblist})
+
+set_target_properties(userlib_ros2 PROPERTIES OUTPUT_NAME "userlib")
+set_target_properties(cb_create_helloworld_ros2 PROPERTIES OUTPUT_NAME "cb_create_robot")
+set_target_properties(cb_update_attr_ros2 PROPERTIES OUTPUT_NAME "cb_update_attr")
+
+install(TARGETS cb_update_attr_ros2
+    RUNTIME DESTINATION examples/${PROJECT_NAME}/build$<$<BOOL:${WIN32}>:/${CMAKE_BUILD_TYPE}>
+    )
+
+install(TARGETS cb_create_helloworld_ros2
+    RUNTIME DESTINATION examples/${PROJECT_NAME}/build$<$<BOOL:${WIN32}>:/${CMAKE_BUILD_TYPE}>
+    )
+
+install(TARGETS userlib_ros2
+    LIBRARY DESTINATION examples/${PROJECT_NAME}/build$<$<BOOL:${WIN32}>:/${CMAKE_BUILD_TYPE}>
+    )
+
+install(FILES
+    config$<$<BOOL:${WIN32}>:_win>.xml
+    DESTINATION examples/${PROJECT_NAME}
+    )
+
+if(WIN32)
+    install(FILES
+    ${CURL_BUILD_DIR}/bin/libcurl.dll
+        DESTINATION examples/${PROJECT_NAME}/build$<$<BOOL:${WIN32}>:/${CMAKE_BUILD_TYPE}>
+        )
+endif()

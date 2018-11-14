@@ -18,7 +18,7 @@
 
 #include <iostream>
 
-#include "../../thirdparty/integration-services/src/ISBridge.h"
+#include "ISBridge.h"
 #include <asio.hpp>
 
 #include "NGSIv2Params.h"

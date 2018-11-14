@@ -126,7 +126,8 @@ IF (NOT DEFINED LOG_LEVEL_ERROR)
 ENDIF()
 ADD_DEFINITIONS(-DLOG_LEVEL_ERROR=${LOG_LEVEL_ERROR})
 
-configure_file(thirdparty/integration-services/src/log/ISLog.h.in ${PROJECT_SOURCE_DIR}/thirdparty/integration-services/src/log/ISLog.h)
+configure_file(thirdparty/integration-service/src/log/ISLog.h.in
+    ${PROJECT_SOURCE_DIR}/thirdparty/integration-service/include/log/ISLog.h)
 configure_file(${PROJECT_SOURCE_DIR}/src/config.h.in
     ${PROJECT_BINARY_DIR}/include/${PROJECT_NAME}/config.h)
 
@@ -194,15 +195,14 @@ set(CURLPP_SOURCES
     ${CURLPP_DIR}/src/curlpp/internal/SList.cpp)
 
 set(CURL_FILES ${CURLPP_HEADERS} ${CURLPP_SOURCES})
-set(IS_LIB_FILES thirdparty/integration-services/src/ISManager.cpp thirdparty/integration-services/src/ISManager.h
-    thirdparty/integration-services/src/ISBridge.h
-    thirdparty/integration-services/src/log/ISLog.h
-    thirdparty/integration-services/src/RTPSBridge.cpp thirdparty/integration-services/src/RTPSBridge.h
-    thirdparty/integration-services/src/RTPSPublisher.cpp thirdparty/integration-services/src/RTPSPublisher.h
-    thirdparty/integration-services/src/RTPSSubscriber.cpp thirdparty/integration-services/src/RTPSSubscriber.h
-    thirdparty/integration-services/src/dynamicload/dynamicload.cpp thirdparty/integration-services/src/dynamicload/dynamicload.h
-    thirdparty/integration-services/src/GenericPubSubTypes.cpp thirdparty/integration-services/src/GenericPubSubTypes.h
-    thirdparty/integration-services/src/xmlUtils.h)
+
+set(IS_LIB_FILES thirdparty/integration-service/src/ISManager.cpp
+    thirdparty/integration-service/src/RTPSBridge.cpp
+    thirdparty/integration-service/src/RTPSPublisher.cpp
+    thirdparty/integration-service/src/RTPSSubscriber.cpp
+    thirdparty/integration-service/src/dynamicload/dynamicload.cpp
+    thirdparty/integration-service/src/GenericPubSubTypes.cpp
+    )
 
 set(NGSIv2_FILES src/NGSIv2/NGSIv2Params.cpp src/NGSIv2/NGSIv2Params.h
         src/NGSIv2/NGSIv2ISBridge.cpp src/NGSIv2/NGSIv2ISBridge.h
@@ -222,7 +222,12 @@ set(DYN_NGSIv2_FILES src/DynNGSIv2/NGSIv2Params.cpp src/DynNGSIv2/NGSIv2Params.h
         src/jsoncpp.cpp
         src/DynNGSIv2/rtpsngsiv2lib.cpp)
 
-set(THIRDPARTY_INCLUDE thirdparty/tinyxml2 thirdparty/curlpp/include thirdparty/asio/asio/include)
+set(THIRDPARTY_INCLUDE
+    thirdparty/tinyxml2
+    thirdparty/curlpp/include
+    thirdparty/asio/asio/include
+    thirdparty/integration-service/include
+    )
 
 if(WIN32)
     add_executable(firos2 src/main.cpp
@@ -290,8 +295,8 @@ target_link_libraries(isdynbridgengsiv2lib
     ${liblist}
     ${CMAKE_DL_LIBS})
 
-set(CPACK_COMPONENT_HEADERS_DISPLAY_NAME "C++ Headers" PARENT_SCOPE)
-set(CPACK_COMPONENT_HEADERS_DESCRIPTION "eProsima ${PROJECT_NAME_LARGE} C++ Headers" PARENT_SCOPE)
+set(CPACK_COMPONENT_HEADERS_DISPLAY_NAME "C++ Headers")
+set(CPACK_COMPONENT_HEADERS_DESCRIPTION "eProsima ${PROJECT_NAME_LARGE} C++ Headers")
 
 
 # Add sources to Makefile.am
@@ -378,28 +383,28 @@ if(EPROSIMA_INSTALLER)
 
     install(
         FILES
-            thirdparty/integration-services/src/ISManager.cpp thirdparty/integration-services/src/ISManager.h
-            thirdparty/integration-services/src/ISBridge.h
-            thirdparty/integration-services/src/RTPSBridge.cpp thirdparty/integration-services/src/RTPSBridge.h
-            thirdparty/integration-services/src/RTPSPublisher.cpp thirdparty/integration-services/src/RTPSPublisher.h
-            thirdparty/integration-services/src/RTPSSubscriber.cpp thirdparty/integration-services/src/RTPSSubscriber.h
-            thirdparty/integration-services/src/GenericPubSubTypes.cpp thirdparty/integration-services/src/GenericPubSubTypes.h
-            thirdparty/integration-services/src/xmlUtils.h
+            thirdparty/integration-service/src/ISManager.cpp thirdparty/integration-service/src/ISManager.h
+            thirdparty/integration-service/src/ISBridge.h
+            thirdparty/integration-service/src/RTPSBridge.cpp thirdparty/integration-service/src/RTPSBridge.h
+            thirdparty/integration-service/src/RTPSPublisher.cpp thirdparty/integration-service/src/RTPSPublisher.h
+            thirdparty/integration-service/src/RTPSSubscriber.cpp thirdparty/integration-service/src/RTPSSubscriber.h
+            thirdparty/integration-service/src/GenericPubSubTypes.cpp thirdparty/integration-service/src/GenericPubSubTypes.h
+            thirdparty/integration-service/src/xmlUtils.h
         COMPONENT sources
-        DESTINATION ${INCLUDE_SOURCE_DIR}/thirdparty/integration-services/src)
+        DESTINATION ${INCLUDE_SOURCE_DIR}/thirdparty/integration-service/src)
 
     install(
         FILES
-            thirdparty/integration-services/src/log/ISLog.h
+            thirdparty/integration-service/src/log/ISLog.h
         COMPONENT sources
-        DESTINATION ${INCLUDE_SOURCE_DIR}/thirdparty/integration-services/src/log)
+        DESTINATION ${INCLUDE_SOURCE_DIR}/thirdparty/integration-service/src/log)
 
     install(
         FILES
-            thirdparty/integration-services/src/dynamicload/dynamicload.cpp
-            thirdparty/integration-services/src/dynamicload/dynamicload.h
+            thirdparty/integration-service/src/dynamicload/dynamicload.cpp
+            thirdparty/integration-service/src/dynamicload/dynamicload.h
         COMPONENT sources
-        DESTINATION ${INCLUDE_SOURCE_DIR}/thirdparty/integration-services/src/dynamicload)
+        DESTINATION ${INCLUDE_SOURCE_DIR}/thirdparty/integration-service/src/dynamicload)
 
     install(
         FILES
@@ -498,12 +503,6 @@ if(EPROSIMA_INSTALLER)
         )
 endif()
 
-# Install examples
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/examples
-    DESTINATION ./
-    COMPONENT examples
-    PATTERN "examples/CMakeLists.txt" EXCLUDE
-    )
 set(CPACK_COMPONENT_EXAMPLES_DISPLAY_NAME "Examples")
 set(CPACK_COMPONENT_EXAMPLES_DESCRIPTION "eProsima ${PROJECT_NAME_LARGE} examples")
 
@@ -595,3 +594,19 @@ install(
   DIRECTORY cmake
   DESTINATION share/${PROJECT_NAME}
 )
+
+###############################################################################
+# Examples
+###############################################################################
+option(COMPILE_EXAMPLES "Build example" OFF)
+
+if(EPROSIMA_BUILD AND IS_TOP_LEVEL AND NOT EPROSIMA_INSTALLER AND NOT EPROSIMA_INSTALLER_MINION)
+    set(COMPILE_EXAMPLES ON)
+endif()
+
+if(COMPILE_EXAMPLES)
+    if(NOT CMAKE_BUILD_TYPE)
+        set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "Build type" FORCE)
+    endif()
+    add_subdirectory(examples)
+endif()

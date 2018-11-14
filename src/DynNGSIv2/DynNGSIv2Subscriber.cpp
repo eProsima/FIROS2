@@ -18,7 +18,7 @@
 #include "DynNGSIv2Subscriber.h"
 #include "NGSIv2Utils.h"
 #include "DynJsonPubSubType.hpp" // Received type from NGSIv2
-#include "../../thirdparty/integration-services/src/log/ISLog.h"
+#include "log/ISLog.h"
 #include <thread>
 
 #ifndef LISTENER_BUFFER_SIZE

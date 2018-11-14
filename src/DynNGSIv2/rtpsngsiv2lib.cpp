@@ -2,7 +2,7 @@
 #include "DynNGSIv2ISBridge.h"
 #include "DynNGSIv2Publisher.h"
 #include "DynNGSIv2Subscriber.h"
-#include "../../thirdparty/integration-services/src/log/ISLog.h"
+#include "log/ISLog.h"
 
 #if defined(_WIN32) && defined (BUILD_SHARED_LIBS)
 	#if defined (_MSC_VER)
