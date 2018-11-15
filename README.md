@@ -4,7 +4,7 @@
 *eProsima FIROS2* is an application that allows intercommunication between ROS2 and NGSIv2 protocol.
 Since *FIROS2* is powered by *eProsima Integration Service* it makes possible the creation of bidirectional communication bridges with customized routing, mapping between input and output attributes or data modification between ROS2 and NGSIv2 from FIWARE-Orion contextBroker.
 
-<p align="center"> <img src="docs/Firos_main.png" alt="Default behaviour"/> </p>
+<p align="center"> <img src="doc/Firos_main.png" alt="Default behaviour"/> </p>
 
 ### Installation of FIROS2
 
