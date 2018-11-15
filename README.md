@@ -4,32 +4,7 @@
 *eProsima FIROS2* is an application that allows intercommunication between ROS2 and NGSIv2 protocol.
 Since *FIROS2* is powered by *eProsima Integration Service* it makes possible the creation of bidirectional communication bridges with customized routing, mapping between input and output attributes or data modification between ROS2 and NGSIv2 from FIWARE-Orion contextBroker.
 
-```plantuml
-@startuml
-
-package "Orion contextBroker" <<Cloud>> {
-    class Subscription
-}
-
-package "Integration Service" <<Rectangle>> {
-    class UserLibrary {
-        +RTPS_t transformFromNGSIv2(NGSIv2_t)
-        +NGSIv2_t transform(RTPS_t)
-    }
-}
-
-Subscription -right-> UserLibrary
-Subscription <-right- UserLibrary
-
-package "RTPS-Subscriber" <<Cloud>> {
-    class Subscriber
-}
-
-UserLibrary -left-> Subscriber
-UserLibrary <-left- Subscriber
-
-@enduml
-```
+<p align="center"> <img src="docs/Firos_main.png" alt="Default behaviour"/> </p>
 
 ### Installation of FIROS2
 

@@ -1,0 +1,23 @@
+@startuml
+
+hide empty members
+package "Context Broker" <<Cloud>> {
+    class NGSIv2
+}
+
+package "Integration Service" <<Rectangle>> {
+    class UserLibrary {
+        +RTPS_t transformFromNGSIv2(NGSIv2_t)
+        +NGSIv2_t transform(RTPS_t)
+    }
+}
+
+NGSIv2 <-right-> UserLibrary
+
+package "RTPS" <<Cloud>> {
+    class RTPS_Participant
+}
+
+UserLibrary <-left-> RTPS_Participant
+
+@enduml
