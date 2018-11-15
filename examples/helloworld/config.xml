@@ -31,12 +31,12 @@
                 <dataType>std_msgs::msg::dds_::String_</dataType>
             </topic>
             <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
-        </publisher>        
+        </publisher>
     </profiles>
 
     <connector name="domain_change">
-        <subscriber participant_profile="rtps" subscriber_profile="fastrtps_subscriber"/>
-        <publisher participant_profile="ros2" publisher_profile="ros2_publisher"/>
+        <reader participant_profile="rtps" subscriber_profile="fastrtps_subscriber"/>
+        <writer participant_profile="ros2" publisher_profile="ros2_publisher"/>
         <transformation file="build/libuserlib.so" function="transform"/>
     </connector>
 </is>

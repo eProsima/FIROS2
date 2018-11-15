@@ -154,9 +154,9 @@ The next step is to set the *config.xml* file with the specific parameters of ou
             </publisher>
         </profiles>
 
-        <connector name="domain_change"> 
-            <subscriber participant_name="rtps" subscriber_name="fastrtps_subscriber"/>
-            <publisher participant_name="ros2" publisher_name="ros2_publisher"/>
+        <connector name="domain_change">
+            <reader participant_profile="rtps" subscriber_profile="fastrtps_subscriber"/>
+            <publisher participant_profile="ros2" publisher_profile="ros2_publisher"/>
             <transformation file="/path/to/compiled/library/libuserlib.so" function="transform"/>
         </connector>
     </is>

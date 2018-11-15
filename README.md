@@ -72,7 +72,7 @@ In this template is it possible to set different bridges between topics and enti
         <!-- Path to the NGSIv2 library -->
         <library>/path/to/ngsiv2bridge.so</library>
 
-        <subscriber name="sub_ngsiv2">
+        <reader name="sub_ngsiv2">
             <property>
                 <name>id</name>
                 <value>entity_idPattern</value>
@@ -126,9 +126,9 @@ In this template is it possible to set different bridges between topics and enti
                 <name>description</name>
                 <value>subscription_description</value>
             </property>
-        </subscriber>
+        </reader>
 
-        <publisher name="pub_ngsiv2">
+        <writer name="pub_ngsiv2">
             <property>
                 <name>host</name>
                 <value>context_broker_host</value>
@@ -137,7 +137,7 @@ In this template is it possible to set different bridges between topics and enti
                 <name>port</name>
                 <value>context_broker_port</value>
             </property>
-        </publisher>
+        </writer>
     </bridge>
 
 ### Transformation, mapping and communication
@@ -148,7 +148,7 @@ This function will be compiled apart and loaded in *FIROS2* at runtime.
 
 In this way, the user can map attributes from the input to the output message and at the same time to apply changes over the data. The serialization and deserialization functions are generated with provided tools, so the only thing that the user has to put are the *idl* files used in the bridge.
 
-*FIROS2* provides a builtin *NGSIv2 bridge library* named *libisbridgengsiv2lib.so* that implements a ISBridgeNGSIv2 with NGSIv2Publisher and NGSIv2Subscriber in order to communicate RTPS and NGSIv2, implementing the interfaces ISBridge, ISPublisher and ISSubscriber respectively.
+*FIROS2* provides a builtin *NGSIv2 bridge library* named *libisbridgengsiv2lib.so* that implements a ISBridgeNGSIv2 with NGSIv2Publisher and NGSIv2Subscriber in order to communicate RTPS and NGSIv2, implementing the interfaces ISBridge, ISWriter and ISReader respectively.
 
 You can, of course, implement and use your own bridge libraries to define other behaviour.
 

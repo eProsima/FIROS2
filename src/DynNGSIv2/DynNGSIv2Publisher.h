@@ -19,19 +19,18 @@
 #include "ISBridge.h"
 #include "NGSIv2Params.h"
 
-class DynNGSIv2Publisher : public ISPublisher
+class DynNGSIv2Publisher : public ISWriter
 {
 private:
     std::string url;
-    long write(eprosima::fastrtps::types::DynamicData* data);
     NGSIv2Params part_params;
 public:
     DynNGSIv2Publisher(const std::string &name);
     DynNGSIv2Publisher(const std::string &name, const NGSIv2Params &params);
     ~DynNGSIv2Publisher() override;
 
-    bool publish(SerializedPayload_t* payload) override { return false; }
-    bool publish(eprosima::fastrtps::types::DynamicData* payload) override;
+    bool write(SerializedPayload_t* payload) override { return false; }
+    bool write(eprosima::fastrtps::types::DynamicData* payload) override;
 };
 
 #endif // _DYN_NGSIv2_PUBLISHER_H_

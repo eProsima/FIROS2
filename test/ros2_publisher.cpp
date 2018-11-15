@@ -26,7 +26,7 @@ public:
     MinimalPublisher()
     : Node("test_firos2_publisher"), count_(0)
     {
-        publisher_ = this->create_publisher<std_msgs::msg::String>("test_ros2_topic");
+        publisher_ = this->create_writer<std_msgs::msg::String>("test_ros2_topic");
         timer_ = this->create_wall_timer(
             500ms, std::bind(&MinimalPublisher::timer_callback, this));
         }

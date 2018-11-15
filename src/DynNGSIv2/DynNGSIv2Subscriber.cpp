@@ -41,7 +41,7 @@ std::string DynNGSIv2Subscriber::getListenerURL()
 }
 
 DynNGSIv2Subscriber::DynNGSIv2Subscriber(const std::string &name, const NGSIv2Params &params)
-: ISSubscriber(name)
+: ISReader(name)
 , part_params(params)
 {
     std::stringstream strstr;

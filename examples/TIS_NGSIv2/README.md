@@ -181,7 +181,7 @@ The *config.xml* file used in this example is the following:
         <bridge name="ngsiv2">
             <library>libisbridgengsiv2lib.so</library> <!-- Path to the NGSIv2 library -->
 
-            <subscriber name="ngsiv2_subscriber">
+            <reader name="ngsiv2_subscriber">
                 <property>
                     <name>host</name>
                     <value>localhost</value>
@@ -210,9 +210,9 @@ The *config.xml* file used in this example is the following:
                     <name>listener_port</name>
                     <value>12345</value>
                 </property>
-            </subscriber>
+            </reader>
 
-            <publisher name="ngsiv2_publisher">
+            <writer name="ngsiv2_publisher">
                 <property>
                     <name>host</name>
                     <value>localhost</value>
@@ -221,18 +221,18 @@ The *config.xml* file used in this example is the following:
                     <name>port</name>
                     <value>1026</value>
                 </property>
-            </publisher>
+            </writer>
         </bridge>
 
         <connector name="ros2_ngsiv2">
-            <subscriber participant_name="ros2" subscriber_name="ros2_subscriber"/>
-            <publisher participant_name="ngsiv2" publisher_name="ngsiv2_publisher"/>
+            <reader participant_profile="ros2" subscriber_profile="ros2_subscriber"/>
+            <writer bridge_name="ngsiv2" writer_name="ngsiv2_publisher"/>
             <transformation file="/path/to/compiled/library/libuserlib.so" function="transform"/>
         </connector>
 
         <connector name="ngsiv2_ros2">
-            <subscriber participant_name="ngsiv2" subscriber_name="ngsiv2_subscriber"/>
-            <publisher participant_name="ros2" publisher_name="ros2_publisher"/>
+            <reader bridge_name="ngsiv2" reader_name="ngsiv2_subscriber"/>
+            <writer participant_profile="ros2" publisher_profile="ros2_publisher"/>
             <transformation file="/path/to/compiled/library/libuserlib.so" function="transformFromNGSIv2"/>
         </connector>
     </is>
@@ -296,4 +296,3 @@ Let's suppose again that our ROS2 path is **~/ros2**
 
 Now, you can create or modify any robot you has in your contextBroker with *cb_create_robot* and *cb_update_attr*, and will see how the firos2 received and transmits the data.
 Using *RobotExample* program you can check and modify the ROS2 side and observe how the changes propagate to contextBroker.
-

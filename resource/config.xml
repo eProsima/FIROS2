@@ -53,7 +53,7 @@
     <bridge name="bridge_ngsiv2">
         <library>/path/to/ngsiv2bridge.so</library> <!-- Path to the NGSIv2 library -->
 
-        <subscriber name="sub_ngsiv2">
+        <reader name="sub_ngsiv2">
             <property>
                 <name>id</name>
                 <value>entity_idPattern</value>
@@ -106,9 +106,9 @@
                 <name>description</name>
                 <value>subscription_description</value>
             </property>
-        </subscriber>
+        </reader>
 
-        <publisher name="pub_ngsiv2">
+        <writer name="pub_ngsiv2">
             <property>
                 <name>host</name>
                 <value>context_broker_host</value>
@@ -117,19 +117,19 @@
                 <name>port</name>
                 <value>context_broker_port</value>
             </property>
-        </publisher>
+        </writer>
     </bridge>
 
 
     <connector name="ros2_ngsiv2">
-        <subscriber participant_name="ros2_participant" subscriber_name="ros2_subscriber"/>
-        <publisher participant_name="ngsiv2" publisher_name="pub_ngsiv2"/>
+        <reader participant_profile="ros2_participant" subscriber_profile="ros2_subscriber"/>
+        <writer bridge_name="ngsiv2" writer_name="pub_ngsiv2"/>
         <transformation file="/path/to/libuserlib.so" function="transformToNGSIv2"/>
     </connector>
 
     <connector name="ngsiv2_ros2">
-        <subscriber participant_name="ngsiv2" subscriber_name="sub_ngsiv2"/>
-        <publisher participant_name="ros2_participant" publisher_name="ros2_publisher"/>
+        <reader bridge_name="ngsiv2" reader_name="sub_ngsiv2"/>
+        <writer participant_profile="ros2_participant" publisher_profile="ros2_publisher"/>
         <transformation file="/path/to/libuserlib.so" function="transformFromNGSIv2"/>
     </connector>
 </is>

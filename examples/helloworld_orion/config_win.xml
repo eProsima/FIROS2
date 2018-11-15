@@ -22,7 +22,7 @@
     <bridge name="ngsiv2">
         <library>C:\dev\ros2\install\Lib\isbridgengsiv2lib.dll</library> <!-- Path to the NGSIv2 library -->
 
-        <publisher name="ngsiv2_publisher">
+        <writer name="ngsiv2_publisher">
             <property>
                 <name>host</name>
                 <value>localhost</value>
@@ -31,12 +31,12 @@
                 <name>port</name>
                 <value>1026</value>
             </property>
-        </publisher>
+        </writer>
     </bridge>
 
     <connector name="domain_change">
-        <subscriber participant_profile="ros2" subscriber_profile="ros2_subscriber"/>
-        <publisher bridge_name="ngsiv2" publisher_name="ngsiv2_publisher"/>
+        <reader participant_profile="ros2" subscriber_profile="ros2_subscriber"/>
+        <writer bridge_name="ngsiv2" writer_name="ngsiv2_publisher"/>
         <transformation file="\build\Release\userlib.dll" function="transform"/>
     </connector>
 </is>

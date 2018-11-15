@@ -33,13 +33,13 @@ DynNGSIv2Publisher::~DynNGSIv2Publisher()
 }
 
 DynNGSIv2Publisher::DynNGSIv2Publisher(const std::string &name)
-    : ISPublisher(name)
+    : ISWriter(name)
 {
     output_type = getDynJsonPubSubType();
 }
 
 DynNGSIv2Publisher::DynNGSIv2Publisher(const std::string &name, const NGSIv2Params &params)
-: ISPublisher(name)
+: ISWriter(name)
 , part_params(params)
 {
     std::stringstream strstr;
@@ -48,14 +48,9 @@ DynNGSIv2Publisher::DynNGSIv2Publisher(const std::string &name, const NGSIv2Para
     output_type = getDynJsonPubSubType();
 }
 
-bool DynNGSIv2Publisher::publish(DynamicData* payload)
+bool DynNGSIv2Publisher::write(DynamicData* data)
 {
-    long code = write(payload);
-    return (code / 100) == 2;
-}
-
-long DynNGSIv2Publisher::write(DynamicData* data)
-{
+    long code = 600;
     try
     {
         curlpp::Cleanup cleaner;
@@ -75,17 +70,17 @@ long DynNGSIv2Publisher::write(DynamicData* data)
 
         performAndRetry(part_params.retries, request);
 
-        return curlpp::infos::ResponseCode::get(request);
+        code = curlpp::infos::ResponseCode::get(request);
     }
     catch (curlpp::LogicError & e)
     {
         LOG_ERROR(e.what());
-        return 601;
+        code = 601;
     }
     catch (curlpp::RuntimeError & e)
     {
         LOG_ERROR(e.what());
-        return 602;
+        code = 602;
     }
-    return 600;
+    return (code / 100) == 2;
 }

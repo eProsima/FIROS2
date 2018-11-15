@@ -102,7 +102,7 @@ The *config.xml* file used in this example is the following:
         <bridge name="ngsiv2">
             <library>libisbridgengsiv2lib.so</library> <!-- Path to the NGSIv2 library -->
 
-            <publisher name="ngsiv2_publisher">
+            <writer name="ngsiv2_publisher">
                 <property>
                     <name>host</name>
                     <value>localhost</value>
@@ -111,12 +111,12 @@ The *config.xml* file used in this example is the following:
                     <name>port</name>
                     <value>1026</value>
                 </property>
-            </publisher>
+            </writer>
         </bridge>
 
-        <connector name="domain_change"> 
-            <subscriber participant_name="ros2" subscriber_name="ros2_subscriber"/>
-            <publisher participant_name="ngsiv2" publisher_name="ngsiv2_publisher"/>
+        <connector name="domain_change">
+            <reader participant_profile="ros2" subscriber_profile="ros2_subscriber"/>
+            <writer bridge_name="ngsiv2" writer_name="ngsiv2_publisher"/>
             <transformation file="/path/to/compiled/library/libuserlib.so" function="transform"/>
         </connector>
     </is>

@@ -20,13 +20,13 @@ extern "C" USER_LIB_EXPORT ISBridge* create_bridge(const char* name,
     return loadDummyBridge(name);
 }
 
-extern "C" USER_LIB_EXPORT ISSubscriber* create_subscriber(ISBridge *bridge, const char* name,
+extern "C" USER_LIB_EXPORT ISReader* create_reader(ISBridge *bridge, const char* name,
     const std::vector<std::pair<std::string, std::string>> *config)
 {
     return loadDummySubscriber(name, config);
 }
 
-extern "C" USER_LIB_EXPORT ISPublisher* create_publisher(ISBridge *bridge, const char* name,
+extern "C" USER_LIB_EXPORT ISWriter* create_writer(ISBridge *bridge, const char* name,
     const std::vector<std::pair<std::string, std::string>> *config)
 {
     return loadDummyPublisher(name, config);

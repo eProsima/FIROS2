@@ -33,7 +33,7 @@
 using namespace curlpp::options;
 using namespace curlpp::infos;
 
-class NGSIv2Subscriber : public ISSubscriber
+class NGSIv2Subscriber : public ISReader
 {
 private:
     asio::io_service* io_service;

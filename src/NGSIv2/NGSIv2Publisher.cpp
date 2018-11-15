@@ -33,12 +33,12 @@ NGSIv2Publisher::~NGSIv2Publisher()
 }
 
 NGSIv2Publisher::NGSIv2Publisher(const std::string &name)
-    : ISPublisher(name)
+    : ISWriter(name)
 {
 }
 
 NGSIv2Publisher::NGSIv2Publisher(const std::string &name, const NGSIv2Params &params)
-: ISPublisher(name)
+: ISWriter(name)
 , part_params(params)
 {
     std::stringstream strstr;
@@ -46,14 +46,9 @@ NGSIv2Publisher::NGSIv2Publisher(const std::string &name, const NGSIv2Params &pa
     url = strstr.str();
 }
 
-bool NGSIv2Publisher::publish(SerializedPayload_t* payload)
+bool NGSIv2Publisher::write(SerializedPayload_t* payload)
 {
-    long code = write(payload);
-    return (code / 100) == 2;
-}
-
-long NGSIv2Publisher::write(SerializedPayload_t* payload)
-{
+    long code = 600;
     try
     {
         curlpp::Cleanup cleaner;
@@ -76,17 +71,18 @@ long NGSIv2Publisher::write(SerializedPayload_t* payload)
 
         performAndRetry(part_params.retries, request);
 
-        return curlpp::infos::ResponseCode::get(request);
+        code = curlpp::infos::ResponseCode::get(request);
     }
     catch (curlpp::LogicError & e)
     {
         LOG_ERROR(e.what());
-        return 601;
+        code = 601;
     }
     catch (curlpp::RuntimeError & e)
     {
         LOG_ERROR(e.what());
-        return 602;
+        code = 602;
     }
-    return 600;
+
+    return (code / 100) == 2;
 }

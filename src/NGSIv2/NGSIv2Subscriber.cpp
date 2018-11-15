@@ -40,7 +40,7 @@ std::string NGSIv2Subscriber::getListenerURL()
 }
 
 NGSIv2Subscriber::NGSIv2Subscriber(const std::string &name, const NGSIv2Params &params)
-: ISSubscriber(name)
+: ISReader(name)
 , part_params(params)
 {
     std::stringstream strstr;
