@@ -8,7 +8,7 @@ Since *FIROS2* is powered by *eProsima Integration Service* it makes possible th
 
 ### Installation of FIROS2
 
-Before using *Firos2*, it has to be installed along with the rest of *ROS2* packages of your system. If you have followed the *ROS2* installation manual provided [here](https://github.com/ros2/ros2/wiki/Installation) you only need to clone this repository on your *ROS2* workspace. For cloning this project and update its submodules at the same time, don't forget to add the *--recursive* option.. In Linux, these are the steps:
+Before using *Firos2*, it has to be installed along with the rest of *ROS2* packages of your system. If you have followed the *ROS2* <a href="https://index.ros.org/doc/ros2/Installation" target="_blank">installation manual</a> you only need to clone this repository on your *ROS2* workspace. For cloning this project and update its submodules at the same time, don't forget to add the *--recursive* option.. In Linux, these are the steps:
 
     $ cd ~/ros2_ws/src/ros2/
     $ git clone --recursive https://github.com/eProsima/firos2
@@ -34,11 +34,11 @@ Once this is done, it can be compiled like any other *ROS2* package. For example
 
 
 
-There are several examples to show the behaviour under [examples folder](https://github.com/eProsima/firos2/examples).
+There are several examples to show the behaviour under [examples folder](examples).
 
 ### FIROS2 configuration
 
-*FIROS2* offers different parameters that can be configured. For setting-up a bridge, the user has to define a configuration file with the information about input and output protocols. A generic example can be found on [**config.xml**](https://github.com/eProsima/firos2/blob/master/resource/config.xml)
+*FIROS2* offers different parameters that can be configured. For setting-up a bridge, the user has to define a configuration file with the information about input and output protocols. A generic example can be found on [**config.xml**](resource/config.xml)
 
 In this template is it possible to set different bridges between topics and entities. FIROS2' bridges subscribe to a topic and update data of the related entity and subscribe to entities and publish data to the related topic. The parameters that have to be defined are (only shown a *bridge* section of the *config.xml* file):
 
@@ -127,7 +127,7 @@ In this way, the user can map attributes from the input to the output message an
 
 You can, of course, implement and use your own bridge libraries to define other behaviours.
 
-You can learn more about *Bridge Libraries* and *Transformation Libraries* in the documentation of *[eProsima Integration Service](https://github.com/eProsima/Integration-Services)*.
+You can learn more about *Bridge Libraries* and *Transformation Libraries* in the documentation of *[eProsima Integration Service](https://github.com/eProsima/Integration-Service)*.
 
 ### Types and interfaces
 
