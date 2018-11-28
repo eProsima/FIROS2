@@ -1,46 +1,80 @@
 # eProsima FIROS2
 ![http://www.eprosima.com](https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSd0PDlVz1U_7MgdTe0FRIWD0Jc9_YH-gGi0ZpLkr-qgCI6ZEoJZ5GBqQ)
 
-*eProsima FIROS2* is an application that allows intercommunication between ROS2 and NGSIv2 protocol.
-Since *FIROS2* is powered by *eProsima Integration Service* it makes possible the creation of bidirectional communication bridges with customized routing, mapping between input and output attributes or data modification between ROS2 and NGSIv2 from FIWARE-Orion contextBroker.
+*eProsima FIROS2* is an application that allows intercommunication between *ROS2* and *NGSIv2* protocol.
+Since *FIROS2* is powered by *eProsima Integration Service* it makes possible the creation of bidirectional
+communication bridges with customized routing, mapping between input and output attributes or data
+modification between *ROS2* and *NGSIv2* from *FIWARE-Orion contextBroker*.
 
 <p align="center"> <img src="doc/Firos_main.png" alt="Default behaviour"/> </p>
 
+<hr></hr>
+
+### **Table Of Contents**
+
+[Installation](#installation-of-firos2)
+
+[Configuration](#firos2-configuration)
+
+[Transformation, mapping and communication](#transformation-mapping-and-communication)
+
+[Types and interfaces](#types-and-interfaces)
+
+[Dynamic Types](#dynamic-types)
+
+<hr></hr>
+
 ### Installation of FIROS2
 
-Before using *Firos2*, it has to be installed along with the rest of *ROS2* packages of your system. If you have followed the *ROS2* <a href="https://index.ros.org/doc/ros2/Installation" target="_blank">installation manual</a> you only need to clone this repository on your *ROS2* workspace. For cloning this project and update its submodules at the same time, don't forget to add the *--recursive* option.. In Linux, these are the steps:
+Before using *FIROS2*, it has to be installed along with the rest of *ROS2* packages of your system.
+If you have followed the *ROS2*
+<a href="https://index.ros.org/doc/ros2/Installation" target="_blank">installation manual</a>
+you only need to clone this repository on your *ROS2* workspace.
+For cloning this project and update its submodules at the same time, don't forget to add the *--recursive* option.
 
+In Linux, these are the steps:
+
+``` bash
     $ cd ~/ros2_ws/src/ros2/
     $ git clone --recursive https://github.com/eProsima/firos2
     $ cd ~/ros2_ws
+```
 
 In the case of Windows:
 
+``` bash
     > cd C:\dev\ros2\src\ros2
     > git clone --recursive https://github.com/eProsima/firos2
+```
 
 On windows you must compile [*cURL Library*](https://github.com/curl/curl) that is included as thirdpary submodule:
 
+``` bash
     > cd C:\dev\ros2\src\ros2\firos2\thirdparty\curl
     > buildconf.bat
     > cd winbuild
     > nmake /f Makefile.vc mode=dll VC=14
     > cd C:\dev\ros2
+```
 
 Once this is done, it can be compiled like any other *ROS2* package. For example:
 
-
+``` bash
     $ ament build --only-package firos2
-
-
+```
 
 There are several examples to show the behaviour under [examples folder](examples).
 
 ### FIROS2 configuration
 
-*FIROS2* offers different parameters that can be configured. For setting-up a bridge, the user has to define a configuration file with the information about input and output protocols. A generic example can be found on [**config.xml**](resource/config.xml)
+*FIROS2* offers different parameters that can be configured. For setting-up a *bridge*,
+the user has to define a configuration file with the information about input and output protocols.
+A generic example can be found on [**config.xml**](resource/config.xml)
 
-In this template is it possible to set different bridges between topics and entities. FIROS2' bridges subscribe to a topic and update data of the related entity and subscribe to entities and publish data to the related topic. The parameters that have to be defined are (only shown a *bridge* section of the *config.xml* file):
+In this template is it possible to set different bridges between topics and entities.
+*FIROS2's* *bridges* subscribe to a topic and update data of the related entity and subscribe to entities and
+publish data to the related topic.
+The parameters that have to be defined are (only shown a *bridge* section of the *config.xml* file):
 
     <!-- Declares a custom bridge named 'bridge_ngsiv2' -->
     <bridge name="bridge_ngsiv2">
@@ -117,52 +151,52 @@ In this template is it possible to set different bridges between topics and enti
 
 ### Transformation, mapping and communication
 
-As said before, when a bridge is connecting two nodes with different protocols, the user has to provide a library with a function to transform and/or map the attributes from one protocol to another. To make this step easier, there is an empty code template in **templatelib.cpp**.
+As said before, when a *bridge* is connecting two nodes with different protocols,
+the user has to provide a library with a function to transform and/or map the attributes from one protocol to another.
+To make this step easier, there is an empty code template in **templatelib.cpp**.
 
 This function will be compiled apart and loaded in *FIROS2* at runtime.
 
-In this way, the user can map attributes from the input to the output message and at the same time to apply changes over the data. The serialization and deserialization functions are generated with provided tools, so the *IDL* files used are the only thing that the user has to put in the bridge.
+In this way, the user can map attributes from the input to the output message and at the same time to apply changes
+over the data. The serialization and deserialization functions are generated with provided tools,
+so the *IDL* files used are the only thing that the user has to put in the bridge.
 
-*FIROS2* provides a built-in *NGSIv2 bridge library* named *libisbridgengsiv2lib.so* that implements an ISBridgeNGSIv2 with NGSIv2Publisher and NGSIv2Subscriber in order to communicate RTPS and NGSIv2, implementing the interfaces ISBridge, ISWriter and ISReader respectively.
+*FIROS2* provides a built-in *NGSIv2 bridge library* named *libisbridgengsiv2lib.so* that implements an
+*ISBridgeNGSIv2* with *NGSIv2Publisher* and *NGSIv2Subscriber* in order to communicate RTPS and NGSIv2,
+implementing the interfaces *ISBridge*, *ISWriter* and *ISReader* respectively.
 
-You can, of course, implement and use your own bridge libraries to define other behaviours.
+You can, of course, implement and use your own *bridge libraries* to define other behaviours.
 
-You can learn more about *Bridge Libraries* and *Transformation Libraries* in the documentation of *[eProsima Integration Service](https://github.com/eProsima/Integration-Service)*.
+You can learn more about *Bridge Libraries* and *Transformation Libraries* in the documentation of
+*[eProsima Integration Service](https://integration-services.readthedocs.io/)*.
 
 ### Types and interfaces
 
-The interaction with the *ROS2* IDL is made from *Fast RTPS* *IDL* compatible files.
-
-For making easier the creation of types interfaces used by the communication bridges, FIROS2 includes an *IDL* generator based on *rosidl_generator_dds_idl* package. *ROS2* messages definitions *msg* are slightly different from *Fast RTPS* *IDL* types, but since *ROS2* is running over *Fast RTPS*, for each *msg* file exists an equivalent *IDL* file.
-
-[//]: # (Add ? .. image:: images/firos2_idl.png :align: center)
-
-To get a deeper comprehension about the relation between *ROS2* and *Fast RTPS* IDL definitions, you can see [this article](http://design.ros2.org/articles/mapping_dds_types.html). The *FIROS2* *IDL* generation feature allows two different options:
-
-- Generate a *Fast RTPS* compatible *IDL* file for an specific package. This can be achieved just adding *FIROS2* in the package CMakeLists as a dependency.
-
-[//]: # (Add ? .. image:: images/idl_specific.png :align: center)
-
-- Generate *Fast RTPS* compatible *IDL* files by default for all the packages defined in the *ROS2* workspace. To make this possible *FIROS2* must be added to the rosidl_default_generators list.
-
-[//]: # (Add ? .. image:: images/idl_default.png  :align: center)
-
-The *IDL* files will be created inside the workspace build directory at compilation time.
-
 For interaction with *NGSIv2* entities an *IDL* file (and generated files) is provided. This *IDL* is named **JsonNGSIv2.idl** and contains a structure composed by two strings, *entityId* and *data*.
 
-For received messages from *NGSIv2* protocol, only *data* must be filled. In this case *entityId* will be ignored, and it's better to keep it empty.
-*Integration Service* will fill *data* with the complete JSON string sent to our listener by the contextBroker server (this is, the subscription result).
+For received messages from *NGSIv2* protocol, only *data* must be filled.
+In this case *entityId* will be ignored, and it's better to keep it empty.
+*Integration Service* will fill *data* with the complete JSON string sent to our listener by the
+*contextBroker* server (this is, the subscription result).
 
-For sending messages to the contextBroker to update entities from changes received from *RTPS* subscriber, *JsonNGSIv2" must fill *entityId* with the entityId of the entity modified and *data* with a composed JSON containing the attributed to being updated.
+For sending messages to the *contextBroker* to update entities from changes received from *RTPS* subscriber,
+*JsonNGSIv2" must fill *entityId* with the *entityId* of the entity modified and *data* with a composed JSON
+containing the attributed to being updated.
 
-The interaction with the *NGSIv2* entities must be implemented by the user in the transformation library.
+The interaction with the *NGSIv2* entities must be implemented by the user in the *transformation library*.
 
-In the example **TIS_NGSIv2** the transformation library shown examples of both transformations using the described behavior.
+In the example **TIS_NGSIv2** the *transformation library* shows examples of both transformations using the
+described behavior.
+
+You can create your own *IDL* files to define your own behavior and management of the data.
+To get a deeper comprehension about the relation between *ROS2* and *Fast RTPS* IDL definitions,
+you can see [this article](http://design.ros2.org/articles/mapping_dds_types.html).
 
 ## Dynamic Types
 
-An example of integration with **Dynamic Types**, Dyn_TIS_NGSIv2 example has been added.
-RobotExample executable uses static types (to show compatibility), but ROS2 publisher/subscriber uses DynamicTypes, as
-well as NGSIv2 that uses a dynamic version of the NGSIv2 JSON library.
-All Dynamic Types related files are under *DynNGSIv2* folder, that generates an additional dynamic library to be used with dynamic types transformation libraries.
+An example of integration with **Dynamic Types** can be found in the *Dyn_TIS_NGSIv2* example.
+*RobotExample* executable uses static types (to show compatibility),
+but *ROS2* publisher/subscriber uses *DynamicTypes*, as well as *NGSIv2* that uses a dynamic version of the
+*NGSIv2 JSON* library.
+All *Dynamic Types* related files are under *DynNGSIv2* folder,
+that generates an additional dynamic library to be used with *dynamic types transformation libraries*.
