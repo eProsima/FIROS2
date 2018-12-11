@@ -5,9 +5,9 @@
 		<subscriber>
 			<participant>ros2_subscriber</participant>
 			<domain>0</domain>
-			<topic>chatter</topic>
+			<topic>rt/chatter</topic>
 			<type>std_msgs::msg::dds_::String_</type>
-			<partition>rt</partition>
+			<partition></partition>
 		</subscriber>
 		<publisher>
 			<participant>ngsiv2_publisher</participant>
@@ -19,7 +19,7 @@
 		<!-- <transformToNGSIv2>C:\dev\ros2\src\ros2\firos2\examples\helloworld_orion\build\Release\userlib.dll</transformToNGSIv2>
 		<bridge_library>C:\dev\ros2\build\firos2\Release\isrtpsngsiv2bridgelib.dll</bridge_library> -->
 		<!-- Linux -->
-		<transformToNGSIv2>/home/luisgp/ros2_ws/src/ros2/firos2/examples/helloworld_orion/build/libuserlib.so</transformToNGSIv2>
+		<transformToNGSIv2>~/ros2_ws/src/ros2/firos2/examples/helloworld_orion/build/libuserlib.so</transformToNGSIv2>
 		<bridge_library>libisrtpsngsiv2bridgelib.so</bridge_library>
 	</bridge>
 </is>
