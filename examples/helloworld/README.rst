@@ -12,7 +12,7 @@ The goal will be to make a bridge from the *Fast RTPS* HelloWorld publisher and 
 Types generation
 ----------------
 
-First of all, we are going to check which IDL is using each node. In the case of *Fast RTPS* HelloWorld, the *IDL* of the example is located in the main directory. But in the case of *ROS2*, we have to take the *IDL* file from the generated files that *ROS2* creates at compilation time (if you need more information about *IDL* files and its generation from *ROS2* *msg* files, you can find it `here <https://github.com/JavierIH/armageddon/tree/firos/doc#types-and-interfaces>`_. For this particular example, we can find a compatible *IDL* named *String\_.idl* in the install directory. These two IDLs has been copied to the `idl <idl>`_ directory.
+First of all, we are going to check which IDL is using each node. In the case of *Fast RTPS* HelloWorld, the *IDL* of the example is located in the main directory. But in the case of *ROS2*, we have to take the *IDL* file from the generated files that *ROS2* creates at compilation time. For this particular example, we can find a compatible *IDL* named *String\_.idl* in the install directory. These two IDLs has been copied to the `idl <idl>`_ directory.
 
 Now using these two *IDL* files and the tool `fastrtpsgen <http://eprosima-fast-rtps.readthedocs.io/en/latest/geninfo.html>`_ we are going to generate the needed source files that contain the definition of the described types in the IDL:
 
