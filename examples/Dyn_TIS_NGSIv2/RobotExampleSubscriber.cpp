@@ -54,8 +54,8 @@ bool RobotExampleSubscriber::init()
     //CREATE THE SUBSCRIBER
     SubscriberAttributes Rparam;
     Rparam.topic.topicKind = NO_KEY;
-    Rparam.topic.topicDataType = "rt/RobotSnd";
-    Rparam.topic.topicName = "RobotTopic";
+    Rparam.topic.topicDataType = "RobotSnd";
+    Rparam.topic.topicName = "rt/RobotTopic";
     Rparam.topic.historyQos.kind = KEEP_LAST_HISTORY_QOS;
     Rparam.topic.historyQos.depth = 30;
     Rparam.topic.resourceLimitsQos.max_samples = 50;

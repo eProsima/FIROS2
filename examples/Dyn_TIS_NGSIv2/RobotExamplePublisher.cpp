@@ -67,8 +67,8 @@ bool RobotExamplePublisher::init()
     //CREATE THE PUBLISHER
     PublisherAttributes Wparam;
     Wparam.topic.topicKind = NO_KEY;
-    Wparam.topic.topicDataType = "rt/RobotSnd";
-    Wparam.topic.topicName = "RobotTopic";
+    Wparam.topic.topicDataType = "RobotSnd";
+    Wparam.topic.topicName = "rt/RobotTopic";
     Wparam.topic.historyQos.kind = KEEP_LAST_HISTORY_QOS;
     Wparam.topic.historyQos.depth = 30;
     Wparam.topic.resourceLimitsQos.max_samples = 50;
