@@ -649,17 +649,16 @@ if(COMPILE_EXAMPLES)
     add_subdirectory(examples)
 endif()
 
-#
 # ROS2 Configuration
-#ament_export_dependencies(rosidl_cmake)
-#ament_export_include_directories(include)
+ament_export_dependencies(rosidl_cmake)
+ament_export_include_directories(include)
 
-#ament_export_libraries(oriontypes)
+ament_export_libraries(oriontypes)
 
-#ament_export_dependencies(fastcdr)
-#ament_export_dependencies(fastrtps)
+ament_export_dependencies(fastcdr)
+ament_export_dependencies(fastrtps)
 
-#ament_package(
-#  CONFIG_EXTRAS "firos2-extras.cmake.in"
-#)
+ament_package(
+  CONFIG_EXTRAS "firos2-extras.cmake.in"
+)
 
