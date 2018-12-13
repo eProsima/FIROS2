@@ -47,7 +47,7 @@ In the case of Windows:
 Once this is done, it can be compiled like any other *ROS2* package. For example:
 
 
-    $ ament build --only-package firos2
+    $ colcon build --cmake-args -DTHIRDPARTY=ON --packages-select firos
 
 
 	

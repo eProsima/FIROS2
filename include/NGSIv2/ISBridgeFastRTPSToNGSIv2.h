@@ -55,9 +55,9 @@ class ISBridgeFastRTPSToNGSIv2 : public ISBridge
 {
 public:
     ISBridgeFastRTPSToNGSIv2(
-        ParticipantAttributes par_fastrtps_params,
-        NGSIv2Params par_ngsiv2_params,
-        SubscriberAttributes sub_params,
+        ParticipantAttributes &par_fastrtps_params,
+        NGSIv2Params &par_ngsiv2_params,
+        SubscriberAttributes &sub_params,
         const char* file_path);
     virtual ~ISBridgeFastRTPSToNGSIv2();
     void onTerminate() override;

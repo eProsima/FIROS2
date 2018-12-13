@@ -28,9 +28,9 @@
 using asio::ip::tcp;
 
 ISBridgeFastRTPSToNGSIv2::ISBridgeFastRTPSToNGSIv2(
-                    ParticipantAttributes par_fastrtps_params,
-                    NGSIv2Params par_ngsiv2_params,
-                    SubscriberAttributes sub_params,
+                    ParticipantAttributes &par_fastrtps_params,
+                    NGSIv2Params &par_ngsiv2_params,
+                    SubscriberAttributes &sub_params,
                     const char *file_path
                 ) : mf_participant(nullptr),
                     mf_subscriber(nullptr),
@@ -187,4 +187,6 @@ string ISBridgeFastRTPSToNGSIv2::NGSIv2Publisher::write(SerializedPayload_t* pay
     catch ( curlpp::RuntimeError & e ) {
         std::cout << e.what() << std::endl;
     }
+
+    return "";
 }
