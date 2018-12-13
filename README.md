@@ -62,7 +62,7 @@ Once done, *FIROS2* is compiled like any other *ROS2* package.
 For example:
 
 ``` bash
-    $ ament build --only-package firos2
+    $ colcon build --cmake-args -DTHIRDPARTY=ON --packages-select firos
 ```
 
 There are several examples to show the behavior under the [examples folder](examples).

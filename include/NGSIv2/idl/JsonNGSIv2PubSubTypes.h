@@ -36,14 +36,15 @@ class JsonNGSIv2PubSubType : public eprosima::fastrtps::TopicDataType
 public:
 	typedef JsonNGSIv2 type;
 
-	JsonNGSIv2PubSubType();
-	virtual ~JsonNGSIv2PubSubType();
-	bool serialize(void *data, eprosima::fastrtps::rtps::SerializedPayload_t *payload);
-	bool deserialize(eprosima::fastrtps::rtps::SerializedPayload_t *payload, void *data);
+    eProsima_user_DllExport JsonNGSIv2PubSubType();
+    eProsima_user_DllExport virtual ~JsonNGSIv2PubSubType();
+    eProsima_user_DllExport bool serialize(void *data, eprosima::fastrtps::rtps::SerializedPayload_t *payload);
+    eProsima_user_DllExport bool deserialize(eprosima::fastrtps::rtps::SerializedPayload_t *payload, void *data);
         std::function<uint32_t()> getSerializedSizeProvider(void* data);
-	bool getKey(void *data, eprosima::fastrtps::rtps::InstanceHandle_t *ihandle, bool force_md5 = false);
-	void* createData();
-	void deleteData(void * data);
+    eProsima_user_DllExport bool getKey(void *data, eprosima::fastrtps::rtps::InstanceHandle_t *ihandle, bool force_md5 = false);
+    eProsima_user_DllExport void* createData();
+    eProsima_user_DllExport void deleteData(void * data);
+
 	MD5 m_md5;
 	unsigned char* m_keyBuffer;
 };

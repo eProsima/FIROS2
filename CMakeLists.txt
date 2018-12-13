@@ -102,6 +102,7 @@ else()
     set(CURL_BUILD_DIR thirdparty/curl/builds/libcurl-vc14-x86-release-dll-ipv6-sspi-winssl)
 endif()
 
+add_definitions(-DBUILD_SHARED_LIBS -Doriontypes_EXPORTS)
 add_definitions(-DBUILD_SHARED_LIBS -Disbridgengsiv2lib_EXPORTS)
 add_definitions(-DBUILD_SHARED_LIBS -Disdynbridgengsiv2lib_EXPORTS)
 add_definitions(-D${PROJECT_NAME_UPPER}_SOURCE)
@@ -204,23 +205,24 @@ set(IS_LIB_FILES thirdparty/integration-service/src/ISManager.cpp
     thirdparty/integration-service/src/GenericPubSubTypes.cpp
     )
 
-set(NGSIv2_FILES src/NGSIv2/NGSIv2Params.cpp src/NGSIv2/NGSIv2Params.h
-        src/NGSIv2/NGSIv2ISBridge.cpp src/NGSIv2/NGSIv2ISBridge.h
-        src/NGSIv2/NGSIv2Publisher.cpp src/NGSIv2/NGSIv2Publisher.h
-        src/NGSIv2/NGSIv2Subscriber.cpp src/NGSIv2/NGSIv2Subscriber.h
-        src/NGSIv2/NGSIv2Utils.cpp src/NGSIv2/NGSIv2Utils.h
+set(NGSIv2_FILES src/NGSIv2/NGSIv2Params.cpp include/NGSIv2/NGSIv2Params.h
+        src/NGSIv2/NGSIv2ISBridge.cpp include/NGSIv2/NGSIv2ISBridge.h
+        src/NGSIv2/NGSIv2Publisher.cpp include/NGSIv2/NGSIv2Publisher.h
+        src/NGSIv2/NGSIv2Subscriber.cpp include/NGSIv2/NGSIv2Subscriber.h
+        src/NGSIv2/NGSIv2Utils.cpp include/NGSIv2/NGSIv2Utils.h
         src/jsoncpp.cpp
-        src/NGSIv2/rtpsngsiv2lib.cpp
-        src/NGSIv2/idl/JsonNGSIv2.cxx src/NGSIv2/idl/JsonNGSIv2.h
-        src/NGSIv2/idl/JsonNGSIv2PubSubTypes.cxx src/NGSIv2/idl/JsonNGSIv2PubSubTypes.h)
+        src/NGSIv2/rtpsngsiv2lib.cpp)
 
-set(DYN_NGSIv2_FILES src/DynNGSIv2/NGSIv2Params.cpp src/DynNGSIv2/NGSIv2Params.h
-        src/DynNGSIv2/DynNGSIv2ISBridge.cpp src/DynNGSIv2/DynNGSIv2ISBridge.h
-        src/DynNGSIv2/DynNGSIv2Publisher.cpp src/DynNGSIv2/DynNGSIv2Publisher.h
-        src/DynNGSIv2/DynNGSIv2Subscriber.cpp src/DynNGSIv2/DynNGSIv2Subscriber.h
-        src/DynNGSIv2/NGSIv2Utils.cpp src/DynNGSIv2/NGSIv2Utils.h
-        src/jsoncpp.cpp
-        src/DynNGSIv2/rtpsngsiv2lib.cpp)
+set(NGSIv2_TYPES_FILES 
+        src/NGSIv2/idl/JsonNGSIv2.cxx include/NGSIv2/idl/JsonNGSIv2.h
+        src/NGSIv2/idl/JsonNGSIv2PubSubTypes.cxx include/NGSIv2/idl/JsonNGSIv2PubSubTypes.h)
+
+set(DYN_NGSIv2_FILES src/DynNGSIv2/NGSIv2Params.cpp include/DynNGSIv2/NGSIv2Params.h
+        src/DynNGSIv2/DynNGSIv2ISBridge.cpp include/DynNGSIv2/DynNGSIv2ISBridge.h
+        src/DynNGSIv2/DynNGSIv2Publisher.cpp include/DynNGSIv2/DynNGSIv2Publisher.h
+        src/DynNGSIv2/DynNGSIv2Subscriber.cpp include/DynNGSIv2/DynNGSIv2Subscriber.h
+        src/DynNGSIv2/NGSIv2Utils.cpp include/DynNGSIv2/NGSIv2Utils.h
+        src/jsoncpp.cpp src/DynNGSIv2/rtpsngsiv2lib.cpp)
 
 set(THIRDPARTY_INCLUDE
     thirdparty/tinyxml2
@@ -230,6 +232,11 @@ set(THIRDPARTY_INCLUDE
     )
 
 if(WIN32)
+    add_library(oriontypes SHARED
+        ${NGSIv2_TYPES_FILES}
+        )
+    target_compile_definitions(oriontypes PUBLIC -DEPROSIMA_USER_DLL_EXPORT -DBUILD_SHARED_LIBS -Doriontypes_EXPORTS)
+
     add_executable(firos2 src/main.cpp
         ${IS_LIB_FILES}
         ${CURL_FILES}
@@ -255,8 +262,14 @@ if(WIN32)
     # Include thirdparty (ASIO only in WIN32)
     add_definitions(-DASIO_STANDALONE)
     target_include_directories(firos2 PRIVATE ${THIRDPARTY_INCLUDE} ${CURL_BUILD_DIR}/include)
-    target_include_directories(isbridgengsiv2lib PRIVATE ${THIRDPARTY_INCLUDE} ${CURL_BUILD_DIR}/include src)
-    target_include_directories(isdynbridgengsiv2lib PRIVATE ${THIRDPARTY_INCLUDE} ${CURL_BUILD_DIR}/include src)
+    target_include_directories(oriontypes PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/NGSIv2>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/NGSIv2/idl>
+        $<INSTALL_INTERFACE:include/NGSIv2>
+        $<INSTALL_INTERFACE:include/NGSIv2/idl>
+    )
+    target_include_directories(isbridgengsiv2lib PRIVATE ${THIRDPARTY_INCLUDE} ${CURL_BUILD_DIR}/include include/NGSIv2 src)
+    target_include_directories(isdynbridgengsiv2lib PRIVATE ${THIRDPARTY_INCLUDE} ${CURL_BUILD_DIR}/include include/DynNGSIv2 src)
 
     #set(liblist fastrtps_static fastcdr_static ${CMAKE_DL_LIBS} IPHLPAPI shlwapi libcurl_a)
     set(liblist fastrtps fastcdr ${CMAKE_DL_LIBS} IPHLPAPI shlwapi libcurl)
@@ -279,15 +292,25 @@ else()
         thirdparty/tinyxml2/tinyxml2.cpp thirdparty/tinyxml2/tinyxml2.h)
 
     target_include_directories(firos2 PRIVATE ${THIRDPARTY_INCLUDE})
+    target_include_directories(oriontypes PUBLIC 
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/NGSIv2>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/NGSIv2/idl>
+        $<INSTALL_INTERFACE:include/NGSIv2>
+        $<INSTALL_INTERFACE:include/NGSIv2/idl>
+    )
     target_include_directories(isbridgengsiv2lib PRIVATE ${THIRDPARTY_INCLUDE} src)
     target_include_directories(isdynbridgengsiv2lib PRIVATE ${THIRDPARTY_INCLUDE} src)
 
     set(liblist fastrtps fastcdr -L/usr/lib/x86_64-linux-gnu curl)
 endif()
 
-target_link_libraries(firos2 ${CMAKE_DL_LIBS} ${liblist})
+target_link_libraries(firos2 fastrtps fastcdr ${CMAKE_DL_LIBS} ${liblist})
 
-target_link_libraries(isbridgengsiv2lib
+target_link_libraries(oriontypes
+    ${liblist})
+
+target_link_libraries(isbridgengsiv2lib 
+    oriontypes
     ${liblist}
     ${CMAKE_DL_LIBS})
 
@@ -365,19 +388,19 @@ if(EPROSIMA_INSTALLER)
 
     install(
         FILES
-            src/NGSIv2/NGSIv2Params.cpp src/NGSIv2/NGSIv2Params.h
-            src/NGSIv2/NGSIv2ISBridge.cpp src/NGSIv2/NGSIv2ISBridge.h
-            src/NGSIv2/NGSIv2Publisher.cpp src/NGSIv2/NGSIv2Publisher.h
-            src/NGSIv2/NGSIv2Subscriber.cpp src/NGSIv2/NGSIv2Subscriber.h
-            src/NGSIv2/NGSIv2Utils.cpp src/NGSIv2/NGSIv2Utils.h
+            src/NGSIv2/NGSIv2Params.cpp include/NGSIv2/NGSIv2Params.h
+            src/NGSIv2/NGSIv2ISBridge.cpp include/NGSIv2/NGSIv2ISBridge.h
+            src/NGSIv2/NGSIv2Publisher.cpp include/NGSIv2/NGSIv2Publisher.h
+            src/NGSIv2/NGSIv2Subscriber.cpp include/NGSIv2/NGSIv2Subscriber.h
+            src/NGSIv2/NGSIv2Utils.cpp include/NGSIv2/NGSIv2Utils.h
             src/NGSIv2/rtpsngsiv2lib.cpp
         COMPONENT sources
         DESTINATION ${INCLUDE_SOURCE_DIR}/src/NGSIv2)
 
     install(
         FILES
-            src/NGSIv2/idl/JsonNGSIv2.cxx src/NGSIv2/idl/JsonNGSIv2.h
-            src/NGSIv2/idl/JsonNGSIv2PubSubTypes.cxx src/NGSIv2/idl/JsonNGSIv2PubSubTypes.h
+            src/NGSIv2/idl/JsonNGSIv2.cxx include/NGSIv2/idl/JsonNGSIv2.h
+            src/NGSIv2/idl/JsonNGSIv2PubSubTypes.cxx include/NGSIv2/idl/JsonNGSIv2PubSubTypes.h
         COMPONENT sources
         DESTINATION ${INCLUDE_SOURCE_DIR}/src/NGSIv2/idl)
 
@@ -508,6 +531,11 @@ set(CPACK_COMPONENT_EXAMPLES_DESCRIPTION "eProsima ${PROJECT_NAME_LARGE} example
 
 if(MSVC OR MSVC_IDE)
     install(
+        TARGETS oriontypes
+        EXPORT ${PROJECT_NAME}Targets
+        COMPONENT libraries_${MSVC_ARCH}
+        DESTINATION ${LIB_INSTALL_DIR})
+    install(
         TARGETS isbridgengsiv2lib
         EXPORT ${PROJECT_NAME}Targets
         COMPONENT libraries_${MSVC_ARCH}
@@ -518,6 +546,11 @@ if(MSVC OR MSVC_IDE)
         COMPONENT libraries_${MSVC_ARCH}
         DESTINATION ${LIB_INSTALL_DIR})
 else()
+    install(
+        TARGETS oriontypes
+        EXPORT ${PROJECT_NAME}Targets
+        COMPONENT libraries}
+        DESTINATION ${LIB_INSTALL_DIR})
     install(
         TARGETS isbridgengsiv2lib
         EXPORT ${PROJECT_NAME}Targets
@@ -531,11 +564,16 @@ else()
 endif()
 
 export(
+    TARGETS oriontypes
+    FILE ${BIN_INSTALL_DIR}cmake/config/oriontypes_Targets.cmake)
+
+export(
     TARGETS isbridgengsiv2lib
-    FILE ${BIN_INSTALL_DIR}cmake/config/${PROJECT_NAME}Targets.cmake)
+    FILE ${BIN_INSTALL_DIR}cmake/config/isbridgengsiv2lib_Targets.cmake)
+
 export(
     TARGETS isdynbridgengsiv2lib
-    FILE ${BIN_INSTALL_DIR}cmake/config/${PROJECT_NAME}Targets.cmake)
+    FILE ${BIN_INSTALL_DIR}cmake/config/isdynbridgengsiv2lib_Targets.cmake)
 
 install(
     EXPORT ${PROJECT_NAME}Targets
@@ -582,12 +620,12 @@ if(MSVC OR MSVC_IDE)
             )
 
         string(TOUPPER "${MSVC_ARCH}" MSVC_ARCH_UPPER)
-        set(CPACK_COMPONENT_LIBRARIES_${MSVC_ARCH_UPPER}_DISPLAY_NAME "${MSVC_ARCH}" PARENT_SCOPE)
-        set(CPACK_COMPONENT_LIBRARIES_${MSVC_ARCH_UPPER}_DESCRIPTION "eProsima ${PROJECT_NAME_LARGE} libraries for platform ${MSVC_ARCH}" PARENT_SCOPE)
-        set(CPACK_COMPONENT_LIBRARIES_${MSVC_ARCH_UPPER}_GROUP "Libraries" PARENT_SCOPE)
+        set(CPACK_COMPONENT_LIBRARIES_${MSVC_ARCH_UPPER}_DISPLAY_NAME "${MSVC_ARCH}")
+        set(CPACK_COMPONENT_LIBRARIES_${MSVC_ARCH_UPPER}_DESCRIPTION "eProsima ${PROJECT_NAME_LARGE} libraries for platform ${MSVC_ARCH}")
+        set(CPACK_COMPONENT_LIBRARIES_${MSVC_ARCH_UPPER}_GROUP "Libraries")
     endif()
 
-    set(CPACK_COMPONENT_GROUP_LIBRARIES_DESCRIPTION "eProsima ${PROJECT_NAME_LARGE} libraries" PARENT_SCOPE)
+    set(CPACK_COMPONENT_GROUP_LIBRARIES_DESCRIPTION "eProsima ${PROJECT_NAME_LARGE} libraries")
 endif()
 
 install(
@@ -610,3 +648,18 @@ if(COMPILE_EXAMPLES)
     endif()
     add_subdirectory(examples)
 endif()
+
+#
+# ROS2 Configuration
+#ament_export_dependencies(rosidl_cmake)
+#ament_export_include_directories(include)
+
+#ament_export_libraries(oriontypes)
+
+#ament_export_dependencies(fastcdr)
+#ament_export_dependencies(fastrtps)
+
+#ament_package(
+#  CONFIG_EXTRAS "firos2-extras.cmake.in"
+#)
+
