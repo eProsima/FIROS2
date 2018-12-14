@@ -386,6 +386,24 @@ if(MSVC OR MSVC_IDE)
     endif()
 endif()
 
+# ROS2 Installation headers.
+install(
+    FILES
+        include/NGSIv2/NGSIv2Params.h
+        include/NGSIv2/NGSIv2ISBridge.h
+        include/NGSIv2/NGSIv2Publisher.h
+        include/NGSIv2/NGSIv2Subscriber.h
+        include/NGSIv2/NGSIv2Utils.h            
+    COMPONENT sources
+    DESTINATION ${INCLUDE_SOURCE_DIR}/include/NGSIv2)
+
+install(
+    FILES
+        include/NGSIv2/idl/JsonNGSIv2.h
+        include/NGSIv2/idl/JsonNGSIv2PubSubTypes.h
+    COMPONENT sources
+    DESTINATION ${INCLUDE_SOURCE_DIR}/include/NGSIv2/idl)
+
 
 if(EPROSIMA_INSTALLER)
     install(
@@ -408,27 +426,10 @@ if(EPROSIMA_INSTALLER)
 
     install(
         FILES
-            include/NGSIv2/NGSIv2Params.h
-            include/NGSIv2/NGSIv2ISBridge.h
-            include/NGSIv2/NGSIv2Publisher.h
-            include/NGSIv2/NGSIv2Subscriber.h
-            include/NGSIv2/NGSIv2Utils.h            
-        COMPONENT sources
-        DESTINATION ${INCLUDE_SOURCE_DIR}/include/NGSIv2)
-
-    install(
-        FILES
             src/NGSIv2/idl/JsonNGSIv2.cxx
             src/NGSIv2/idl/JsonNGSIv2PubSubTypes.cxx
         COMPONENT sources
         DESTINATION ${INCLUDE_SOURCE_DIR}/src/NGSIv2/idl)
-
-    install(
-        FILES
-            include/NGSIv2/idl/JsonNGSIv2.h
-            include/NGSIv2/idl/JsonNGSIv2PubSubTypes.h
-        COMPONENT sources
-        DESTINATION ${INCLUDE_SOURCE_DIR}/include/NGSIv2/idl)
 
     install(
         FILES
