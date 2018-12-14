@@ -256,8 +256,8 @@ if(WIN32)
         ${CURL_FILES}
         thirdparty/tinyxml2/tinyxml2.cpp thirdparty/tinyxml2/tinyxml2.h)
 
-    source_group("curl" FILES ${CURL_FILES})
-    source_group("is_lib" FILES ${IS_LIB_FILES})
+    #source_group("curl" FILES ${CURL_FILES})
+    #source_group("is_lib" FILES ${IS_LIB_FILES})
 
     # Include thirdparty (ASIO only in WIN32)
     add_definitions(-DASIO_STANDALONE)
@@ -274,6 +274,11 @@ if(WIN32)
     #set(liblist fastrtps_static fastcdr_static ${CMAKE_DL_LIBS} IPHLPAPI shlwapi libcurl_a)
     set(liblist fastrtps fastcdr ${CMAKE_DL_LIBS} IPHLPAPI shlwapi libcurl)
 else()
+    add_library(oriontypes SHARED
+        ${NGSIv2_TYPES_FILES}
+        )
+    target_compile_definitions(oriontypes PUBLIC -DEPROSIMA_USER_DLL_EXPORT -DBUILD_SHARED_LIBS -Doriontypes_EXPORTS)
+
     add_executable(firos2 src/main.cpp
         ${IS_LIB_FILES}
         ${CURL_FILES}
