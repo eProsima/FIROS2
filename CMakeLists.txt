@@ -397,21 +397,38 @@ if(EPROSIMA_INSTALLER)
 
     install(
         FILES
-            src/NGSIv2/NGSIv2Params.cpp include/NGSIv2/NGSIv2Params.h
-            src/NGSIv2/NGSIv2ISBridge.cpp include/NGSIv2/NGSIv2ISBridge.h
-            src/NGSIv2/NGSIv2Publisher.cpp include/NGSIv2/NGSIv2Publisher.h
-            src/NGSIv2/NGSIv2Subscriber.cpp include/NGSIv2/NGSIv2Subscriber.h
-            src/NGSIv2/NGSIv2Utils.cpp include/NGSIv2/NGSIv2Utils.h
+            src/NGSIv2/NGSIv2Params.cpp
+            src/NGSIv2/NGSIv2ISBridge.cpp
+            src/NGSIv2/NGSIv2Publisher.cpp
+            src/NGSIv2/NGSIv2Subscriber.cpp
+            src/NGSIv2/NGSIv2Utils.cpp
             src/NGSIv2/rtpsngsiv2lib.cpp
         COMPONENT sources
         DESTINATION ${INCLUDE_SOURCE_DIR}/src/NGSIv2)
 
     install(
         FILES
-            src/NGSIv2/idl/JsonNGSIv2.cxx include/NGSIv2/idl/JsonNGSIv2.h
-            src/NGSIv2/idl/JsonNGSIv2PubSubTypes.cxx include/NGSIv2/idl/JsonNGSIv2PubSubTypes.h
+            include/NGSIv2/NGSIv2Params.h
+            include/NGSIv2/NGSIv2ISBridge.h
+            include/NGSIv2/NGSIv2Publisher.h
+            include/NGSIv2/NGSIv2Subscriber.h
+            include/NGSIv2/NGSIv2Utils.h            
+        COMPONENT sources
+        DESTINATION ${INCLUDE_SOURCE_DIR}/include/NGSIv2)
+
+    install(
+        FILES
+            src/NGSIv2/idl/JsonNGSIv2.cxx
+            src/NGSIv2/idl/JsonNGSIv2PubSubTypes.cxx
         COMPONENT sources
         DESTINATION ${INCLUDE_SOURCE_DIR}/src/NGSIv2/idl)
+
+    install(
+        FILES
+            include/NGSIv2/idl/JsonNGSIv2.h
+            include/NGSIv2/idl/JsonNGSIv2PubSubTypes.h
+        COMPONENT sources
+        DESTINATION ${INCLUDE_SOURCE_DIR}/include/NGSIv2/idl)
 
     install(
         FILES
