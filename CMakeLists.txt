@@ -77,6 +77,10 @@ cmake_policy(SET CMP0057 NEW)
 
 include(${PROJECT_SOURCE_DIR}/cmake/common/eprosima_libraries.cmake)
 
+# ROS2 requirement
+find_package(ament_cmake REQUIRED)
+# ROS2 requirement
+
 find_package(fastcdr REQUIRED)
 find_package(fastrtps REQUIRED)
 
@@ -654,7 +658,7 @@ if(COMPILE_EXAMPLES)
     add_subdirectory(examples)
 endif()
 
-# ROS2 Configuration
+# ROS2 requirement
 ament_export_dependencies(rosidl_cmake)
 ament_export_include_directories(include)
 
@@ -666,4 +670,5 @@ ament_export_dependencies(fastrtps)
 ament_package(
   CONFIG_EXTRAS "firos2-extras.cmake.in"
 )
+# ROS2 requirement
 
