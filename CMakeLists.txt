@@ -307,8 +307,8 @@ else()
         $<INSTALL_INTERFACE:include/NGSIv2>
         $<INSTALL_INTERFACE:include/NGSIv2/idl>
     )
-    target_include_directories(isbridgengsiv2lib PRIVATE ${THIRDPARTY_INCLUDE} src)
-    target_include_directories(isdynbridgengsiv2lib PRIVATE ${THIRDPARTY_INCLUDE} src)
+    target_include_directories(isbridgengsiv2lib PRIVATE ${THIRDPARTY_INCLUDE} ${CURL_BUILD_DIR}/include include/NGSIv2 src)
+    target_include_directories(isdynbridgengsiv2lib PRIVATE ${THIRDPARTY_INCLUDE} ${CURL_BUILD_DIR}/include include/DynNGSIv2 src)
 
     set(liblist fastrtps fastcdr -L/usr/lib/x86_64-linux-gnu curl)
 endif()
