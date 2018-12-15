@@ -393,16 +393,15 @@ install(
         include/NGSIv2/NGSIv2ISBridge.h
         include/NGSIv2/NGSIv2Publisher.h
         include/NGSIv2/NGSIv2Subscriber.h
-        include/NGSIv2/NGSIv2Utils.h            
-    COMPONENT sources
-    DESTINATION ${INCLUDE_SOURCE_DIR}/include/NGSIv2)
+        include/NGSIv2/NGSIv2Utils.h
+    DESTINATION include/NGSIv2)
 
 install(
     FILES
         include/NGSIv2/idl/JsonNGSIv2.h
         include/NGSIv2/idl/JsonNGSIv2PubSubTypes.h
-    COMPONENT sources
-    DESTINATION ${INCLUDE_SOURCE_DIR}/include/NGSIv2/idl)
+    DESTINATION include/NGSIv2/idl)
+
 
 
 if(EPROSIMA_INSTALLER)
@@ -576,17 +575,17 @@ else()
     install(
         TARGETS oriontypes
         EXPORT ${PROJECT_NAME}Targets
-        COMPONENT libraries}
+        COMPONENT libraries
         DESTINATION ${LIB_INSTALL_DIR})
     install(
         TARGETS isbridgengsiv2lib
         EXPORT ${PROJECT_NAME}Targets
-        COMPONENT libraries}
+        COMPONENT libraries
         DESTINATION ${LIB_INSTALL_DIR})
     install(
         TARGETS isdynbridgengsiv2lib
         EXPORT ${PROJECT_NAME}Targets
-        COMPONENT libraries}
+        COMPONENT libraries
         DESTINATION ${LIB_INSTALL_DIR})
 endif()
 
@@ -629,7 +628,7 @@ else()
     set(CPACK_COMPONENTS_ALL ${CPACK_COMPONENTS_ALL} libraries)
 endif()
 
-include(${PROJECT_SOURCE_DIR}/cmake/packaging/eProsimaPackaging.cmake)
+#include(${PROJECT_SOURCE_DIR}/cmake/packaging/eProsimaPackaging.cmake)
 
 # Install libraries
 if(MSVC OR MSVC_IDE)
