@@ -25,21 +25,18 @@
                 <builtin>
                     <domainId>0</domainId>
                     <leaseDuration>
-                        <durationbyname>INFINITE</durationbyname>
+                        <sec>DURATION_INFINITY</sec>
                     </leaseDuration>
                     <leaseAnnouncement>
-                        <durationbyval>
-                            <seconds>1</seconds>
-                            <fraction>0</fraction>
-                        </durationbyval>
+                        <sec>1</sec>
+                        <fraction>0</fraction>
                     </leaseAnnouncement>
                     <initialPeersList>
                         <locator>
-                            <kind>TCPv4</kind>
-                            <address>127.0.0.1</address>
-                            <ports_>
+                            <tcpv4>
+                                <address>127.0.0.1</address>
                                 <physical_port>5100</physical_port>
-                            </ports_>
+                            </tcpv4>
                         </locator>
                     </initialPeersList>
                 </builtin>
