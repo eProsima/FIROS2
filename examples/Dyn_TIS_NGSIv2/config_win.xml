@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<is>
+    <topic_types>
+        <type name="RobotSnd">
+            <library>userlib.dll</library>
+        </type>
+        <type name="RobotRcv">
+            <library>userlib.dll</library>
+        </type>
+    </topic_types>
+
+    <profiles>
+        <participant profile_name="ros2">
+            <rtps>
+                <builtin>
+                    <domainId>0</domainId>
+                </builtin>
+            </rtps>
+        </participant>
+
+        <subscriber profile_name="ros2_subscriber">
+            <topic>
+                <name>rt/RobotTopic</name>
+                <dataType>RobotSnd</dataType>
+            </topic>
+            <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+        </subscriber>
+
+        <publisher profile_name="ros2_publisher">
+            <topic>
+                <name>rt/RobotTopic</name>
+                <dataType>RobotSnd</dataType>
+            </topic>
+            <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+        </publisher>
+    </profiles>
+
+    <bridge name="ngsiv2">
+        <library>C:\dev\ros2\build\firos2\Release\isbridgengsiv2lib.dll</library> <!-- Path to the NGSIv2 library -->
+
+        <reader name="ngsiv2_subscriber">
+            <property>
+                <name>host</name>
+                <value>localhost</value>
+            </property>
+            <property>
+                <name>port</name>
+                <value>1026</value>
+            </property>
+            <property>
+                <name>id</name>
+                <value>.*</value>
+            </property>
+            <property>
+                <name>type</name>
+                <value>Robot</value>
+            </property>
+            <property>
+                <name>notifs</name>
+                <value>id,transmission_time,floor,x,y,zeta</value>
+            </property>
+            <property>
+                <name>listener_host</name>
+                <value>localhost</value>
+            </property>
+            <property>
+                <name>listener_port</name>
+                <value>12345</value>
+            </property>
+            <property>
+                <name>listener_buffer_size</name>
+                <value>20480</value>
+            </property>
+        </reader>
+
+        <writer name="ngsiv2_publisher">
+            <property>
+                <name>host</name>
+                <value>localhost</value>
+            </property>
+            <property>
+                <name>port</name>
+                <value>1026</value>
+            </property>
+            <property>
+                <name>http_retries</name>
+                <value>3</value>
+            </property>
+            <property>
+                <name>retry_wait</name>
+                <value>2000</value>
+            </property>
+        </writer>
+    </bridge>
+
+    <connector name="ros2_ngsiv2">
+        <reader participant_profile="ros2" subscriber_profile="ros2_subscriber"/>
+        <writer bridge_name="ngsiv2" writer_name="ngsiv2_publisher"/>
+        <transformation file="build\Release\userlib.dll" function="transform"/>
+    </connector>
+
+    <connector name="ngsiv2_ros2">
+        <reader bridge_name="ngsiv2" reader_name="ngsiv2_subscriber"/>
+        <writer participant_profile="ros2" publisher_profile="ros2_publisher"/>
+        <transformation file="build\Release\userlib.dll" function="transformFromNGSIv2"/>
+    </connector>
+</is>

@@ -1,5 +1,4 @@
 #include <iostream>
-#include <tinyxml2.h>
 #include "ISBridgeDummy.h"
 
 #if defined(_WIN32) && defined (BUILD_SHARED_LIBS)
@@ -15,58 +14,20 @@
   #define USER_LIB_EXPORT
 #endif
 
-ISBridgeDummy* loadDummyBridge(tinyxml2::XMLElement *bridge_element);
-
-// TODO ISBridge must be now an interface (or abstract class) that all Bridges must implement.
-extern "C" ISBridge* USER_LIB_EXPORT createBridge(tinyxml2::XMLElement *bridge_element)
+extern "C" USER_LIB_EXPORT ISBridge* create_bridge(const char* name,
+    const std::vector<std::pair<std::string, std::string>> *config)
 {
-    // Add Bridge constructor and...
-    //return new ISBridgeDummy(bridge_element);
-
-    // OR parse the config xml here and return a cleaner Bridge class!
-    //return loadDummyBridge(bridge_element);
+    return loadDummyBridge(name);
 }
 
-// TODO parse the xml and return a configured RSBRidgeDummy
-ISBridgeDummy* loadDummyBridge(tinyxml2::XMLElement *bridge_element)
+extern "C" USER_LIB_EXPORT ISReader* create_reader(ISBridge *bridge, const char* name,
+    const std::vector<std::pair<std::string, std::string>> *config)
 {
-    try
-    {
-        tinyxml2::XMLElement *nodeA_element = bridge_element->FirstChildElement("nodeA");
-        if (!nodeA_element)
-        {
-            throw 0;
-        }
-        tinyxml2::XMLElement *nodeB_element = bridge_element->FirstChildElement("nodeB");
-        if(!nodeB_element)
-        {
-            throw 0;
-        }
-
-        // TODO Parse configuration for each node
-
-        // TODO Load transformation library function_path
-        const char* function_path = bridge_element->FirstChildElement("transformation")->GetText();
-
-        // TODO NodeA configuration
-        DummyNodeAAttributes participant_nodeA_params;
-        participant_nodeA_params.dummyProperty = parsed_value_a;
-        // [...]
-
-        // TODO NodeB configuration
-        DummyNodeBAttributes participant_nodeB_params;
-        participant_nodeB_params.dummyProperty = parsed_value_b;
-        // [...]
-
-        ISBridgeDummy *bridge = new ISBridgeDummy(
-                                    participant_nodeA_params,
-                                    participant_nodeB_params,
-                                    function_path);
-
-        return bridge;
-    }
-    catch (int e_code){
-        std::cout << "Invalid configuration, skipping bridge " << e_code << std::endl;
-    }
+    return loadDummySubscriber(name, config);
 }
 
+extern "C" USER_LIB_EXPORT ISWriter* create_writer(ISBridge *bridge, const char* name,
+    const std::vector<std::pair<std::string, std::string>> *config)
+{
+    return loadDummyPublisher(name, config);
+}

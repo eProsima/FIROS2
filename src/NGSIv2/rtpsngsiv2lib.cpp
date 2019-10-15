@@ -1,12 +1,14 @@
 #include <iostream>
-#include <tinyxml2.h>
-#include "ISBridgeFastRTPSToNGSIv2.h"
+#include "NGSIv2ISBridge.h"
+#include "NGSIv2Publisher.h"
+#include "NGSIv2Subscriber.h"
+#include "log/ISLog.h"
 
 #if defined(_WIN32) && defined (BUILD_SHARED_LIBS)
 	#if defined (_MSC_VER)
 		#pragma warning(disable: 4251)
 	#endif
-  #if defined(rtpsngsiv2lib_EXPORTS)
+  #if defined(isbridgengsiv2lib_EXPORTS)
   	#define  USER_LIB_EXPORT __declspec(dllexport)
   #else
     #define  USER_LIB_EXPORT __declspec(dllimport)
@@ -15,142 +17,83 @@
   #define USER_LIB_EXPORT
 #endif
 
-ISBridgeFastRTPSToNGSIv2* loadFastRTPSToNGSIv2Bridge(tinyxml2::XMLElement *bridge_element);
+NGSIv2ISBridge* loadNGSIv2Bridge(const char* name);
+NGSIv2Subscriber* loadNGSIv2Subscriber(const char* name, const std::vector<std::pair<std::string, std::string>> *config);
+NGSIv2Publisher* loadNGSIv2Publisher(const char* name, const std::vector<std::pair<std::string, std::string>> *config);
 
-extern "C" ISBridge* USER_LIB_EXPORT createBridge(tinyxml2::XMLElement *bridge_element)
+extern "C" USER_LIB_EXPORT ISBridge* create_bridge(const char* name,
+    const std::vector<std::pair<std::string, std::string>> *config)
 {
-    return loadFastRTPSToNGSIv2Bridge(bridge_element);
+    return loadNGSIv2Bridge(name);
 }
 
-tinyxml2::XMLElement* _assignNextElement(tinyxml2::XMLElement *element, std::string name){
-    if (!element->FirstChildElement(name.c_str())){
-        throw 0;
-    }
-    return element->FirstChildElement(name.c_str());
+extern "C" USER_LIB_EXPORT ISReader* create_reader(ISBridge *bridge, const char* name,
+    const std::vector<std::pair<std::string, std::string>> *config)
+{
+    return loadNGSIv2Subscriber(name, config);
 }
 
-tinyxml2::XMLElement* _assignOptionalElement(tinyxml2::XMLElement *element, std::string name){
-    return element->FirstChildElement(name.c_str());
+extern "C" USER_LIB_EXPORT ISWriter* create_writer(ISBridge *bridge, const char* name,
+    const std::vector<std::pair<std::string, std::string>> *config)
+{
+    return loadNGSIv2Publisher(name, config);
 }
 
-ISBridgeFastRTPSToNGSIv2* loadFastRTPSToNGSIv2Bridge(tinyxml2::XMLElement *bridge_element)
+NGSIv2ISBridge* loadNGSIv2Bridge(const char* name)
 {
     try
     {
-        tinyxml2::XMLElement *fastrtps_element = bridge_element->FirstChildElement("fastrtps");
-        if (!fastrtps_element)
-        {
-            fastrtps_element = bridge_element->FirstChildElement("ros2");
-            if (!fastrtps_element)
-            {
-                fastrtps_element = bridge_element->FirstChildElement("subscriber"); // Case unidirectional configuration
-            }
-        }
-        tinyxml2::XMLElement *ngsiv2_element = bridge_element->FirstChildElement("ngsiv2");
-        if (!ngsiv2_element)
-        {
-            ngsiv2_element = bridge_element->FirstChildElement("publisher"); // Case unidirectional configuration
-        }
-        if(!fastrtps_element || !ngsiv2_element)
-        {
-            throw 0;
-        }
-
-        tinyxml2::XMLElement *current_element;
-        current_element = _assignNextElement(fastrtps_element, "participant");
-        const char* fastrtps_participant_name = current_element->GetText();
-        current_element = _assignNextElement(fastrtps_element, "topic");
-        const char* fastrtps_topic_name = current_element->GetText();
-        current_element = _assignNextElement(fastrtps_element, "type");
-        const char* fastrtps_type_name = current_element->GetText();
-
-        current_element = _assignOptionalElement(fastrtps_element, "partition");
-        const char* fastrtps_partition = (current_element == nullptr) ? nullptr : current_element->GetText();
-
-        current_element = _assignNextElement(ngsiv2_element, "participant");
-        const char* ngsiv2_participant_name = current_element->GetText();
-        current_element = _assignNextElement(ngsiv2_element, "id");
-        const char* ngsiv2_id = current_element->GetText();
-
-        current_element = _assignOptionalElement(ngsiv2_element, "host");
-        const char* ngsiv2_host = (current_element == nullptr) ? "localhost" : current_element->GetText();
-
-        int fastrtps_domain = 0;
-        current_element = _assignNextElement(fastrtps_element, "domain");
-        if(current_element->QueryIntText(&fastrtps_domain))
-        {
-            throw 0;
-        }
-
-        int ngsiv2_port;
-        current_element = _assignNextElement(ngsiv2_element, "port");
-        if(current_element->QueryIntText(&ngsiv2_port))
-        {
-            ngsiv2_port = 1026;
-        }
-
-        const char* function_path;
-        if (bridge_element->FirstChildElement("transformation"))
-        {
-            function_path = bridge_element->FirstChildElement("transformation")->GetText();
-        }
-        else
-        {
-            if (bridge_element->FirstChildElement("transformToNGSIv2"))
-            {
-                function_path = bridge_element->FirstChildElement("transformToNGSIv2")->GetText();
-            }
-            else
-            {
-                function_path = nullptr;
-                std::cout << "ERROR: No transformation function defined." << std::endl;
-                throw 0;
-            }
-        }
-
-        // Participant (publisher) configuration
-        ParticipantAttributes participant_fastrtps_params;
-        participant_fastrtps_params.rtps.builtin.domainId = fastrtps_domain;
-        participant_fastrtps_params.rtps.builtin.leaseDuration = c_TimeInfinite;
-        participant_fastrtps_params.rtps.setName(fastrtps_participant_name);
-
-        // Publisher configuration
-        PublisherAttributes publisher_params;
-        publisher_params.historyMemoryPolicy = DYNAMIC_RESERVE_MEMORY_MODE;
-        publisher_params.topic.topicDataType = fastrtps_type_name;
-        publisher_params.topic.topicName = fastrtps_topic_name;
-        if (fastrtps_partition != nullptr)
-        {
-            publisher_params.qos.m_partition.push_back(fastrtps_partition);
-        }
-
-        // Subscriber configuration
-        SubscriberAttributes subscriber_params;
-        subscriber_params.historyMemoryPolicy = DYNAMIC_RESERVE_MEMORY_MODE;
-        subscriber_params.topic.topicKind = NO_KEY;
-        subscriber_params.topic.topicDataType = fastrtps_type_name;
-        subscriber_params.topic.topicName = fastrtps_topic_name;
-        if (fastrtps_partition != nullptr)
-        {
-            subscriber_params.qos.m_partition.push_back(fastrtps_partition);
-        }
-
-        // NGSIv2 configuration
-        NGSIv2Params participant_ngsiv2_params;
-        participant_ngsiv2_params.name = ngsiv2_participant_name;
-        participant_ngsiv2_params.host = ngsiv2_host;
-        participant_ngsiv2_params.idPattern = ngsiv2_id;
-        participant_ngsiv2_params.port = ngsiv2_port;
-
-        ISBridgeFastRTPSToNGSIv2 *rtps_ngsiv2 = new ISBridgeFastRTPSToNGSIv2(participant_fastrtps_params,
-                            participant_ngsiv2_params,
-                            subscriber_params,
-                            function_path);
-
-        return rtps_ngsiv2;
+        return new NGSIv2ISBridge(name);
     }
-    catch (int e_code){
-        std::cout << "Invalid configuration, skipping bridge " << e_code << std::endl;
+    catch (int e_code)
+    {
+        LOG("Invalid configuration, skipping bridge " << e_code);
         return nullptr;
     }
+}
+
+NGSIv2Subscriber* loadNGSIv2Subscriber(const char* name, const std::vector<std::pair<std::string, std::string>> *config)
+{
+    if (!config)
+    {
+        return nullptr;
+    }
+
+    NGSIv2Params participant_ngsiv2_params;
+    participant_ngsiv2_params.name = name;
+    if (!participant_ngsiv2_params.LoadConfig(config))
+    {
+        std::cout << "Failed to parse subscriber '" << name << "' properties." << std::endl;
+    }
+
+    NGSIv2SubscriptionParams participant_ngsiv2_subscription_param;
+    if (!participant_ngsiv2_subscription_param.LoadConfig(config))
+    {
+        std::cout << "Failed to parse subscriber '" << name << "' properties." << std::endl;
+    }
+
+
+    NGSIv2Subscriber* listener = new NGSIv2Subscriber(name, participant_ngsiv2_params);
+    listener->setSubscriptionParams(participant_ngsiv2_subscription_param);
+    listener->startListenerAndSubscribe();
+
+    return listener;
+}
+
+NGSIv2Publisher* loadNGSIv2Publisher(const char* name, const std::vector<std::pair<std::string, std::string>> *config)
+{
+    if (!config)
+    {
+        return nullptr;
+    }
+
+    NGSIv2Params participant_ngsiv2_params;
+    participant_ngsiv2_params.name = name;
+    if (!participant_ngsiv2_params.LoadConfig(config))
+    {
+        std::cout << "Failed to parse publisher '" << name << "' properties." << std::endl;
+    }
+
+    NGSIv2Publisher* publisher = new NGSIv2Publisher(name, participant_ngsiv2_params);
+    return publisher;
 }

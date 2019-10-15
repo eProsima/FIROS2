@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<is>
+    <profiles>
+        <participant profile_name="rtps">
+            <rtps>
+                <builtin>
+                    <domainId>0</domainId>
+                </builtin>
+            </rtps>
+        </participant>
+
+        <subscriber profile_name="fastrtps_subscriber">
+            <topic>
+                <name>HelloWorldTopic</name>
+                <dataType>HelloWorld</dataType>
+            </topic>
+            <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+        </subscriber>
+
+        <participant profile_name="ros2">
+            <rtps>
+                <builtin>
+                    <domainId>0</domainId>
+                </builtin>
+            </rtps>
+        </participant>
+
+        <publisher profile_name="ros2_publisher">
+            <topic>
+                <name>rt/chatter</name>
+                <dataType>std_msgs::msg::dds_::String_</dataType>
+            </topic>
+            <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+        </publisher>
+    </profiles>
+
+    <connector name="domain_change">
+        <reader participant_profile="rtps" subscriber_profile="fastrtps_subscriber"/>
+        <writer participant_profile="ros2" publisher_profile="ros2_publisher"/>
+        <transformation file="build/Debug/userlib.dll" function="transform"/>
+    </connector>
+</is>

@@ -31,7 +31,7 @@
 
 class RobotExamplePublisher {
 public:
-	RobotExamplePublisher();
+	RobotExamplePublisher(int waitTime);
 	virtual ~RobotExamplePublisher();
 	//!Initialize
 	bool init();
@@ -40,6 +40,7 @@ public:
 	//!Run for number samples
 	void run(uint32_t number);
 private:
+    int wait_time;
 	RobotSnd m_Hello;
 	eprosima::fastrtps::Participant* mp_participant;
 	eprosima::fastrtps::Publisher* mp_publisher;

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/*! 
+/*!
  * @file String_PubSubTypes.cpp
  * This header file contains the implementation of the serialization functions.
  *
@@ -104,14 +104,14 @@ namespace std_msgs
                 delete((String_*)data);
             }
 
-            bool String_PubSubType::getKey(void *data, InstanceHandle_t* handle) {
+            bool String_PubSubType::getKey(void *data, InstanceHandle_t* handle, bool force_md5) {
                 if(!m_isGetKeyDefined)
                     return false;
                 String_* p_type = (String_*) data;
                 eprosima::fastcdr::FastBuffer fastbuffer((char*)m_keyBuffer,String_::getKeyMaxCdrSerializedSize()); 	// Object that manages the raw buffer.
                 eprosima::fastcdr::Cdr ser(fastbuffer, eprosima::fastcdr::Cdr::BIG_ENDIANNESS); 	// Object that serializes the data.
                 p_type->serializeKey(ser);
-                if(String_::getKeyMaxCdrSerializedSize()>16)	{
+                if(force_md5 || String_::getKeyMaxCdrSerializedSize()>16)	{
                     m_md5.init();
                     m_md5.update(m_keyBuffer,(unsigned int)ser.getSerializedDataLength());
                     m_md5.finalize();

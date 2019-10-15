@@ -1,25 +1,42 @@
 <?xml version="1.0"?>
 <is>
-	<bridge>
-		<bridge_type>unidirectional</bridge_type>
-		<subscriber>
-			<participant>ros2_subscriber</participant>
-			<domain>0</domain>
-			<topic>chatter</topic>
-			<type>std_msgs::msg::dds_::String_</type>
-			<partition>rt</partition>
-		</subscriber>
-		<publisher>
-			<participant>ngsiv2_publisher</participant>
-			<id>Helloworld</id>
-			<host>localhost</host>
-			<port>1026</port>
-		</publisher>
-		<!-- Windows -->
-		<!-- <transformToNGSIv2>C:\dev\ros2\src\ros2\firos2\examples\helloworld_orion\build\Release\userlib.dll</transformToNGSIv2>
-		<bridge_library>C:\dev\ros2\build\firos2\Release\isrtpsngsiv2bridgelib.dll</bridge_library> -->
-		<!-- Linux -->
-		<transformToNGSIv2>/home/luisgp/ros2_ws/src/ros2/firos2/examples/helloworld_orion/build/libuserlib.so</transformToNGSIv2>
-		<bridge_library>libisrtpsngsiv2bridgelib.so</bridge_library>
-	</bridge>
+    <profiles>
+        <participant profile_name="ros2">
+            <rtps>
+                <builtin>
+                    <domainId>0</domainId>
+                </builtin>
+            </rtps>
+        </participant>
+
+        <subscriber profile_name="ros2_subscriber">
+            <topic>
+                <name>rt/chatter</name>
+                <dataType>std_msgs::msg::dds_::String_</dataType>
+            </topic>
+            <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+        </subscriber>
+
+    </profiles>
+
+    <bridge name="ngsiv2">
+        <library>libisbridgengsiv2lib.so</library> <!-- Path to the NGSIv2 library -->
+
+        <writer name="ngsiv2_publisher">
+            <property>
+                <name>host</name>
+                <value>localhost</value>
+            </property>
+            <property>
+                <name>port</name>
+                <value>1026</value>
+            </property>
+        </writer>
+    </bridge>
+
+    <connector name="domain_change">
+        <reader participant_profile="ros2" subscriber_profile="ros2_subscriber"/>
+        <writer bridge_name="ngsiv2" writer_name="ngsiv2_publisher"/>
+        <transformation file="build/libuserlib.so" function="transform"/>
+    </connector>
 </is>

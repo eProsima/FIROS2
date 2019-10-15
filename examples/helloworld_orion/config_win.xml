@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<is>
+    <profiles>
+        <participant profile_name="ros2">
+            <rtps>
+                <builtin>
+                    <domainId>0</domainId>
+                </builtin>
+            </rtps>
+        </participant>
+
+        <subscriber profile_name="ros2_subscriber">
+            <topic>
+                <name>rt/chatter</name>
+                <dataType>std_msgs::msg::dds_::String_</dataType>
+            </topic>
+            <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+        </subscriber>
+
+    </profiles>
+
+    <bridge name="ngsiv2">
+        <library>C:\dev\ros2\install\Lib\isbridgengsiv2lib.dll</library> <!-- Path to the NGSIv2 library -->
+
+        <writer name="ngsiv2_publisher">
+            <property>
+                <name>host</name>
+                <value>localhost</value>
+            </property>
+            <property>
+                <name>port</name>
+                <value>1026</value>
+            </property>
+        </writer>
+    </bridge>
+
+    <connector name="domain_change">
+        <reader participant_profile="ros2" subscriber_profile="ros2_subscriber"/>
+        <writer bridge_name="ngsiv2" writer_name="ngsiv2_publisher"/>
+        <transformation file="\build\Release\userlib.dll" function="transform"/>
+    </connector>
+</is>

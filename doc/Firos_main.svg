@@ -1,0 +1,829 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:xhtml="http://www.w3.org/1999/xhtml"
+   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   width="1487px"
+   height="399px"
+   viewBox="-0.5 -0.5 1487 399"
+   style="background-color: rgb(255, 255, 255);"
+   id="svg124"
+   sodipodi:docname="Firos_main.svg"
+   inkscape:version="0.92.3 (unknown)"
+   inkscape:export-filename="C:\git\Integration-Services-docs\docs\Bidirectional_connector.png"
+   inkscape:export-xdpi="45.222073"
+   inkscape:export-ydpi="45.222073">
+  <metadata
+     id="metadata128">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1025"
+     id="namedview126"
+     showgrid="false"
+     inkscape:zoom="0.77202421"
+     inkscape:cx="738.05928"
+     inkscape:cy="51.479381"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg124"
+     showguides="false">
+    <inkscape:grid
+       type="xygrid"
+       id="grid4783" />
+  </sodipodi:namedview>
+  <defs
+     id="defs2">
+    <linearGradient
+       id="linearGradient4733"
+       osb:paint="solid">
+      <stop
+         style="stop-color:#ffc001;stop-opacity:1;"
+         offset="0"
+         id="stop4731" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4733"
+       id="linearGradient4735"
+       x1="350"
+       y1="221"
+       x2="1126"
+       y2="221"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(0,-2)" />
+    <linearGradient
+       gradientTransform="translate(-333.0723,-0.70468)"
+       inkscape:collect="always"
+       xlink:href="#linearGradient4733"
+       id="linearGradient4735-6"
+       x1="350"
+       y1="221"
+       x2="1126"
+       y2="221"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       gradientTransform="translate(878.58444,71.5)"
+       inkscape:collect="always"
+       xlink:href="#linearGradient4733"
+       id="linearGradient4735-6-0"
+       x1="350"
+       y1="221"
+       x2="1126"
+       y2="221"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <rect
+     x="3"
+     y="5"
+     width="260"
+     height="390"
+     rx="39"
+     ry="39"
+     fill="#0895cd"
+     stroke="#09487e"
+     stroke-width="6"
+     pointer-events="none"
+     id="rect6" />
+  <g
+     transform="translate(102.5,23.5)"
+     id="g12">
+    <switch
+       id="switch10">
+      <foreignObject
+         style="overflow:visible;"
+         pointer-events="all"
+         width="61"
+         height="32"
+         requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+        <xhtml:div
+           style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 62px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+          <xhtml:div
+             style="display:inline-block;text-align:inherit;text-decoration:inherit;">
+            <xhtml:font
+               color="#ffffff">
+              <xhtml:span
+                 style="font-size: 28px">
+                <xhtml:b>ROS</xhtml:b>
+              </xhtml:span>
+            </xhtml:font>
+          </xhtml:div>
+        </xhtml:div>
+      </foreignObject>
+      <text
+         x="31"
+         y="22"
+         font-size="12px"
+         id="text8"
+         style="font-size:24px;font-family:Helvetica;text-anchor:middle;fill:#ffffff">
+        <tspan
+           style="font-size:32px"
+           id="tspan3835">ROS2</tspan>
+      </text>
+    </switch>
+  </g>
+  <rect
+     x="19.9277"
+     y="66.295319"
+     width="229.86148"
+     height="306.70468"
+     rx="46.200001"
+     ry="46.200001"
+     pointer-events="none"
+     id="rect44-6"
+     style="fill:url(#linearGradient4735-6);fill-opacity:1;stroke:#09487e;stroke-width:6" />
+  <rect
+     x="35.5"
+     y="148.5"
+     width="195"
+     height="78"
+     rx="11.7"
+     ry="11.7"
+     fill="#88ce28"
+     stroke="#09487e"
+     stroke-width="6"
+     pointer-events="none"
+     id="rect14" />
+  <g
+     transform="translate(64.431875,176.248)"
+     id="g20">
+    <switch
+       id="switch18">
+      <foreignObject
+         style="overflow:visible;"
+         pointer-events="all"
+         width="136"
+         height="27"
+         requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+        <xhtml:div
+           style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 137px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+          <xhtml:div
+             style="display:inline-block;text-align:inherit;text-decoration:inherit;">
+            <xhtml:font
+               style="font-size: 24px">PUBLISHER</xhtml:font>
+          </xhtml:div>
+        </xhtml:div>
+      </foreignObject>
+      <text
+         x="68"
+         y="20"
+         font-size="12px"
+         id="text16"
+         style="font-size:12px;font-family:Helvetica;text-anchor:middle;fill:#000000">
+        <tspan
+           style="font-size:24px;fill:#ffffff"
+           id="tspan3837">PUBLISHER</tspan>
+      </text>
+    </switch>
+  </g>
+  <rect
+     x="35.5"
+     y="260.52853"
+     width="195"
+     height="78"
+     rx="11.7"
+     ry="11.7"
+     pointer-events="none"
+     id="rect22"
+     style="fill:#88ce28;stroke:#09487e;stroke-width:6" />
+  <g
+     transform="translate(54.947875,288.27653)"
+     id="g28">
+    <switch
+       id="switch26">
+      <foreignObject
+         style="overflow:visible;"
+         pointer-events="all"
+         width="156"
+         height="27"
+         requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+        <xhtml:div
+           style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 157px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+          <xhtml:div
+             style="display:inline-block;text-align:inherit;text-decoration:inherit;">
+            <xhtml:font
+               style="font-size: 24px">SUBSCRIBER</xhtml:font>
+          </xhtml:div>
+        </xhtml:div>
+      </foreignObject>
+      <text
+         x="78"
+         y="20"
+         font-size="12px"
+         id="text24"
+         style="font-size:12px;font-family:Helvetica;text-anchor:middle;fill:#000000">
+        <tspan
+           style="font-size:24px;fill:#ffffff"
+           id="tspan3839">SUBSCRIBER</tspan>
+      </text>
+    </switch>
+  </g>
+  <rect
+     x="323"
+     y="5"
+     width="830"
+     height="390"
+     rx="58.5"
+     ry="58.5"
+     fill="#0895cd"
+     stroke="#09487e"
+     stroke-width="6"
+     pointer-events="none"
+     id="rect30" />
+  <g
+     transform="translate(579.5,23.5)"
+     id="g42">
+    <switch
+       id="switch40">
+      <foreignObject
+         style="overflow:visible;"
+         pointer-events="all"
+         width="321"
+         height="32"
+         requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+        <xhtml:div
+           style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 322px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+          <xhtml:div
+             style="display:inline-block;text-align:inherit;text-decoration:inherit;">
+            <xhtml:font
+               color="#ffffff">
+              <xhtml:span
+                 style="font-size: 28px">
+                <xhtml:b>INTEGRATION SERVICE</xhtml:b>
+              </xhtml:span>
+            </xhtml:font>
+          </xhtml:div>
+        </xhtml:div>
+      </foreignObject>
+      <text
+         x="161"
+         y="22"
+         font-size="12px"
+         id="text38"
+         style="font-size:12px;font-family:Helvetica;text-anchor:middle;fill:#000000">
+        <tspan
+           style="font-size:29.33333397px;fill:#ffffff"
+           id="tspan3833">INTEGRATION SERVICE</tspan>
+      </text>
+    </switch>
+  </g>
+  <rect
+     x="353"
+     y="65"
+     width="770"
+     height="308"
+     rx="46.200001"
+     ry="46.200001"
+     pointer-events="none"
+     id="rect44"
+     style="fill:url(#linearGradient4735);fill-opacity:1;stroke:#09487e;stroke-width:6" />
+  <g
+     transform="translate(564.5,96.5)"
+     id="g50">
+    <switch
+       id="switch48">
+      <foreignObject
+         style="overflow:visible;"
+         pointer-events="all"
+         width="346"
+         height="32"
+         requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+        <xhtml:div
+           style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 347px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+          <xhtml:div
+             style="display:inline-block;text-align:inherit;text-decoration:inherit;">
+            <xhtml:span
+               style="font-size: 28px">
+              <xhtml:b>PROTOCOL CONNECTOR</xhtml:b>
+            </xhtml:span>
+          </xhtml:div>
+        </xhtml:div>
+      </foreignObject>
+      <text
+         x="173"
+         y="22"
+         font-size="12px"
+         id="text46"
+         style="font-size:12px;font-family:Helvetica;text-anchor:middle;fill:#000000">
+        <tspan
+           style="font-size:26.66666603px"
+           id="tspan3845">FIROS2</tspan>
+      </text>
+    </switch>
+  </g>
+  <rect
+     x="383"
+     y="260.52853"
+     width="195"
+     height="78"
+     rx="11.7"
+     ry="11.7"
+     pointer-events="none"
+     id="rect52"
+     style="fill:#88ce28;stroke:#09487e;stroke-width:6" />
+  <g
+     transform="translate(411.93187,288.248)"
+     id="g58">
+    <switch
+       id="switch56">
+      <foreignObject
+         style="overflow:visible;"
+         pointer-events="all"
+         width="136"
+         height="27"
+         requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+        <xhtml:div
+           style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 137px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+          <xhtml:div
+             style="display:inline-block;text-align:inherit;text-decoration:inherit;">
+            <xhtml:font
+               style="font-size: 24px">PUBLISHER</xhtml:font>
+          </xhtml:div>
+        </xhtml:div>
+      </foreignObject>
+      <text
+         x="68"
+         y="20"
+         font-size="12px"
+         id="text54"
+         style="font-size:12px;font-family:Helvetica;text-anchor:middle;fill:#000000">
+        <tspan
+           style="font-size:24px;fill:#ffffff"
+           id="tspan3843">PUBLISHER</tspan>
+      </text>
+    </switch>
+  </g>
+  <rect
+     x="383"
+     y="148.5"
+     width="195"
+     height="78"
+     rx="11.7"
+     ry="11.7"
+     fill="#88ce28"
+     stroke="#09487e"
+     stroke-width="6"
+     pointer-events="none"
+     id="rect60" />
+  <g
+     transform="translate(402.44787,176.248)"
+     id="g66">
+    <switch
+       id="switch64">
+      <foreignObject
+         style="overflow:visible;"
+         pointer-events="all"
+         width="156"
+         height="27"
+         requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+        <xhtml:div
+           style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 157px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+          <xhtml:div
+             style="display:inline-block;text-align:inherit;text-decoration:inherit;">
+            <xhtml:font
+               style="font-size: 24px">SUBSCRIBER</xhtml:font>
+          </xhtml:div>
+        </xhtml:div>
+      </foreignObject>
+      <text
+         x="78"
+         y="20"
+         font-size="12px"
+         id="text62"
+         style="font-size:12px;font-family:Helvetica;text-anchor:middle;fill:#000000">
+        <tspan
+           style="font-size:24px;fill:#ffffff"
+           id="tspan3841">SUBSCRIBER</tspan>
+      </text>
+    </switch>
+  </g>
+  <rect
+     x="613"
+     y="146.5"
+     width="240"
+     height="192"
+     rx="28.8"
+     ry="28.8"
+     fill="#88ce28"
+     stroke="#09487e"
+     stroke-width="6"
+     pointer-events="none"
+     id="rect68" />
+  <g
+     transform="translate(622.58379,213.45495)"
+     id="g74">
+    <switch
+       id="switch72">
+      <foreignObject
+         style="overflow:visible;"
+         pointer-events="all"
+         width="224"
+         height="56"
+         requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+        <xhtml:div
+           style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 224px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+          <xhtml:div
+             style="display:inline-block;text-align:inherit;text-decoration:inherit;">
+            <xhtml:font
+               style="font-size: 24px">TRANSFORMATION<xhtml:br />
+
+
+LIBRARY</xhtml:font>
+            <xhtml:br />
+          </xhtml:div>
+        </xhtml:div>
+      </foreignObject>
+      <text
+         x="111.08408"
+         y="23.009048"
+         font-size="12px"
+         id="text70"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24px;font-family:Helvetica;-inkscape-font-specification:'Helvetica, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff">
+        <tspan
+           sodipodi:role="line"
+           id="tspan3892"
+           x="111.08408"
+           y="23.009048">TRANSFORMATION</tspan>
+        <tspan
+           sodipodi:role="line"
+           id="tspan3894"
+           x="111.08408"
+           y="53.009048">LIBRARY</tspan>
+      </text>
+      <text
+         x="112"
+         y="34"
+         font-size="12px"
+         style="font-size:12px;font-family:Helvetica;text-anchor:middle;fill:#000000"
+         id="text3851">
+        <tspan
+           style="font-size:24px;fill:#ffffff"
+           id="tspan3853">LIBRARY</tspan>
+        <tspan
+           style="font-size:24px;fill:#ffffff"
+           id="tspan3849" />
+      </text>
+    </switch>
+  </g>
+  <rect
+     x="885.87585"
+     y="146.17618"
+     width="206.98151"
+     height="77.67617"
+     rx="11.7"
+     ry="11.7"
+     pointer-events="none"
+     id="rect76"
+     style="fill:#88ce28;stroke:#09487e;stroke-width:6" />
+  <g
+     transform="translate(926.97848,173.76226)"
+     id="g82">
+    <switch
+       id="switch80">
+      <foreignObject
+         style="overflow:visible;"
+         pointer-events="all"
+         width="124"
+         height="27"
+         requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+        <xhtml:div
+           style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 125px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+          <xhtml:div
+             style="display:inline-block;text-align:inherit;text-decoration:inherit;">
+            <xhtml:font
+               style="font-size: 24px">IS WRITER</xhtml:font>
+          </xhtml:div>
+        </xhtml:div>
+      </foreignObject>
+      <text
+         x="62"
+         y="20"
+         font-size="12px"
+         id="text78"
+         style="font-size:12px;font-family:Helvetica;text-anchor:middle;fill:#000000">
+        <tspan
+           style="font-size:24px;fill:#ffffff"
+           id="tspan3864">NGSIv2 WRITER</tspan>
+      </text>
+    </switch>
+  </g>
+  <rect
+     x="885.81879"
+     y="261.82382"
+     width="204.39093"
+     height="75.409409"
+     rx="11.7"
+     ry="11.7"
+     pointer-events="none"
+     id="rect84"
+     style="fill:#88ce28;stroke:#09487e;stroke-width:6" />
+  <g
+     transform="translate(922.62613,288.27653)"
+     id="g90">
+    <switch
+       id="switch88">
+      <foreignObject
+         style="overflow:visible;"
+         pointer-events="all"
+         width="130"
+         height="27"
+         requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+        <xhtml:div
+           style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 130px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+          <xhtml:div
+             style="display:inline-block;text-align:inherit;text-decoration:inherit;">
+            <xhtml:font
+               style="font-size: 24px">IS READER</xhtml:font>
+            <xhtml:br />
+          </xhtml:div>
+        </xhtml:div>
+      </foreignObject>
+      <text
+         x="65"
+         y="20"
+         font-size="12px"
+         id="text86"
+         style="font-size:12px;font-family:Helvetica;text-anchor:middle;fill:#000000">
+        <tspan
+           style="font-size:24px;fill:#ffffff"
+           id="tspan3866">NGSIv2 READER</tspan>
+      </text>
+    </switch>
+  </g>
+  <path
+     d="M 249.21 300 L 383 300"
+     fill="none"
+     stroke="#09487e"
+     stroke-width="6"
+     stroke-miterlimit="10"
+     pointer-events="none"
+     id="path92" />
+  <path
+     d="M 237.21 300 L 249.21 294 L 249.21 306 Z"
+     fill="#09487e"
+     stroke="#09487e"
+     stroke-width="6"
+     stroke-miterlimit="10"
+     pointer-events="none"
+     id="path94" />
+  <path
+     d="M 364.29 187.5 L 230.5 187.5"
+     fill="none"
+     stroke="#09487e"
+     stroke-width="6"
+     stroke-miterlimit="10"
+     pointer-events="none"
+     id="path96" />
+  <path
+     d="M 376.29 187.5 L 364.29 193.5 L 364.29 181.5 Z"
+     fill="#09487e"
+     stroke="#09487e"
+     stroke-width="6"
+     stroke-miterlimit="10"
+     pointer-events="none"
+     id="path98" />
+  <path
+     d="M 596.29 187.93 L 577.86 187.86"
+     fill="none"
+     stroke="#09487e"
+     stroke-width="6"
+     stroke-miterlimit="10"
+     pointer-events="none"
+     id="path100" />
+  <path
+     d="M 608.29 187.97 L 596.27 193.93 L 596.32 181.93 Z"
+     fill="#09487e"
+     stroke="#09487e"
+     stroke-width="6"
+     stroke-miterlimit="10"
+     pointer-events="none"
+     id="path102" />
+  <path
+     d="M 596.71 300.5 L 613.5 300.5"
+     fill="none"
+     stroke="#09487e"
+     stroke-width="6"
+     stroke-miterlimit="10"
+     pointer-events="none"
+     id="path104" />
+  <path
+     d="M 584.71 300.5 L 596.71 294.5 L 596.71 306.5 Z"
+     fill="#09487e"
+     stroke="#09487e"
+     stroke-width="6"
+     stroke-miterlimit="10"
+     pointer-events="none"
+     id="path106" />
+  <path
+     d="M 871.29 187.43 L 852.86 187.36"
+     fill="none"
+     stroke="#09487e"
+     stroke-width="6"
+     stroke-miterlimit="10"
+     pointer-events="none"
+     id="path108" />
+  <path
+     d="m 877.29,187.47 -12.02,5.96 0.05,-12 z"
+     stroke-miterlimit="10"
+     pointer-events="none"
+     id="path110"
+     inkscape:connector-curvature="0"
+     style="fill:#09487e;stroke:#09487e;stroke-width:6;stroke-miterlimit:10" />
+  <path
+     d="M 871.71 300 L 888.5 300"
+     fill="none"
+     stroke="#09487e"
+     stroke-width="6"
+     stroke-miterlimit="10"
+     pointer-events="none"
+     id="path112" />
+  <path
+     d="M 859.71 300 L 871.71 294 L 871.71 306 Z"
+     fill="#09487e"
+     stroke="#09487e"
+     stroke-width="6"
+     stroke-miterlimit="10"
+     pointer-events="none"
+     id="path114" />
+  <g
+     transform="translate(49.954998,98.664251)"
+     id="g50-2">
+    <switch
+       id="switch48-8">
+      <foreignObject
+         style="overflow:visible;"
+         pointer-events="all"
+         width="346"
+         height="32"
+         requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+        <xhtml:div
+           style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 347px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+          <xhtml:div
+             style="display:inline-block;text-align:inherit;text-decoration:inherit;">
+            <xhtml:span
+               style="font-size: 28px">
+              <xhtml:b>PROTOCOL CONNECTOR</xhtml:b>
+            </xhtml:span>
+          </xhtml:div>
+        </xhtml:div>
+      </foreignObject>
+      <text
+         x="84.919861"
+         y="18.114111"
+         font-size="12px"
+         id="text46-9"
+         style="font-size:12px;font-family:Helvetica;text-anchor:middle;fill:#000000">
+        <tspan
+           style="font-size:26.66666603px"
+           id="tspan3845-6">ROS2 Participant</tspan>
+      </text>
+    </switch>
+  </g>
+  <rect
+     style="fill:#0895cd;stroke:#09487e;stroke-width:6"
+     x="1214.5723"
+     y="77.204681"
+     width="261.29529"
+     height="296.73868"
+     rx="39"
+     ry="39"
+     pointer-events="none"
+     id="rect6-0" />
+  <g
+     transform="translate(1313.6597,95.70468)"
+     id="g12-1">
+    <switch
+       id="switch10-3">
+      <foreignObject
+         style="overflow:visible;"
+         pointer-events="all"
+         width="61"
+         height="32"
+         requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+        <xhtml:div
+           style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 62px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+          <xhtml:div
+             style="display:inline-block;text-align:inherit;text-decoration:inherit;">
+            <xhtml:font
+               color="#ffffff">
+              <xhtml:span
+                 style="font-size: 28px">
+                <xhtml:b>ROS</xhtml:b>
+              </xhtml:span>
+            </xhtml:font>
+          </xhtml:div>
+        </xhtml:div>
+      </foreignObject>
+      <text
+         x="31"
+         y="22"
+         font-size="12px"
+         id="text8-7"
+         style="font-size:24px;font-family:Helvetica;text-anchor:middle;fill:#ffffff">
+        <tspan
+           style="font-size:32px"
+           id="tspan3835-7">ContextBroker</tspan>
+      </text>
+    </switch>
+  </g>
+  <rect
+     x="1231.5845"
+     y="138.5"
+     width="227.27087"
+     height="213.44336"
+     rx="46.200001"
+     ry="46.200001"
+     pointer-events="none"
+     id="rect44-6-2"
+     style="fill:url(#linearGradient4735-6-0);fill-opacity:1;stroke:#09487e;stroke-width:6" />
+  <g
+     transform="translate(1260.2421,184.86893)"
+     id="g50-2-5">
+    <switch
+       id="switch48-8-1">
+      <foreignObject
+         style="overflow:visible;"
+         pointer-events="all"
+         width="346"
+         height="32"
+         requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+        <xhtml:div
+           style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; vertical-align: top; width: 347px; white-space: nowrap; overflow-wrap: normal; text-align: center;">
+          <xhtml:div
+             style="display:inline-block;text-align:inherit;text-decoration:inherit;">
+            <xhtml:span
+               style="font-size: 28px">
+              <xhtml:b>PROTOCOL CONNECTOR</xhtml:b>
+            </xhtml:span>
+          </xhtml:div>
+        </xhtml:div>
+      </foreignObject>
+      <text
+         x="84.919861"
+         y="18.114111"
+         font-size="12px"
+         id="text46-9-0"
+         style="font-size:12px;font-family:Helvetica;text-anchor:middle;fill:#000000">
+        <tspan
+           style="font-size:26.66666603px"
+           id="tspan3845-6-3">NGSIv2 Protocol</tspan>
+      </text>
+    </switch>
+  </g>
+  <path
+     d="M 1106.71,300.15 1230.5,299.5"
+     stroke-miterlimit="10"
+     pointer-events="none"
+     id="path116"
+     inkscape:connector-curvature="0"
+     style="fill:none;stroke:#09487e;stroke-width:6;stroke-miterlimit:10"
+     sodipodi:nodetypes="cc" />
+  <path
+     d="m 1098.71,300.05 12.05,-5.9 -0.1,12 z"
+     stroke-miterlimit="10"
+     pointer-events="none"
+     id="path118"
+     inkscape:connector-curvature="0"
+     style="fill:#09487e;stroke:#09487e;stroke-width:6;stroke-miterlimit:10" />
+  <path
+     d="M 1222.29,185.85 1092,185"
+     stroke-miterlimit="10"
+     pointer-events="none"
+     id="path120"
+     inkscape:connector-curvature="0"
+     style="fill:none;stroke:#09487e;stroke-width:6;stroke-miterlimit:10"
+     sodipodi:nodetypes="cc" />
+  <path
+     d="m 1224.29,185.95 -12.05,5.9 0.1,-12 z"
+     stroke-miterlimit="10"
+     pointer-events="none"
+     id="path122"
+     inkscape:connector-curvature="0"
+     style="fill:#09487e;stroke:#09487e;stroke-width:6;stroke-miterlimit:10" />
+</svg>

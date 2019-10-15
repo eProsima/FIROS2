@@ -1,78 +1,135 @@
 <?xml version="1.0"?>
-<!-- Complete <bridge> node will be sent to each bridge_library to be parsed by itself. -->
 <is>
-    <!-- Generic bridges -->
-    <bridge>
-        <bridge_type>unidirectional</bridge_type>
-        <subscriber> <!-- subscriber node may change depending of bridge_library implementation -->
-            <!-- CUSTOM subscriber parameters -->
+    <topic_types>
+        <type name="ROS2_Type">
+            <participants>
+                <participant name="ros2_participant"/>
+            </participants>
+        </type>
+    </topic_types>
+
+    <profiles>
+
+        <participant profile_name="ros2_participant">
+            <rtps>
+                <builtin>
+                    <domainId>ros2_domain</domainId>
+                </builtin>
+            </rtps>
+        </participant>
+
+        <subscriber profile_name="ros2_subscriber">
+            <topic>
+                <name>ROS2_Topic</name>
+                <dataType>ROS2_Type</dataType>
+            </topic>
+            <qos>
+                <partition>
+                    <names>
+                        <name>rt</name>
+                    </names>
+                </partition>
+            </qos>
+            <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
         </subscriber>
-        <publisher> <!-- publisher node may change depending of bridge_library implementation -->
-            <!-- CUSTOM publisher parameters -->
+
+        <publisher profile_name="ros2_publisher">
+            <topic>
+                <name>ROS2_Topic</name>
+                <dataType>ROS2_Type</dataType>
+            </topic>
+            <qos>
+                <partition>
+                    <names>
+                        <name>rt</name>
+                    </names>
+                </partition>
+            </qos>
+            <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
         </publisher>
-        <transformation>/path/to/transformation/library</transformation> <!-- must define transform function -->
-        <bridge_library>/path/to/bridge/library</bridge_library> <!-- must load tranform function as well -->
+    </profiles>
+
+    <!-- Declares a custom bridge named 'bridge_ngsiv2' -->
+    <bridge name="bridge_ngsiv2">
+        <library>/path/to/ngsiv2bridge.so</library> <!-- Path to the NGSIv2 library -->
+
+        <reader name="sub_ngsiv2">
+            <property>
+                <name>id</name>
+                <value>entity_idPattern</value>
+            </property>
+            <property>
+                <name>host</name>
+                <value>context_broker_host</value>
+            </property>
+            <property>
+                <name>port</name>
+                <value>context_broker_port</value>
+            </property>
+            <property> <!-- optional -->
+                <name>type</name>
+                <value>entity_type</value>
+            </property>
+            <property> <!-- optional, comma separated values -->
+                <name>attrs</name>
+                <value>attr1[,attr2...]</value>
+            </property>
+            <property> <!-- optional -->
+                <name>expression</name>
+                <value>condition_expression</value>
+            </property>
+            <property> <!-- optional, comma separated values -->
+                <name>notif</name>
+                <value>notif_attr1[,notif_attr2...]</value>
+            </property>
+            <property>
+                <name>listener_host</name>
+                <value>our_listener_host</value>
+            </property>
+            <property>
+                <name>listener_port</name>
+                <value>our_listener_port</value>
+            </property>
+            <property>
+                <name>listener_buffer_size</name> <!-- optional. In KB, if not specified, 2KB -->
+                <value>our_listener_buffer_size</value>
+            </property>
+            <property> <!-- optional -->
+                <name>expiration</name>
+                <value>subscription_expiration_time</value>
+            </property>
+            <property> <!-- optional -->
+                <name>throttling</name>
+                <value>subscription_throttling</value>
+            </property>
+            <property> <!-- optional -->
+                <name>description</name>
+                <value>subscription_description</value>
+            </property>
+        </reader>
+
+        <writer name="pub_ngsiv2">
+            <property>
+                <name>host</name>
+                <value>context_broker_host</value>
+            </property>
+            <property>
+                <name>port</name>
+                <value>context_broker_port</value>
+            </property>
+        </writer>
     </bridge>
-    <bridge>
-        <bridge_type>bidirectional</bridge_type>
-        <nodeA>
-            <!-- CUSTOM nodeA parameters -->
-        </nodeA>
-        <nodeB>
-            <!-- CUSTOM nodeB parameters -->
-        </nodeB>
-        <transformation>/path/to/transformation/library</transformation> <!-- must implement both ways. Bridge_library must know what functions to search -->
-        <bridge_library_nodeA>/path/to/bridge/library_1</bridge_library_nodeA> <!-- nodeA -> nodeB logic -->
-        <bridge_library_nodeB>/path/to/bridge/library_2</bridge_library_nodeB> <!-- nodeB -> nodeA logic -->
-    </bridge>
-    <!-- Example bridges -->
-    <bridge>
-        <bridge_type>unidirectional</bridge_type>
-        <subscriber>
-            <participant>subscriber_participant_name</participant>
-            <domain>subscriber_domain</domain>
-            <topic>subscriber_topic_name</topic>
-            <type>subscriber_type_name</type>
-            <partition>subscriber_partition</partition>  <!-- optional -->
-        </subscriber>
-        <publisher>
-            <participant>publisher_participant_name</participant>
-            <domain>subscriber_domain</domain>
-            <topic>publisher_topic_name</topic>
-            <type>publisher_type_name</type>
-            <partition>publisher_partition</partition>  <!-- optional -->
-        </publisher>
-        <transformation>/path/to/transformation/library</transformation>
-        <bridge_library>/path/to/bridge/library</bridge_library> <!-- optional -->
-    </bridge>
-    <bridge>
-        <bridge_type>bidirectional</bridge_type>
-        <ros2>
-            <participant>ros2_participant_name</participant>
-            <domain>0</domain>
-            <topic>ros2_topic_name</topic>
-            <type>ros2_type_name</type>
-            <partition>ros2_partition</partition>
-        </ros2>
-        <ngsiv2>
-            <participant>ngsiv2_participant_name</participant>
-            <id>ngsiv2_entity_id</id>
-            <host>ngsiv2_host</host>
-            <port>ngsiv2_port</port>
-            <subscription>
-                <type>ngsiv2_entity_type</type> <!-- optional -->
-                <attrs>ngsiv2_condition_attrs_list</attrs> <!-- optional, comma separated -->
-                <expression>ngsiv2_condition_expression</expression> <!-- optional -->
-                <notifs>ngsiv2_notification_attrs_list</notifs> <!-- comma separated -->
-                <listener_host>listener_host</listener_host>
-                <listener_port>listener_port</listener_port>
-                <expiration>ngsiv2_expiration_time</expiration> <!-- optional -->
-                <throttling>ngsiv2_throttling</throttling> <!-- optional -->
-                <description>ngsiv2_description</description> <!-- optional -->
-            </subscription>
-        </ngsiv2>
-        <transformation>/path/to/transformation/library</transformation>
-        <bridge_library_nodeA>/path/to/bridge/library_1</bridge_library_nodeA>
-        <bridge_library_nodeB>/path/to/bridge/library_2</bridge_library_nodeB>
-    </bridge>
+
+
+    <connector name="ros2_ngsiv2">
+        <reader participant_profile="ros2_participant" subscriber_profile="ros2_subscriber"/>
+        <writer bridge_name="ngsiv2" writer_name="pub_ngsiv2"/>
+        <transformation file="/path/to/libuserlib.so" function="transformToNGSIv2"/>
+    </connector>
+
+    <connector name="ngsiv2_ros2">
+        <reader bridge_name="ngsiv2" reader_name="sub_ngsiv2"/>
+        <writer participant_profile="ros2_participant" publisher_profile="ros2_publisher"/>
+        <transformation file="/path/to/libuserlib.so" function="transformFromNGSIv2"/>
+    </connector>
 </is>

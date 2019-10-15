@@ -53,6 +53,11 @@ void usage()
 
 int main(int argc, char *argv[])
 {
+    if (argc != 6) 
+    {
+        usage();
+        return 0;
+    }
     try {
         string url = argv[1];
         string entityId = argv[2];

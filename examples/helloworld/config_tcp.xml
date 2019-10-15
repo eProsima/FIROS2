@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<is>
+    <profiles>
+        <transport_descriptors>
+            <transport_descriptor>
+                <transport_id>TCPv4_Server</transport_id>
+                <type>TCPv4</type>
+                <wait_negotiation>false</wait_negotiation>
+                <listening_ports>
+                    <port>5100</port>
+                </listening_ports>
+            </transport_descriptor>
+            <transport_descriptor>
+                <transport_id>TCPv4_Client</transport_id>
+                <type>TCPv4</type>
+                <wait_negotiation>false</wait_negotiation>
+            </transport_descriptor>
+        </transport_descriptors>
+
+        <participant profile_name="rtps">
+            <rtps>
+                <userTransports>
+                    <transport_id>TCPv4_Client</transport_id>
+                </userTransports>
+                <builtin>
+                    <domainId>0</domainId>
+                    <leaseDuration>
+                        <durationbyname>INFINITE</durationbyname>
+                    </leaseDuration>
+                    <leaseAnnouncement>
+                        <durationbyval>
+                            <seconds>1</seconds>
+                            <fraction>0</fraction>
+                        </durationbyval>
+                    </leaseAnnouncement>
+                    <initialPeersList>
+                        <locator>
+                            <kind>TCPv4</kind>
+                            <address>127.0.0.1</address>
+                            <ports_>
+                                <physical_port>5100</physical_port>
+                            </ports_>
+                        </locator>
+                    </initialPeersList>
+                </builtin>
+                <useBuiltinTransports>false</useBuiltinTransports>
+                <!-->
+                <userTransports>
+                    <transport_id>TCPv4_Server</transport_id>
+                </userTransports>
+                <defaultUnicastLocatorList>
+                    <locator>
+                        <kind>TCPv4</kind>
+                        <address>127.0.0.1</address>
+                        <physical_port>5100</physical_port>
+                    </locator>
+                </defaultUnicastLocatorList>
+                <builtin>
+                    <leaseDuration>
+                        <durationbyname>INFINITE</durationbyname>
+                    </leaseDuration>
+                    <leaseAnnouncement>
+                        <durationbyval>
+                            <seconds>1</seconds>
+                            <fraction>0</fraction>
+                        </durationbyval>
+                    </leaseAnnouncement>
+                </builtin>
+                <useBuiltinTransports>false</useBuiltinTransports>
+                <-->
+            </rtps>
+        </participant>
+
+        <subscriber profile_name="fastrtps_subscriber">
+            <topic>
+                <name>HelloWorldTopic</name>
+                <dataType>HelloWorld</dataType>
+            </topic>
+            <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+        </subscriber>
+
+        <participant profile_name="ros2">
+            <rtps>
+                <builtin>
+                    <domainId>0</domainId>
+                </builtin>
+            </rtps>
+        </participant>
+
+        <publisher profile_name="ros2_publisher">
+            <topic>
+                <name>rt/chatter</name>
+                <dataType>std_msgs::msg::dds_::String_</dataType>
+            </topic>
+            <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+        </publisher>
+    </profiles>
+
+    <connector name="domain_change">
+        <reader participant_profile="rtps" subscriber_profile="fastrtps_subscriber"/>
+        <writer participant_profile="ros2" publisher_profile="ros2_publisher"/>
+        <transformation file="build/libuserlib.so" function="transform"/>
+    </connector>
+</is>

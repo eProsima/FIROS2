@@ -1,24 +1,42 @@
 <?xml version="1.0"?>
 <is>
-	<bridge>
-		<bridge_type>unidirectional</bridge_type>
-		<subscriber>
-			<participant>fastrtps_subscriber</participant>
-			<domain>0</domain>
-			<topic>HelloWorldTopic</topic>
-			<type>HelloWorld</type>
-		</subscriber>
-		<publisher>
-			<participant>ros2_publisher</participant>
-			<domain>0</domain>
-			<topic>chatter</topic>
-			<type>std_msgs::msg::dds_::String_</type>
-            <partition>rt</partition>
-		</publisher>
-		<!-- Windows -->
-		<transformation>C:/dev/ros2/src/ros2/firos2/examples/helloworld/build/Release/userlib.dll</transformation>
-		<bridge_library>C:/dev/ros2/src/ros2/firos2/thirdparty/integration-services/build/Release/isrtpsbridgelib.dll</bridge_library>
-		<!-- Linux -->
-		<!--<transformation>/home/luisgp/ros2_ws/src/ros2/firos2/examples/helloworld/build/libuserlib.so</transformation>-->
-	</bridge>
+    <profiles>
+        <participant profile_name="rtps">
+            <rtps>
+                <builtin>
+                    <domainId>0</domainId>
+                </builtin>
+            </rtps>
+        </participant>
+
+        <subscriber profile_name="fastrtps_subscriber">
+            <topic>
+                <name>HelloWorldTopic</name>
+                <dataType>HelloWorld</dataType>
+            </topic>
+            <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+        </subscriber>
+
+        <participant profile_name="ros2">
+            <rtps>
+                <builtin>
+                    <domainId>0</domainId>
+                </builtin>
+            </rtps>
+        </participant>
+
+        <publisher profile_name="ros2_publisher">
+            <topic>
+                <name>rt/chatter</name>
+                <dataType>std_msgs::msg::dds_::String_</dataType>
+            </topic>
+            <historyMemoryPolicy>DYNAMIC</historyMemoryPolicy>
+        </publisher>
+    </profiles>
+
+    <connector name="domain_change">
+        <reader participant_profile="rtps" subscriber_profile="fastrtps_subscriber"/>
+        <writer participant_profile="ros2" publisher_profile="ros2_publisher"/>
+        <transformation file="build/libuserlib.so" function="transform"/>
+    </connector>
 </is>
