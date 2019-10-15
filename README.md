@@ -26,10 +26,13 @@ modification between *ROS2* and *NGSIv2* from *FIWARE-Orion contextBroker*.
 
 ### Installation of FIROS2
 
-Before using *FIROS2*, it has to be installed along with the rest of *ROS2* packages of your system.
+Before using *FIROS2*, it has to be installed along with the rest of *ROS2 Crystal* packages of your system.
 If you have followed the *ROS2*
 <a href="https://index.ros.org/doc/ros2/Installation" target="_blank">installation manual</a>,
 you only need to clone this repository on your *ROS2* workspace.
+
+`NOTE: Only ROS2 Crystal is currently supported by FIROS2.`
+
 For cloning this project and update its submodules at the same time, don't forget to add the *--recursive* option.
 
 In Linux, these are the steps:
